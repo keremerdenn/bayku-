@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
 import LogoutButton from "../components/LogoutButton";
 
 export const metadata: Metadata = {
