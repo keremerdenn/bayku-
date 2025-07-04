@@ -11,8 +11,11 @@ import {
   ClipboardDocumentListIcon,
   WalletIcon,
   ChartBarIcon,
+<<<<<<< HEAD
   Bars3Icon,
   XMarkIcon,
+=======
+>>>>>>> f557964185c24d166b5d6f4ec874c0656cf047a4
 } from "@heroicons/react/24/outline";
 
 // Gradientli Baykuş SVG ikonu
@@ -34,10 +37,24 @@ const OwlIcon = () => (
   </svg>
 );
 
+<<<<<<< HEAD
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+=======
+
+type SidebarProps = {
+  username: string;
+  email: string;
+};
+
+const Sidebar: React.FC<SidebarProps> = ({ username, email }) => {
+  const handleLogout = () => {
+    localStorage.removeItem(USER_KEY);
+    window.location.reload();
+  };
+>>>>>>> f557964185c24d166b5d6f4ec874c0656cf047a4
 
   // Kullanıcı baş harfi
   const initial = username?.[0]?.toUpperCase() || "U";
@@ -100,4 +117,10 @@ export default function Sidebar() {
       </div>
     </aside>
   );
+<<<<<<< HEAD
 } 
+=======
+};
+
+export default Sidebar; 
+>>>>>>> f557964185c24d166b5d6f4ec874c0656cf047a4
