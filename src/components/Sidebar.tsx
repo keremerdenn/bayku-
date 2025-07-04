@@ -9,7 +9,6 @@ import {
   ClipboardDocumentListIcon,
   WalletIcon,
   ChartBarIcon,
-  ArrowRightOnRectangleIcon
 } from "@heroicons/react/24/outline";
 
 // Gradientli Baykuş SVG ikonu
@@ -31,7 +30,6 @@ const OwlIcon = () => (
   </svg>
 );
 
-const USER_KEY = "sinavPusulasiUser";
 
 type SidebarProps = {
   username: string;
