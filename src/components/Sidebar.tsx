@@ -1,3 +1,5 @@
+"use client";
+import { useState, useEffect } from "react";
 import React from "react";
 // Heroicons yeni sürüm importları
 import {
@@ -9,7 +11,8 @@ import {
   ClipboardDocumentListIcon,
   WalletIcon,
   ChartBarIcon,
-  ArrowRightOnRectangleIcon
+  Bars3Icon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 
 // Gradientli Baykuş SVG ikonu
@@ -31,18 +34,10 @@ const OwlIcon = () => (
   </svg>
 );
 
-const USER_KEY = "sinavPusulasiUser";
-
-type SidebarProps = {
-  username: string;
-  email: string;
-};
-
-const Sidebar: React.FC<SidebarProps> = ({ username, email }) => {
-  const handleLogout = () => {
-    localStorage.removeItem(USER_KEY);
-    window.location.reload();
-  };
+export default function Sidebar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
 
   // Kullanıcı baş harfi
   const initial = username?.[0]?.toUpperCase() || "U";
@@ -105,6 +100,4 @@ const Sidebar: React.FC<SidebarProps> = ({ username, email }) => {
       </div>
     </aside>
   );
-};
-
-export default Sidebar; 
+} 
