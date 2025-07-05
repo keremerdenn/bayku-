@@ -9,8 +9,19 @@ const USERS_KEY = "registeredUsers";
 // localStorage yardımcı fonksiyonları
 const getStoredUsers = () => {
   try {
-    const stored = localStorage.getItem(USERS_KEY);
-    return stored ? JSON.parse(stored) : [];
+    // Önce normal key'i dene
+    let stored = localStorage.getItem(USERS_KEY);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    
+    // Mobil için eski key'i de dene
+    stored = localStorage.getItem('registeredUsers');
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    
+    return [];
   } catch (error) {
     console.error('localStorage okuma hatası:', error);
     return [];
@@ -19,7 +30,9 @@ const getStoredUsers = () => {
 
 const setStoredUsers = (users: Array<{username: string; email: string; password: string}>) => {
   try {
+    // Her iki key'e de yaz (mobil ve web uyumluluğu için)
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    localStorage.setItem('registeredUsers', JSON.stringify(users));
     return true;
   } catch (error) {
     console.error('localStorage yazma hatası:', error);
