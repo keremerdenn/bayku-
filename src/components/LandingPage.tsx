@@ -4,6 +4,28 @@ import React, { useState, useRef, useEffect } from "react";
 import AuthModal from "./AuthModal";
 
 const USER_KEY = "sinavPusulasiUser";
+const USERS_KEY = "sinavPusulasiRegisteredUsers";
+
+// localStorage yardımcı fonksiyonları
+const getStoredUsers = () => {
+  try {
+    const stored = localStorage.getItem(USERS_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error('localStorage okuma hatası:', error);
+    return [];
+  }
+};
+
+const setStoredUsers = (users: Array<{username: string; email: string; password: string}>) => {
+  try {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    return true;
+  } catch (error) {
+    console.error('localStorage yazma hatası:', error);
+    return false;
+  }
+};
 
 const LandingPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -64,25 +86,19 @@ const LandingPage = () => {
       // Simüle edilmiş API çağrısı
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // localStorage erişim kontrolü
-      let registeredUsers: Array<{username: string; email: string; password: string}> = [];
-      try {
-        const storedUsers = localStorage.getItem('registeredUsers');
-        if (storedUsers) {
-          registeredUsers = JSON.parse(storedUsers);
-        }
-      } catch (error) {
-        console.error('localStorage erişim hatası:', error);
-        throw new Error('Kullanıcı verilerine erişilemiyor. Lütfen sayfayı yenileyin.');
-      }
-      
-      const user = registeredUsers.find((u) => u.email === email && u.password === password);
+      // Kullanıcı kontrolü
+      const registeredUsers = getStoredUsers();
+      const user = registeredUsers.find((u: {username: string; email: string; password: string}) => u.email === email && u.password === password);
       
       if (!user) {
         throw new Error('Email veya şifre hatalı. Lütfen önce kayıt olun.');
       }
       
       // Giriş başarılı
+      if (!setStoredUsers(registeredUsers)) {
+        throw new Error('Giriş bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
+      }
+      
       try {
         localStorage.setItem(USER_KEY, JSON.stringify({ username: user.username, email: user.email }));
       } catch (error) {
@@ -129,20 +145,9 @@ const LandingPage = () => {
       // Simüle edilmiş API çağrısı
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // localStorage erişim kontrolü
-      let registeredUsers: Array<{username: string; email: string; password: string}> = [];
-      try {
-        const storedUsers = localStorage.getItem('registeredUsers');
-        if (storedUsers) {
-          registeredUsers = JSON.parse(storedUsers);
-        }
-      } catch (error) {
-        console.error('localStorage erişim hatası:', error);
-        throw new Error('Kullanıcı verilerine erişilemiyor. Lütfen sayfayı yenileyin.');
-      }
-      
-      // Kullanıcı zaten kayıtlı mı kontrol et
-      const existingUser = registeredUsers.find((u) => u.email === email);
+      // Kullanıcı kontrolü
+      const registeredUsers = getStoredUsers();
+      const existingUser = registeredUsers.find((u: {username: string; email: string; password: string}) => u.email === email);
       
       if (existingUser) {
         throw new Error('Bu email adresi zaten kayıtlı. Lütfen giriş yapın.');
@@ -152,8 +157,11 @@ const LandingPage = () => {
       const newUser = { username, email, password };
       registeredUsers.push(newUser);
       
+      if (!setStoredUsers(registeredUsers)) {
+        throw new Error('Kullanıcı bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
+      }
+      
       try {
-        localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
         localStorage.setItem(USER_KEY, JSON.stringify({ username, email }));
       } catch (error) {
         console.error('localStorage yazma hatası:', error);
