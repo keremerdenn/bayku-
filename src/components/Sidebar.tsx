@@ -11,11 +11,8 @@ import {
   ClipboardDocumentListIcon,
   WalletIcon,
   ChartBarIcon,
-<<<<<<< HEAD
   Bars3Icon,
   XMarkIcon,
-=======
->>>>>>> f557964185c24d166b5d6f4ec874c0656cf047a4
 } from "@heroicons/react/24/outline";
 
 // Gradientli Baykuş SVG ikonu
@@ -30,43 +27,43 @@ const OwlIcon = () => (
     <path d="M8 10 Q16 2 24 10" stroke="#0ea5e9" strokeWidth="2" fill="none"/>
     <defs>
       <linearGradient id="owlGradient" x1="6" y1="22" x2="26" y2="22" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#0ea5e9"/>
-        <stop offset="1" stopColor="#38bdf8"/>
+        <stop stopColor="#38bdf8"/>
+        <stop offset="1" stopColor="#6366f1"/>
       </linearGradient>
     </defs>
   </svg>
 );
 
-<<<<<<< HEAD
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-=======
 
-type SidebarProps = {
-  username: string;
-  email: string;
-};
-
-const Sidebar: React.FC<SidebarProps> = ({ username, email }) => {
-  const handleLogout = () => {
-    localStorage.removeItem(USER_KEY);
-    window.location.reload();
-  };
->>>>>>> f557964185c24d166b5d6f4ec874c0656cf047a4
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userStr = localStorage.getItem("sinavPusulasiUser");
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          setUsername(user.username || "Kullanıcı");
+          setEmail(user.email || "");
+        } catch {
+          setUsername("Kullanıcı");
+          setEmail("");
+        }
+      }
+    }
+  }, []);
 
   // Kullanıcı baş harfi
   const initial = username?.[0]?.toUpperCase() || "U";
 
   return (
     <aside className="glass-sidebar text-sky-900 w-64 h-screen fixed top-0 left-0 flex flex-col z-40 transition-transform duration-300 ease-in-out shadow-2xl">
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-7 pt-8 pb-6">
-        <div className="w-12 h-12 flex items-center justify-center bg-white/30 rounded-xl shadow-lg">
-          <OwlIcon />
-        </div>
-        <span className="text-3xl font-extrabold bg-gradient-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight select-none">Baykuş</span>
+      {/* Logo ve başlık */}
+      <div className="flex items-center gap-3 px-6 pt-8 pb-6">
+        <OwlIcon />
+        <span className="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-sky-400 to-blue-500 text-transparent bg-clip-text">Baykuş</span>
       </div>
       {/* Menü Linkleri */}
       <nav className="flex-1 px-4 pb-2 space-y-1">
@@ -117,10 +114,4 @@ const Sidebar: React.FC<SidebarProps> = ({ username, email }) => {
       </div>
     </aside>
   );
-<<<<<<< HEAD
-} 
-=======
-};
-
-export default Sidebar; 
->>>>>>> f557964185c24d166b5d6f4ec874c0656cf047a4
+}
