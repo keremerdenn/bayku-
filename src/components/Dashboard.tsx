@@ -24,14 +24,12 @@ const pageTitles: Record<string, string> = {
 
 const Dashboard = () => {
   let username = "Kullanıcı";
-  let email = "email@adres.com";
   if (typeof window !== "undefined") {
     const userStr = localStorage.getItem(USER_KEY);
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
         username = user.username || username;
-        email = user.email || email;
       } catch {}
     }
   }
