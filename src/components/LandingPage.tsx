@@ -65,8 +65,8 @@ const LandingPage = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Gerçek kullanıcı kontrolü - localStorage'dan kayıtlı kullanıcıları kontrol et
-      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-      const user = registeredUsers.find((u: any) => u.email === email && u.password === password);
+      const registeredUsers: Array<{username: string; email: string; password: string}> = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const user = registeredUsers.find((u) => u.email === email && u.password === password);
       
       if (!user) {
         throw new Error('Email veya şifre hatalı. Lütfen önce kayıt olun.');
@@ -115,8 +115,8 @@ const LandingPage = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Kullanıcı zaten kayıtlı mı kontrol et
-      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-      const existingUser = registeredUsers.find((u: any) => u.email === email);
+      const registeredUsers: Array<{username: string; email: string; password: string}> = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const existingUser = registeredUsers.find((u) => u.email === email);
       
       if (existingUser) {
         throw new Error('Bu email adresi zaten kayıtlı. Lütfen giriş yapın.');
@@ -206,55 +206,84 @@ const LandingPage = () => {
               
               {/* Enhanced Desktop Menu */}
               <div className="hidden md:flex items-center space-x-8">
-                <a href="#features" className="text-white/90 hover:text-white font-medium transition-colors duration-200">Özellikler</a>
-                <a href="#pricing" className="text-white/90 hover:text-white font-medium transition-colors duration-200">Fiyatlandırma</a>
-                <a href="#contact" className="text-white/90 hover:text-white font-medium transition-colors duration-200">İletişim</a>
-                <button 
-                  onClick={() => openModal(false)}
-                  className="bg-white/20 text-white font-semibold px-6 py-2 rounded-xl hover:bg-white/30 transition-all duration-200 border border-white/30"
-                >
-                  Giriş Yap
-                </button>
+                <a href="#catalogs" className="text-white/90 hover:text-white font-semibold transition-all duration-300 hover:scale-105 relative group">
+                  Dersler
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#" className="text-white/90 hover:text-white font-semibold transition-all duration-300 hover:scale-105 relative group">
+                  Sınavlar
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#" className="text-white/90 hover:text-white font-semibold transition-all duration-300 hover:scale-105 relative group">
+                  Hakkımızda
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+                </a>
               </div>
               
+              <div className="hidden md:flex items-center space-x-4">
+                <button 
+                  className="landing-btn-secondary text-white font-semibold hover:text-gray-200 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2.5" 
+                  onClick={() => openModal(false)}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Yükleniyor...' : 'Giriş Yap'}
+                </button>
+                <button 
+                  className="landing-btn-primary font-bold py-2.5 px-6 disabled:opacity-50 disabled:cursor-not-allowed" 
+                  onClick={() => openModal(true)}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Yükleniyor...' : 'Kayıt Ol'}
+                </button>
+              </div>
+
               {/* Enhanced Mobile Menu Button */}
-              <button 
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden text-white p-2 rounded-lg hover:bg-white/20 transition-colors duration-200"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
+              <div className="md:hidden">
+                <button 
+                  id="mobile-menu-button"
+                  className="text-white p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-300 hover:bg-white/10"
+                  aria-label="Mobil menüyü aç/kapat"
+                  aria-expanded={mobileMenuOpen}
+                  aria-controls="mobile-menu"
+                  onClick={() => setMobileMenuOpen((v) => !v)}
+                  disabled={isLoading}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                  </svg>
+                </button>
+              </div>
             </nav>
             
             {/* Enhanced Mobile Menu */}
-            {mobileMenuOpen && (
-              <div 
-                ref={mobileMenuRef}
-                className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border-b border-white/20 shadow-lg"
-              >
-                <div className="container mx-auto px-6 py-4 space-y-4">
-                  <a href="#features" className="block text-gray-800 hover:text-sky-600 font-medium transition-colors duration-200">Özellikler</a>
-                  <a href="#pricing" className="block text-gray-800 hover:text-sky-600 font-medium transition-colors duration-200">Fiyatlandırma</a>
-                  <a href="#contact" className="block text-gray-800 hover:text-sky-600 font-medium transition-colors duration-200">İletişim</a>
-                  <div className="pt-4 border-t border-gray-200 space-y-3">
-                    <button 
-                      onClick={() => openModal(false)}
-                      className="w-full bg-sky-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-sky-600 transition-all duration-200"
-                    >
-                      Giriş Yap
-                    </button>
-                    <button 
-                      onClick={() => openModal(true)}
-                      className="w-full bg-white text-sky-500 font-semibold px-6 py-3 rounded-xl border-2 border-sky-500 hover:bg-sky-50 transition-all duration-200"
-                    >
-                      Kayıt Ol
-                    </button>
-                  </div>
-                </div>
+            <div 
+              id="mobile-menu"
+              ref={mobileMenuRef}
+              className={`md:hidden mt-2 mx-6 p-6 rounded-2xl glass-effect-modal transition-all duration-300 shadow-2xl z-30 ${mobileMenuOpen ? "block opacity-100 scale-100" : "hidden opacity-0 scale-95"}`}
+              style={{ position: "absolute", left: 0, right: 0 }}
+              role="menu"
+              aria-label="Mobil Menü"
+            >
+              <a href="#catalogs" className="block text-white/80 hover:text-white py-3 transition-colors duration-200 font-medium" onClick={() => setMobileMenuOpen(false)}>Dersler</a>
+              <a href="#" className="block text-white/80 hover:text-white py-3 transition-colors duration-200 font-medium" onClick={() => setMobileMenuOpen(false)}>Sınavlar</a>
+              <a href="#" className="block text-white/80 hover:text-white py-3 transition-colors duration-200 font-medium" onClick={() => setMobileMenuOpen(false)}>Hakkımızda</a>
+              <div className="border-t border-white/20 mt-4 pt-4 space-y-3">
+                <button 
+                  className="landing-btn-secondary w-full text-left text-white font-semibold py-3 disabled:opacity-50 disabled:cursor-not-allowed" 
+                  onClick={() => openModal(false)}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Yükleniyor...' : 'Giriş Yap'}
+                </button>
+                <button 
+                  className="landing-btn-primary w-full font-bold py-3 px-4 disabled:opacity-50 disabled:cursor-not-allowed" 
+                  onClick={() => openModal(true)}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Yükleniyor...' : 'Kayıt Ol'}
+                </button>
               </div>
-            )}
+            </div>
           </header>
           
           {/* Enhanced Hero Section */}
