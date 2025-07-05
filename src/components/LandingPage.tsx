@@ -52,7 +52,7 @@ const LandingPage = () => {
     setUserFeedback({ type: null, message: '' });
     
     try {
-      // Basit validation - gerçek uygulamada API çağrısı yapılır
+      // Validation
       if (!email || !password) {
         throw new Error('Email ve şifre gereklidir');
       }
@@ -61,12 +61,16 @@ const LandingPage = () => {
         throw new Error('Şifre en az 6 karakter olmalıdır');
       }
       
-      // Simüle edilmiş API çağrısı
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Gerçek kullanıcı kontrolü - localStorage'dan kayıtlı kullanıcıları kontrol et
+      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const user = registeredUsers.find((u: any) => u.email === email && u.password === password);
       
-      // Gerçek uygulamada burada API'den kullanıcı doğrulaması yapılır
-      const user = { username: email.split("@")[0], email };
-      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      if (!user) {
+        throw new Error('Email veya şifre hatalı. Lütfen önce kayıt olun.');
+      }
+      
+      // Giriş başarılı
+      localStorage.setItem(USER_KEY, JSON.stringify({ username: user.username, email: user.email }));
       
       setUserFeedback({ type: 'success', message: 'Başarıyla giriş yapıldı!' });
       
@@ -104,11 +108,21 @@ const LandingPage = () => {
         throw new Error('Geçerli bir email adresi giriniz');
       }
       
-      // Simüle edilmiş API çağrısı
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Kullanıcı zaten kayıtlı mı kontrol et
+      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const existingUser = registeredUsers.find((u: any) => u.email === email);
       
-      const user = { username, email };
-      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      if (existingUser) {
+        throw new Error('Bu email adresi zaten kayıtlı. Lütfen giriş yapın.');
+      }
+      
+      // Yeni kullanıcı kaydet
+      const newUser = { username, email, password };
+      registeredUsers.push(newUser);
+      localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+      
+      // Otomatik giriş yap
+      localStorage.setItem(USER_KEY, JSON.stringify({ username, email }));
       
       setUserFeedback({ type: 'success', message: 'Hesabınız başarıyla oluşturuldu!' });
       
