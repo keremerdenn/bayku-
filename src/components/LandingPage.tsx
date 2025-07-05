@@ -61,6 +61,9 @@ const LandingPage = () => {
         throw new Error('Şifre en az 6 karakter olmalıdır');
       }
       
+      // Simüle edilmiş API çağrısı
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       // Gerçek kullanıcı kontrolü - localStorage'dan kayıtlı kullanıcıları kontrol et
       const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
       const user = registeredUsers.find((u: any) => u.email === email && u.password === password);
@@ -107,6 +110,9 @@ const LandingPage = () => {
       if (!emailRegex.test(email)) {
         throw new Error('Geçerli bir email adresi giriniz');
       }
+      
+      // Simüle edilmiş API çağrısı
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Kullanıcı zaten kayıtlı mı kontrol et
       const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
@@ -232,12 +238,18 @@ const LandingPage = () => {
                   <a href="#features" className="block text-gray-800 hover:text-sky-600 font-medium transition-colors duration-200">Özellikler</a>
                   <a href="#pricing" className="block text-gray-800 hover:text-sky-600 font-medium transition-colors duration-200">Fiyatlandırma</a>
                   <a href="#contact" className="block text-gray-800 hover:text-sky-600 font-medium transition-colors duration-200">İletişim</a>
-                  <div className="pt-4 border-t border-gray-200">
+                  <div className="pt-4 border-t border-gray-200 space-y-3">
                     <button 
                       onClick={() => openModal(false)}
                       className="w-full bg-sky-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-sky-600 transition-all duration-200"
                     >
                       Giriş Yap
+                    </button>
+                    <button 
+                      onClick={() => openModal(true)}
+                      className="w-full bg-white text-sky-500 font-semibold px-6 py-3 rounded-xl border-2 border-sky-500 hover:bg-sky-50 transition-all duration-200"
+                    >
+                      Kayıt Ol
                     </button>
                   </div>
                 </div>
