@@ -11,8 +11,6 @@ import {
   ClipboardDocumentListIcon,
   WalletIcon,
   ChartBarIcon,
-  Bars3Icon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
 
 // Gradientli Baykuş SVG ikonu
@@ -35,7 +33,6 @@ const OwlIcon = () => (
 );
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
