@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import AuthModal from "./AuthModal";
 
 const USER_KEY = "sinavPusulasiUser";
-const USERS_KEY = "sinavPusulasiRegisteredUsers";
+const USERS_KEY = "registeredUsers";
 
 // localStorage yardımcı fonksiyonları
 const getStoredUsers = () => {
@@ -88,17 +88,17 @@ const LandingPage = () => {
       
       // Kullanıcı kontrolü
       const registeredUsers = getStoredUsers();
+      console.log('Kayıtlı kullanıcılar:', registeredUsers);
+      console.log('Giriş denemesi:', { email, password });
+      
       const user = registeredUsers.find((u: {username: string; email: string; password: string}) => u.email === email && u.password === password);
       
       if (!user) {
+        console.log('Kullanıcı bulunamadı');
         throw new Error('Email veya şifre hatalı. Lütfen önce kayıt olun.');
       }
       
       // Giriş başarılı
-      if (!setStoredUsers(registeredUsers)) {
-        throw new Error('Giriş bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
-      }
-      
       try {
         localStorage.setItem(USER_KEY, JSON.stringify({ username: user.username, email: user.email }));
       } catch (error) {
@@ -147,15 +147,20 @@ const LandingPage = () => {
       
       // Kullanıcı kontrolü
       const registeredUsers = getStoredUsers();
+      console.log('Mevcut kayıtlı kullanıcılar:', registeredUsers);
+      
       const existingUser = registeredUsers.find((u: {username: string; email: string; password: string}) => u.email === email);
       
       if (existingUser) {
+        console.log('Kullanıcı zaten mevcut:', existingUser);
         throw new Error('Bu email adresi zaten kayıtlı. Lütfen giriş yapın.');
       }
       
       // Yeni kullanıcı kaydet
       const newUser = { username, email, password };
       registeredUsers.push(newUser);
+      console.log('Yeni kullanıcı eklendi:', newUser);
+      console.log('Güncellenmiş kullanıcı listesi:', registeredUsers);
       
       if (!setStoredUsers(registeredUsers)) {
         throw new Error('Kullanıcı bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
