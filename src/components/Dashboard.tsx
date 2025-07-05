@@ -97,7 +97,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex">
-      <Sidebar username={username} email={email} />
+      <Sidebar />
       <div className="flex-1 md:ml-64 transition-all duration-300 ease-in-out min-h-screen bg-gray-50">
         <header className="bg-white shadow-md w-full flex items-center justify-between px-4 h-16 md:hidden">
           <span className="text-xl font-bold text-gray-800">Sınav Pusulası</span>
