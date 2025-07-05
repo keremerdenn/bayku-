@@ -64,8 +64,18 @@ const LandingPage = () => {
       // Simüle edilmiş API çağrısı
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Gerçek kullanıcı kontrolü - localStorage'dan kayıtlı kullanıcıları kontrol et
-      const registeredUsers: Array<{username: string; email: string; password: string}> = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      // localStorage erişim kontrolü
+      let registeredUsers: Array<{username: string; email: string; password: string}> = [];
+      try {
+        const storedUsers = localStorage.getItem('registeredUsers');
+        if (storedUsers) {
+          registeredUsers = JSON.parse(storedUsers);
+        }
+      } catch (error) {
+        console.error('localStorage erişim hatası:', error);
+        throw new Error('Kullanıcı verilerine erişilemiyor. Lütfen sayfayı yenileyin.');
+      }
+      
       const user = registeredUsers.find((u) => u.email === email && u.password === password);
       
       if (!user) {
@@ -73,7 +83,12 @@ const LandingPage = () => {
       }
       
       // Giriş başarılı
-      localStorage.setItem(USER_KEY, JSON.stringify({ username: user.username, email: user.email }));
+      try {
+        localStorage.setItem(USER_KEY, JSON.stringify({ username: user.username, email: user.email }));
+      } catch (error) {
+        console.error('localStorage yazma hatası:', error);
+        throw new Error('Giriş bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
+      }
       
       setUserFeedback({ type: 'success', message: 'Başarıyla giriş yapıldı!' });
       
@@ -114,8 +129,19 @@ const LandingPage = () => {
       // Simüle edilmiş API çağrısı
       await new Promise(resolve => setTimeout(resolve, 1000));
       
+      // localStorage erişim kontrolü
+      let registeredUsers: Array<{username: string; email: string; password: string}> = [];
+      try {
+        const storedUsers = localStorage.getItem('registeredUsers');
+        if (storedUsers) {
+          registeredUsers = JSON.parse(storedUsers);
+        }
+      } catch (error) {
+        console.error('localStorage erişim hatası:', error);
+        throw new Error('Kullanıcı verilerine erişilemiyor. Lütfen sayfayı yenileyin.');
+      }
+      
       // Kullanıcı zaten kayıtlı mı kontrol et
-      const registeredUsers: Array<{username: string; email: string; password: string}> = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
       const existingUser = registeredUsers.find((u) => u.email === email);
       
       if (existingUser) {
@@ -125,10 +151,14 @@ const LandingPage = () => {
       // Yeni kullanıcı kaydet
       const newUser = { username, email, password };
       registeredUsers.push(newUser);
-      localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
       
-      // Otomatik giriş yap
-      localStorage.setItem(USER_KEY, JSON.stringify({ username, email }));
+      try {
+        localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+        localStorage.setItem(USER_KEY, JSON.stringify({ username, email }));
+      } catch (error) {
+        console.error('localStorage yazma hatası:', error);
+        throw new Error('Kullanıcı bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
+      }
       
       setUserFeedback({ type: 'success', message: 'Hesabınız başarıyla oluşturuldu!' });
       
