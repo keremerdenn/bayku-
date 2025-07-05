@@ -47,14 +47,24 @@ const LandingPage = () => {
   }, [userFeedback]);
 
   // Giriş ve kayıt işlemleri
-  const handleLogin = async (email: string) => {
+  const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
     setUserFeedback({ type: null, message: '' });
     
     try {
+      // Basit validation - gerçek uygulamada API çağrısı yapılır
+      if (!email || !password) {
+        throw new Error('Email ve şifre gereklidir');
+      }
+      
+      if (password.length < 6) {
+        throw new Error('Şifre en az 6 karakter olmalıdır');
+      }
+      
       // Simüle edilmiş API çağrısı
       await new Promise(resolve => setTimeout(resolve, 1000));
       
+      // Gerçek uygulamada burada API'den kullanıcı doğrulaması yapılır
       const user = { username: email.split("@")[0], email };
       localStorage.setItem(USER_KEY, JSON.stringify(user));
       
@@ -63,18 +73,37 @@ const LandingPage = () => {
       setTimeout(() => {
         window.location.reload();
       }, 1000);
-    } catch {
-      setUserFeedback({ type: 'error', message: 'Giriş yapılırken bir hata oluştu. Lütfen tekrar deneyin.' });
+    } catch (error) {
+      setUserFeedback({ type: 'error', message: error instanceof Error ? error.message : 'Giriş yapılırken bir hata oluştu. Lütfen tekrar deneyin.' });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleRegister = async (username: string, email: string) => {
+  const handleRegister = async (username: string, email: string, password: string) => {
     setIsLoading(true);
     setUserFeedback({ type: null, message: '' });
     
     try {
+      // Validation
+      if (!username || !email || !password) {
+        throw new Error('Tüm alanlar gereklidir');
+      }
+      
+      if (username.length < 3) {
+        throw new Error('Kullanıcı adı en az 3 karakter olmalıdır');
+      }
+      
+      if (password.length < 6) {
+        throw new Error('Şifre en az 6 karakter olmalıdır');
+      }
+      
+      // Email format kontrolü
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        throw new Error('Geçerli bir email adresi giriniz');
+      }
+      
       // Simüle edilmiş API çağrısı
       await new Promise(resolve => setTimeout(resolve, 1000));
       
@@ -86,8 +115,8 @@ const LandingPage = () => {
       setTimeout(() => {
         window.location.reload();
       }, 1000);
-    } catch {
-      setUserFeedback({ type: 'error', message: 'Kayıt olurken bir hata oluştu. Lütfen tekrar deneyin.' });
+    } catch (error) {
+      setUserFeedback({ type: 'error', message: error instanceof Error ? error.message : 'Kayıt olurken bir hata oluştu. Lütfen tekrar deneyin.' });
     } finally {
       setIsLoading(false);
     }
@@ -157,84 +186,49 @@ const LandingPage = () => {
               
               {/* Enhanced Desktop Menu */}
               <div className="hidden md:flex items-center space-x-8">
-                <a href="#catalogs" className="text-white/90 hover:text-white font-semibold transition-all duration-300 hover:scale-105 relative group">
-                  Dersler
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a href="#" className="text-white/90 hover:text-white font-semibold transition-all duration-300 hover:scale-105 relative group">
-                  Sınavlar
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a href="#" className="text-white/90 hover:text-white font-semibold transition-all duration-300 hover:scale-105 relative group">
-                  Hakkımızda
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
-                </a>
-              </div>
-              
-              <div className="hidden md:flex items-center space-x-4">
+                <a href="#features" className="text-white/90 hover:text-white font-medium transition-colors duration-200">Özellikler</a>
+                <a href="#pricing" className="text-white/90 hover:text-white font-medium transition-colors duration-200">Fiyatlandırma</a>
+                <a href="#contact" className="text-white/90 hover:text-white font-medium transition-colors duration-200">İletişim</a>
                 <button 
-                  className="landing-btn-secondary text-white font-semibold hover:text-gray-200 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2.5" 
                   onClick={() => openModal(false)}
-                  disabled={isLoading}
+                  className="bg-white/20 text-white font-semibold px-6 py-2 rounded-xl hover:bg-white/30 transition-all duration-200 border border-white/30"
                 >
-                  {isLoading ? 'Yükleniyor...' : 'Giriş Yap'}
-                </button>
-                <button 
-                  className="landing-btn-primary font-bold py-2.5 px-6 disabled:opacity-50 disabled:cursor-not-allowed" 
-                  onClick={() => openModal(true)}
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Yükleniyor...' : 'Kayıt Ol'}
+                  Giriş Yap
                 </button>
               </div>
               
               {/* Enhanced Mobile Menu Button */}
-              <div className="md:hidden">
-                <button
-                  id="mobile-menu-button"
-                  className="text-white p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-300 hover:bg-white/10"
-                  aria-label="Mobil menüyü aç/kapat"
-                  aria-expanded={mobileMenuOpen}
-                  aria-controls="mobile-menu"
-                  onClick={() => setMobileMenuOpen((v) => !v)}
-                  disabled={isLoading}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-                  </svg>
-                </button>
-              </div>
+              <button 
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden text-white p-2 rounded-lg hover:bg-white/20 transition-colors duration-200"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
             </nav>
             
             {/* Enhanced Mobile Menu */}
-            <div
-              id="mobile-menu"
-              ref={mobileMenuRef}
-              className={`md:hidden mt-2 mx-6 p-6 rounded-2xl glass-effect-modal transition-all duration-300 shadow-2xl z-30 ${mobileMenuOpen ? "block opacity-100 scale-100" : "hidden opacity-0 scale-95"}`}
-              style={{ position: "absolute", left: 0, right: 0 }}
-              role="menu"
-              aria-label="Mobil Menü"
-            >
-              <a href="#catalogs" className="block text-white/80 hover:text-white py-3 transition-colors duration-200 font-medium" onClick={() => setMobileMenuOpen(false)}>Dersler</a>
-              <a href="#" className="block text-white/80 hover:text-white py-3 transition-colors duration-200 font-medium" onClick={() => setMobileMenuOpen(false)}>Sınavlar</a>
-              <a href="#" className="block text-white/80 hover:text-white py-3 transition-colors duration-200 font-medium" onClick={() => setMobileMenuOpen(false)}>Hakkımızda</a>
-              <div className="border-t border-white/20 mt-4 pt-4 space-y-3">
-                <button 
-                  className="landing-btn-secondary w-full text-left text-white font-semibold py-3 disabled:opacity-50 disabled:cursor-not-allowed" 
-                  onClick={() => openModal(false)}
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Yükleniyor...' : 'Giriş Yap'}
-                </button>
-                <button 
-                  className="landing-btn-primary w-full font-bold py-3 px-4 disabled:opacity-50 disabled:cursor-not-allowed" 
-                  onClick={() => openModal(true)}
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Yükleniyor...' : 'Kayıt Ol'}
-                </button>
+            {mobileMenuOpen && (
+              <div 
+                ref={mobileMenuRef}
+                className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border-b border-white/20 shadow-lg"
+              >
+                <div className="container mx-auto px-6 py-4 space-y-4">
+                  <a href="#features" className="block text-gray-800 hover:text-sky-600 font-medium transition-colors duration-200">Özellikler</a>
+                  <a href="#pricing" className="block text-gray-800 hover:text-sky-600 font-medium transition-colors duration-200">Fiyatlandırma</a>
+                  <a href="#contact" className="block text-gray-800 hover:text-sky-600 font-medium transition-colors duration-200">İletişim</a>
+                  <div className="pt-4 border-t border-gray-200">
+                    <button 
+                      onClick={() => openModal(false)}
+                      className="w-full bg-sky-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-sky-600 transition-all duration-200"
+                    >
+                      Giriş Yap
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </header>
           
           {/* Enhanced Hero Section */}

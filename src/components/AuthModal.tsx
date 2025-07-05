@@ -7,8 +7,8 @@ type AuthModalProps = {
   onClose: () => void;
   showRegister: boolean;
   onSwitchForm: (register: boolean) => void;
-  onLogin: (email: string) => Promise<void>;
-  onRegister: (username: string, email: string) => Promise<void>;
+  onLogin: (email: string, password: string) => Promise<void>;
+  onRegister: (username: string, email: string, password: string) => Promise<void>;
   isLoading?: boolean;
 };
 
@@ -55,7 +55,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
             <form onSubmit={async e => {
               e.preventDefault();
               if (loginEmailRef.current && !isLoading) {
-                await onLogin(loginEmailRef.current.value);
+                await onLogin(loginEmailRef.current.value, loginPasswordRef.current?.value || '');
               }
             }}>
               <div className="mb-4">
@@ -111,7 +111,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
             <form onSubmit={async e => {
               e.preventDefault();
               if (registerUsernameRef.current && registerEmailRef.current && !isLoading) {
-                await onRegister(registerUsernameRef.current.value, registerEmailRef.current.value);
+                await onRegister(registerUsernameRef.current.value, registerEmailRef.current.value, registerPasswordRef.current?.value || '');
               }
             }}>
               <div className="mb-4">

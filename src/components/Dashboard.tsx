@@ -97,9 +97,17 @@ const Dashboard = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 md:ml-64 transition-all duration-300 ease-in-out min-h-screen bg-gray-50">
+        {/* Mobil Header */}
         <header className="bg-white shadow-md w-full flex items-center justify-between px-4 h-16 md:hidden">
-          <span className="text-xl font-bold text-gray-800">Sınav Pusulası</span>
+          <span className="text-xl font-bold text-gray-800">Baykuş</span>
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+              {username?.[0]?.toUpperCase() || "U"}
+            </div>
+          </div>
         </header>
+        
+        {/* Ana İçerik */}
         <main className="pt-16 md:pt-0 p-4 sm:p-6 lg:p-8">
           {pageContent}
         </main>
