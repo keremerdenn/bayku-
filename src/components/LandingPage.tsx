@@ -5,44 +5,6 @@ import AuthModal from "./AuthModal";
 
 const USER_KEY = "sinavPusulasiUser";
 
-// Basit sessionStorage fonksiyonları (mobil uyumlu)
-const getStoredUsers = () => {
-  try {
-    // Önce sessionStorage'ı dene
-    let stored = sessionStorage.getItem('registeredUsers');
-    if (stored) {
-      console.log('Kullanıcılar sessionStorage\'da bulundu:', JSON.parse(stored));
-      return JSON.parse(stored);
-    }
-    
-    // Sonra localStorage'ı dene
-    stored = localStorage.getItem('registeredUsers');
-    if (stored) {
-      console.log('Kullanıcılar localStorage\'da bulundu:', JSON.parse(stored));
-      return JSON.parse(stored);
-    }
-    
-    console.log('Kullanıcı bulunamadı');
-    return [];
-  } catch (error) {
-    console.error('Storage okuma hatası:', error);
-    return [];
-  }
-};
-
-const setStoredUsers = (users: Array<{username: string; email: string; password: string}>) => {
-  try {
-    // Her iki storage'a da yaz
-    sessionStorage.setItem('registeredUsers', JSON.stringify(users));
-    localStorage.setItem('registeredUsers', JSON.stringify(users));
-    console.log('Kullanıcılar her iki storage\'a da kaydedildi:', users);
-    return true;
-  } catch (error) {
-    console.error('Storage yazma hatası:', error);
-    return false;
-  }
-};
-
 const LandingPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
@@ -99,24 +61,24 @@ const LandingPage = () => {
         throw new Error('Şifre en az 6 karakter olmalıdır');
       }
       
-      // Simüle edilmiş API çağrısı
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // API çağrısı
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
       
-      // Kullanıcı kontrolü
-      const registeredUsers = getStoredUsers();
-      console.log('Kayıtlı kullanıcılar:', registeredUsers);
-      console.log('Giriş denemesi:', { email, password });
+      const data = await response.json();
       
-      const user = registeredUsers.find((u: {username: string; email: string; password: string}) => u.email === email && u.password === password);
-      
-      if (!user) {
-        console.log('Kullanıcı bulunamadı');
-        throw new Error('Email veya şifre hatalı. Lütfen önce kayıt olun.');
+      if (!response.ok) {
+        throw new Error(data.error || 'Giriş yapılırken bir hata oluştu');
       }
       
       // Giriş başarılı
       try {
-        localStorage.setItem(USER_KEY, JSON.stringify({ username: user.username, email: user.email }));
+        localStorage.setItem(USER_KEY, JSON.stringify(data.user));
       } catch (error) {
         console.error('localStorage yazma hatası:', error);
         throw new Error('Giriş bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
@@ -158,32 +120,24 @@ const LandingPage = () => {
         throw new Error('Geçerli bir email adresi giriniz');
       }
       
-      // Simüle edilmiş API çağrısı
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // API çağrısı
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
       
-      // Kullanıcı kontrolü
-      const registeredUsers = getStoredUsers();
-      console.log('Mevcut kayıtlı kullanıcılar:', registeredUsers);
+      const data = await response.json();
       
-      const existingUser = registeredUsers.find((u: {username: string; email: string; password: string}) => u.email === email);
-      
-      if (existingUser) {
-        console.log('Kullanıcı zaten mevcut:', existingUser);
-        throw new Error('Bu email adresi zaten kayıtlı. Lütfen giriş yapın.');
+      if (!response.ok) {
+        throw new Error(data.error || 'Kayıt olurken bir hata oluştu');
       }
       
-      // Yeni kullanıcı kaydet
-      const newUser = { username, email, password };
-      registeredUsers.push(newUser);
-      console.log('Yeni kullanıcı eklendi:', newUser);
-      console.log('Güncellenmiş kullanıcı listesi:', registeredUsers);
-      
-      if (!setStoredUsers(registeredUsers)) {
-        throw new Error('Kullanıcı bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
-      }
-      
+      // Kayıt başarılı - otomatik giriş yap
       try {
-        localStorage.setItem(USER_KEY, JSON.stringify({ username, email }));
+        localStorage.setItem(USER_KEY, JSON.stringify(data.user));
       } catch (error) {
         console.error('localStorage yazma hatası:', error);
         throw new Error('Kullanıcı bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
