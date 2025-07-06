@@ -6,27 +6,15 @@ import AuthModal from "./AuthModal";
 const USER_KEY = "sinavPusulasiUser";
 const USERS_KEY = "registeredUsers";
 
-// localStorage yardımcı fonksiyonları
+// Basit localStorage fonksiyonları
 const getStoredUsers = () => {
   try {
-    // Tüm olası key'leri dene
-    const possibleKeys = [
-      USERS_KEY, // 'registeredUsers'
-      'registeredUsers',
-      'sinavPusulasiRegisteredUsers',
-      'users',
-      'baykusUsers'
-    ];
-    
-    for (const key of possibleKeys) {
-      const stored = localStorage.getItem(key);
-      if (stored) {
-        console.log(`Kullanıcılar bulundu: ${key}`, JSON.parse(stored));
-        return JSON.parse(stored);
-      }
+    const stored = localStorage.getItem('registeredUsers');
+    if (stored) {
+      console.log('Kullanıcılar bulundu:', JSON.parse(stored));
+      return JSON.parse(stored);
     }
-    
-    console.log('Hiçbir key\'de kullanıcı bulunamadı');
+    console.log('Kullanıcı bulunamadı');
     return [];
   } catch (error) {
     console.error('localStorage okuma hatası:', error);
@@ -36,20 +24,8 @@ const getStoredUsers = () => {
 
 const setStoredUsers = (users: Array<{username: string; email: string; password: string}>) => {
   try {
-    // Tüm olası key'lere yaz (mobil ve web uyumluluğu için)
-    const keysToWrite = [
-      USERS_KEY, // 'registeredUsers'
-      'registeredUsers',
-      'sinavPusulasiRegisteredUsers',
-      'users',
-      'baykusUsers'
-    ];
-    
-    for (const key of keysToWrite) {
-      localStorage.setItem(key, JSON.stringify(users));
-    }
-    
-    console.log('Kullanıcılar tüm key\'lere yazıldı:', users);
+    localStorage.setItem('registeredUsers', JSON.stringify(users));
+    console.log('Kullanıcılar kaydedildi:', users);
     return true;
   } catch (error) {
     console.error('localStorage yazma hatası:', error);
