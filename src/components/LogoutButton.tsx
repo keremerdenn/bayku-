@@ -22,7 +22,7 @@ export default function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-2 md:px-5 md:py-2 rounded-xl bg-gradient-to-r from-sky-400 to-blue-500 text-white font-bold shadow-lg border-2 border-white/40 hover:scale-105 transition-transform text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-sky-300"
+      className="fixed top-6 right-6 z-[60] flex items-center gap-2 px-3 py-2 md:px-5 md:py-2 rounded-xl bg-white text-sky-600 font-bold shadow-xl border border-gray-200 hover:bg-sky-50 transition-all text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-sky-300"
       aria-label="Çıkış Yap"
     >
       <ArrowRightOnRectangleIcon className="w-4 h-4 md:w-5 md:h-5" />

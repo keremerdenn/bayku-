@@ -61,22 +61,22 @@ const Navbar: React.FC<NavbarProps> = ({ onLogin, onRegister }) => {
         </div>
       </nav>
       
-      {/* Mobil Menü - Tamamen yeniden tasarlandı */}
+      {/* Mobil Menü - Renk sorunu düzeltildi */}
       {isMobileMenuOpen && (
-        <div className="md:hidden mt-2 p-4 rounded-xl glass-effect-modal animate-in slide-in-from-top-2">
+        <div className="md:hidden mt-2 p-4 rounded-xl bg-white/95 backdrop-blur-lg border border-white/30 shadow-2xl">
           <div className="space-y-4">
-            <a href="#catalogs" className="block text-white/80 hover:text-white py-2 px-3 rounded-lg hover:bg-white/10 transition-colors">
+            <a href="#catalogs" className="block text-gray-800 hover:text-sky-600 py-3 px-4 rounded-lg hover:bg-sky-50 transition-colors font-medium">
               Dersler
             </a>
-            <a href="#" className="block text-white/80 hover:text-white py-2 px-3 rounded-lg hover:bg-white/10 transition-colors">
+            <a href="#" className="block text-gray-800 hover:text-sky-600 py-3 px-4 rounded-lg hover:bg-sky-50 transition-colors font-medium">
               Sınavlar
             </a>
-            <a href="#" className="block text-white/80 hover:text-white py-2 px-3 rounded-lg hover:bg-white/10 transition-colors">
+            <a href="#" className="block text-gray-800 hover:text-sky-600 py-3 px-4 rounded-lg hover:bg-sky-50 transition-colors font-medium">
               Hakkımızda
             </a>
-            <div className="border-t border-white/20 pt-4 space-y-3">
+            <div className="border-t border-gray-200 pt-4 space-y-3">
               <button 
-                className="w-full text-left text-white font-semibold py-2 px-3 rounded-lg hover:bg-white/10 transition-colors" 
+                className="w-full text-left text-gray-800 hover:text-sky-600 py-3 px-4 rounded-lg hover:bg-sky-50 transition-colors font-semibold" 
                 onClick={() => {
                   onLogin();
                   setIsMobileMenuOpen(false);
@@ -85,7 +85,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogin, onRegister }) => {
                 Giriş Yap
               </button>
               <button 
-                className="w-full bg-white text-sky-600 font-bold py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors" 
+                className="w-full bg-sky-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-sky-600 transition-colors shadow-lg" 
                 onClick={() => {
                   onRegister();
                   setIsMobileMenuOpen(false);

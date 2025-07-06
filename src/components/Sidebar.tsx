@@ -56,10 +56,10 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobil Menü Butonu - Daha iyi tasarım */}
+      {/* Mobil Menü Butonu - Z-index ve konumlandırma düzeltildi */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed top-4 left-4 z-50 p-3 bg-sky-500 text-white rounded-xl shadow-lg hover:bg-sky-600 transition-all duration-200 modal-close-btn"
+        className="md:hidden fixed top-6 left-6 z-[60] p-3 bg-white text-sky-600 rounded-xl shadow-xl hover:bg-sky-50 transition-all duration-200 border border-gray-200"
         aria-label="Menüyü aç/kapat"
       >
         {isOpen ? (
@@ -69,16 +69,16 @@ export default function Sidebar() {
         )}
       </button>
 
-      {/* Mobil Overlay - Daha iyi z-index */}
+      {/* Mobil Overlay - Z-index düzeltildi */}
       {isOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/60 z-40 backdrop-blur-sm sidebar-overlay"
+          className="md:hidden fixed inset-0 bg-black/60 z-50 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* Sidebar - Tamamen yeniden tasarlandı */}
-      <aside className={`glass-sidebar text-sky-900 w-80 md:w-64 h-screen fixed top-0 left-0 flex flex-col z-50 transition-all duration-300 ease-in-out shadow-2xl md:translate-x-0 sidebar-content ${
+      {/* Sidebar - Z-index düzeltildi */}
+      <aside className={`glass-sidebar text-sky-900 w-80 md:w-64 h-screen fixed top-0 left-0 flex flex-col z-[55] transition-all duration-300 ease-in-out shadow-2xl md:translate-x-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         {/* Logo ve başlık - Mobil için optimize */}
