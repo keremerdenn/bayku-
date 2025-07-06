@@ -7,8 +7,7 @@ import {
   BookOpenIcon,
   ChartBarIcon,
   Bars3Icon,
-  XMarkIcon,
-  Cog6ToothIcon,
+  XMarkIcon
 } from "@heroicons/react/24/outline";
 
 // Gradientli Baykuş SVG ikonu
