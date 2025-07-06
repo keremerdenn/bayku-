@@ -31,7 +31,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
   
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-2xl p-8 relative shadow-2xl border border-white/20"
+      <div className="w-full max-w-md rounded-2xl p-6 md:p-8 relative shadow-2xl border border-white/20 auth-modal-content"
         style={{
           background: 'rgba(255,255,255,0.92)',
           backdropFilter: 'blur(32px)',
@@ -39,51 +39,52 @@ const AuthModal: React.FC<AuthModalProps> = ({
           boxShadow: '0 8px 40px 0 rgba(14, 165, 233, 0.18)'
         }}
       >
-        {/* Kapat Butonu */}
+        {/* Kapat Butonu - Mobil için optimize */}
         <button 
           onClick={onClose} 
-          className="absolute top-4 right-4 text-gray-500 hover:text-sky-500 transition-colors duration-200 disabled:opacity-50 bg-white/70 rounded-full p-1 shadow-md"
+          className="absolute top-3 right-3 md:top-4 md:right-4 text-gray-500 hover:text-sky-500 transition-colors duration-200 disabled:opacity-50 bg-white/70 rounded-full p-2 md:p-1 shadow-md modal-close-btn"
           disabled={isLoading}
+          aria-label="Modal'ı kapat"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-7 md:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
         
         {/* Giriş Formu */}
         {!showRegister && (
           <>
-            <h2 className="text-3xl font-bold text-slate-800 mb-6">Giriş Yap</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 md:mb-6 text-center">Giriş Yap</h2>
             <form onSubmit={async e => {
               e.preventDefault();
               if (loginEmailRef.current && !isLoading) {
                 await onLogin(loginEmailRef.current.value, loginPasswordRef.current?.value || '');
               }
-            }}>
+            }} className="auth-form">
               <div className="mb-4">
-                <label className="block text-slate-700 text-sm font-semibold mb-2">E-posta Adresi</label>
+                <label className="block text-slate-700 text-sm font-semibold mb-2 form-label">E-posta Adresi</label>
                 <input 
                   ref={loginEmailRef} 
                   type="email" 
                   required 
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed" 
+                  className="w-full px-4 py-3 md:py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed form-input auth-input" 
                   placeholder="ornek@email.com"
                 />
               </div>
               <div className="mb-6">
-                <label className="block text-slate-700 text-sm font-semibold mb-2">Şifre</label>
+                <label className="block text-slate-700 text-sm font-semibold mb-2 form-label">Şifre</label>
                 <input 
                   ref={loginPasswordRef} 
                   type="password" 
                   required 
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed" 
+                  className="w-full px-4 py-3 md:py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed form-input auth-input" 
                   placeholder="••••••••"
                 />
               </div>
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full bg-sky-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-sky-600 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full bg-sky-500 text-white font-bold py-3 md:py-3 px-4 rounded-lg hover:bg-sky-600 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none form-button auth-button"
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center space-x-2">
@@ -91,13 +92,13 @@ const AuthModal: React.FC<AuthModalProps> = ({
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span>Giriş Yapılıyor...</span>
+                    <span className="text-sm md:text-base">Giriş Yapılıyor...</span>
                   </div>
                 ) : (
                   'Giriş Yap'
                 )}
               </button>
-              <p className="text-center text-gray-500 text-sm mt-6">
+              <p className="text-center text-gray-500 text-sm mt-4 md:mt-6">
                 Hesabın yok mu? <button type="button" onClick={() => onSwitchForm(true)} className="font-semibold text-sky-500 hover:underline transition-colors duration-200">Kayıt Ol</button>
               </p>
             </form>
@@ -107,52 +108,52 @@ const AuthModal: React.FC<AuthModalProps> = ({
         {/* Kayıt Formu */}
         {showRegister && (
           <>
-            <h2 className="text-3xl font-bold text-slate-800 mb-6">Hesap Oluştur</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 md:mb-6 text-center">Hesap Oluştur</h2>
             <form onSubmit={async e => {
               e.preventDefault();
               if (registerUsernameRef.current && registerEmailRef.current && !isLoading) {
                 await onRegister(registerUsernameRef.current.value, registerEmailRef.current.value, registerPasswordRef.current?.value || '');
               }
-            }}>
+            }} className="auth-form">
               <div className="mb-4">
-                <label className="block text-slate-700 text-sm font-semibold mb-2">Kullanıcı Adı</label>
+                <label className="block text-slate-700 text-sm font-semibold mb-2 form-label">Kullanıcı Adı</label>
                 <input 
                   ref={registerUsernameRef} 
                   type="text" 
                   required 
                   minLength={3} 
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed" 
+                  className="w-full px-4 py-3 md:py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed form-input auth-input" 
                   placeholder="Kullanıcı adınız"
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-slate-700 text-sm font-semibold mb-2">E-posta Adresi</label>
+                <label className="block text-slate-700 text-sm font-semibold mb-2 form-label">E-posta Adresi</label>
                 <input 
                   ref={registerEmailRef} 
                   type="email" 
                   required 
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed" 
+                  className="w-full px-4 py-3 md:py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed form-input auth-input" 
                   placeholder="ornek@email.com"
                 />
               </div>
               <div className="mb-6">
-                <label className="block text-slate-700 text-sm font-semibold mb-2">Şifre</label>
+                <label className="block text-slate-700 text-sm font-semibold mb-2 form-label">Şifre</label>
                 <input 
                   ref={registerPasswordRef} 
                   type="password" 
                   required 
                   minLength={6} 
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed" 
+                  className="w-full px-4 py-3 md:py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed form-input auth-input" 
                   placeholder="En az 6 karakter"
                 />
               </div>
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full bg-sky-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-sky-600 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full bg-sky-500 text-white font-bold py-3 md:py-3 px-4 rounded-lg hover:bg-sky-600 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none form-button auth-button"
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center space-x-2">
@@ -160,13 +161,13 @@ const AuthModal: React.FC<AuthModalProps> = ({
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span>Kayıt Oluşturuluyor...</span>
+                    <span className="text-sm md:text-base">Kayıt Oluşturuluyor...</span>
                   </div>
                 ) : (
                   'Kayıt Ol'
                 )}
               </button>
-              <p className="text-center text-gray-500 text-sm mt-6">
+              <p className="text-center text-gray-500 text-sm mt-4 md:mt-6">
                 Zaten bir hesabın var mı? <button type="button" onClick={() => onSwitchForm(false)} className="font-semibold text-sky-500 hover:underline transition-colors duration-200">Giriş Yap</button>
               </p>
             </form>

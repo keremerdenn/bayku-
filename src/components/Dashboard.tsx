@@ -98,9 +98,9 @@ const Dashboard = () => {
       <Sidebar />
       <div className="flex-1 md:ml-64 transition-all duration-300 ease-in-out min-h-screen bg-gray-50">
         {/* Mobil Header - Tamamen yeniden tasarlandı */}
-        <header className="bg-white shadow-md w-full flex items-center justify-between px-4 h-16 md:hidden sticky top-0 z-30">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center">
+        <header className="bg-white shadow-md w-full flex items-center justify-between px-4 h-16 md:hidden sticky top-0 z-30 mobile-header">
+          <div className="flex items-center space-x-3 mobile-header-content">
+            <div className="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center mobile-header-logo">
               <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="16" cy="22" rx="8" ry="5" fill="#ffffff"/>
                 <ellipse cx="12" cy="14" rx="3" ry="3" fill="#0ea5e9"/>
@@ -114,14 +114,14 @@ const Dashboard = () => {
             <span className="text-lg font-bold text-gray-800">Baykuş</span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm mobile-header-avatar">
               {username?.[0]?.toUpperCase() || "U"}
             </div>
           </div>
         </header>
         
         {/* Ana İçerik - Mobil için optimize */}
-        <main className="pt-16 md:pt-0 p-4 sm:p-6 lg:p-8">
+        <main className="pt-16 md:pt-0 p-4 sm:p-6 lg:p-8 mobile-content">
           {pageContent}
         </main>
       </div>

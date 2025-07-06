@@ -1,6 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 // Heroicons yeni sürüm importları
 import {
   HomeIcon,
@@ -13,7 +12,9 @@ import {
   ChartBarIcon,
   Bars3Icon,
   XMarkIcon,
+  Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
+import LogoutButton from "./LogoutButton";
 
 // Gradientli Baykuş SVG ikonu
 const OwlIcon = () => (
@@ -63,7 +64,7 @@ export default function Sidebar() {
       {/* Mobil Menü Butonu - Daha iyi tasarım */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed top-4 left-4 z-50 p-3 bg-sky-500 text-white rounded-xl shadow-lg hover:bg-sky-600 transition-all duration-200"
+        className="md:hidden fixed top-4 left-4 z-50 p-3 bg-sky-500 text-white rounded-xl shadow-lg hover:bg-sky-600 transition-all duration-200 modal-close-btn"
         aria-label="Menüyü aç/kapat"
       >
         {isOpen ? (
@@ -76,13 +77,13 @@ export default function Sidebar() {
       {/* Mobil Overlay - Daha iyi z-index */}
       {isOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/60 z-40 backdrop-blur-sm"
+          className="md:hidden fixed inset-0 bg-black/60 z-40 backdrop-blur-sm sidebar-overlay"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar - Tamamen yeniden tasarlandı */}
-      <aside className={`glass-sidebar text-sky-900 w-80 md:w-64 h-screen fixed top-0 left-0 flex flex-col z-50 transition-all duration-300 ease-in-out shadow-2xl md:translate-x-0 ${
+      <aside className={`glass-sidebar text-sky-900 w-80 md:w-64 h-screen fixed top-0 left-0 flex flex-col z-50 transition-all duration-300 ease-in-out shadow-2xl md:translate-x-0 sidebar-content ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         {/* Logo ve başlık - Mobil için optimize */}
@@ -107,38 +108,37 @@ export default function Sidebar() {
             <ChatBubbleLeftRightIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
             <span className="font-medium text-lg md:text-sm">Sohbet</span>
           </a>
-          <a href="#/sorutartismasi" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
-            <UserGroupIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
-            <span className="font-medium text-lg md:text-sm">Soru Tartışması</span>
-          </a>
           <a href="#/derslerim" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
             <BookOpenIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
             <span className="font-medium text-lg md:text-sm">Derslerim</span>
-          </a>
-          <a href="#/denemelerim" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
-            <ClipboardDocumentListIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
-            <span className="font-medium text-lg md:text-sm">Denemelerim</span>
-          </a>
-          <a href="#/sorucuzdanim" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
-            <WalletIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
-            <span className="font-medium text-lg md:text-sm">Soru Cüzdanım</span>
           </a>
           <a href="#/verilerim" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
             <ChartBarIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
             <span className="font-medium text-lg md:text-sm">Verilerim</span>
           </a>
+          <a href="#/ayarlar" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
+            <Cog6ToothIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
+            <span className="font-medium text-lg md:text-sm">Ayarlar</span>
+          </a>
         </nav>
         
-        {/* Profil Alanı - Mobil için optimize */}
-        <div className="mt-auto w-full px-4 md:px-6 pb-6 md:pb-12 pt-2 flex flex-col gap-4">
-          <div className="flex items-center gap-4 bg-white/90 rounded-2xl p-4 shadow-md">
-            <div className="w-14 h-14 md:w-12 md:h-12 flex items-center justify-center bg-gradient-to-br from-sky-400 to-blue-500 text-white font-bold rounded-full text-xl md:text-lg shadow">
-              {initial}
+        {/* Kullanıcı Profili - Mobil için optimize */}
+        <div className="sidebar-profile px-4 pb-6">
+          <div className="sidebar-profile-box p-4 md:p-3">
+            <div className="flex items-center space-x-3">
+              <div className="sidebar-profile-avatar w-12 h-12 md:w-10 md:h-10 flex items-center justify-center text-white font-bold text-lg md:text-base">
+                {initial}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white font-semibold text-base md:text-sm truncate">{username}</p>
+                <p className="text-sky-200 text-sm md:text-xs truncate">{email}</p>
+              </div>
             </div>
-            <div className="flex flex-col flex-1 min-w-0">
-              <span className="font-semibold text-sky-900 text-base md:text-sm leading-tight truncate">{username}</span>
-              <span className="text-xs text-sky-700 opacity-80 truncate">{email}</span>
-            </div>
+          </div>
+          
+          {/* Çıkış Butonu - Mobil için optimize */}
+          <div className="mt-4">
+            <LogoutButton />
           </div>
         </div>
       </aside>

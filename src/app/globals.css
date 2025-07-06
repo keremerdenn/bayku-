@@ -447,6 +447,572 @@ footer a:focus-visible {
   }
 }
 
+/* Enhanced Mobile Responsive Design */
+@media (max-width: 1024px) {
+  .text-display {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+  }
+  
+  .text-heading {
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  }
+  
+  .text-subheading {
+    font-size: clamp(1.125rem, 1.8vw, 1.375rem);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mobile Typography */
+  .text-display {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    line-height: 1.2;
+  }
+  
+  .text-heading {
+    font-size: clamp(1.375rem, 2.2vw, 2rem);
+    line-height: 1.3;
+  }
+  
+  .text-subheading {
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    line-height: 1.4;
+  }
+  
+  .text-body {
+    font-size: clamp(0.875rem, 1.4vw, 1rem);
+    line-height: 1.5;
+  }
+  
+  /* Mobile Landing Page Enhancements */
+  .landing-btn-primary {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+  
+  .landing-btn-secondary {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+  
+  /* Mobile Card Enhancements */
+  .landing-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  
+  /* Mobile Modal Enhancements */
+  .auth-modal-box {
+    margin: 1rem;
+    padding: 1.5rem;
+    border-radius: 16px;
+    max-width: calc(100vw - 2rem);
+  }
+  
+  /* Mobile Navigation */
+  .nav-link {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+    min-height: 2.5rem;
+  }
+  
+  /* Mobile Sidebar */
+  .glass-sidebar {
+    width: 100vw;
+    max-width: 320px;
+  }
+  
+  /* Mobile Footer */
+  .footer-section {
+    padding: 2rem 1rem;
+  }
+  
+  .footer-section .container {
+    padding: 0 1rem;
+  }
+  
+  /* Mobile Social Icons */
+  .social-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  /* Mobile Toast */
+  .toast-enter {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra Small Mobile */
+  .text-display {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  
+  .text-heading {
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+  }
+  
+  .landing-btn-primary,
+  .landing-btn-secondary {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+  
+  .landing-card {
+    padding: 1.25rem;
+  }
+  
+  .auth-modal-box {
+    padding: 1.25rem;
+    margin: 0.5rem;
+  }
+  
+  /* Mobile Menu Enhancements */
+  .glass-effect-modal {
+    margin: 0.5rem;
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+  
+  /* Mobile Hero Section */
+  .hero-section {
+    padding: 2rem 1rem;
+  }
+  
+  /* Mobile Catalog Grid */
+  .catalog-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  /* Mobile Footer */
+  .footer-section {
+    padding: 1.5rem 0.5rem;
+  }
+  
+  .footer-section .container {
+    padding: 0 0.5rem;
+  }
+}
+
+/* Mobile Touch Enhancements */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch-friendly button sizes */
+  .landing-btn-primary,
+  .landing-btn-secondary,
+  .btn-primary {
+    min-height: 44px;
+    padding: 0.875rem 1.5rem;
+  }
+  
+  /* Touch-friendly input fields */
+  input, textarea, select {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Touch-friendly navigation */
+  .nav-link {
+    min-height: 44px;
+    padding: 0.875rem 1rem;
+  }
+  
+  /* Touch-friendly modal close button */
+  .modal-close-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Mobile Landscape Orientation */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero-section {
+    padding: 1.5rem 1rem;
+  }
+  
+  .text-display {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+  }
+  
+  .landing-btn-primary,
+  .landing-btn-secondary {
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+/* Mobile Safe Area Support */
+@supports (padding: max(0px)) {
+  .mobile-safe-area {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  /* Reduce animations on mobile for better performance */
+  .landing-btn-primary::before,
+  .landing-btn-secondary::before,
+  .landing-card::before {
+    transition: none;
+  }
+  
+  /* Optimize shadows for mobile */
+  .landing-card,
+  .auth-modal-box,
+  .glass-effect-modal {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Reduce backdrop blur on mobile for performance */
+  .glass-effect-modal {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+/* Mobile Loading States */
+@media (max-width: 768px) {
+  .loading-spinner {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
+  .loading-text {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile Form Enhancements */
+@media (max-width: 768px) {
+  .form-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.875rem 1rem;
+    border-radius: 8px;
+  }
+  
+  .form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-button {
+    min-height: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+/* Mobile Menu Enhancements */
+@media (max-width: 768px) {
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .mobile-menu-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
+
+/* Mobile Toast Enhancements */
+@media (max-width: 768px) {
+  .toast-container {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    z-index: 60;
+  }
+  
+  .toast-message {
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+}
+
+/* Mobile Chart Enhancements */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 200px;
+    margin: 1rem 0;
+  }
+  
+  .chart-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Mobile Stat Card Enhancements */
+@media (max-width: 768px) {
+  .stat-card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .stat-card-title {
+    font-size: 0.875rem;
+  }
+  
+  .stat-card-value {
+    font-size: 1.5rem;
+  }
+  
+  .stat-card-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+/* Mobile Sidebar Enhancements */
+@media (max-width: 768px) {
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+  }
+  
+  .sidebar-content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar-content.open {
+    transform: translateX(0);
+  }
+}
+
+/* Mobile Header Enhancements */
+@media (max-width: 768px) {
+  .mobile-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.75rem 1rem;
+  }
+  
+  .mobile-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .mobile-header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .mobile-header-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #0ea5e9;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+}
+
+/* Mobile Content Enhancements */
+@media (max-width: 768px) {
+  .mobile-content {
+    padding: 1rem;
+  }
+  
+  .mobile-section {
+    margin-bottom: 2rem;
+  }
+  
+  .mobile-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .mobile-card {
+    padding: 1.25rem;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Mobile Chat Enhancements */
+@media (max-width: 768px) {
+  .chat-container {
+    height: calc(100vh - 8rem);
+  }
+  
+  .chat-message {
+    max-width: 85%;
+    margin-bottom: 1rem;
+  }
+  
+  .chat-input {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+  }
+}
+
+/* Mobile Auth Modal Enhancements */
+@media (max-width: 768px) {
+  .auth-modal {
+    padding: 1rem;
+  }
+  
+  .auth-modal-content {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+  
+  .auth-form {
+    gap: 1rem;
+  }
+  
+  .auth-input {
+    padding: 0.875rem 1rem;
+    font-size: 16px;
+  }
+  
+  .auth-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+/* Mobile Loading Enhancements */
+@media (max-width: 768px) {
+  .mobile-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .mobile-loading-spinner {
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .mobile-loading-text {
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+}
+
+/* Mobile Error Enhancements */
+@media (max-width: 768px) {
+  .mobile-error {
+    padding: 1.5rem;
+    text-align: center;
+    border-radius: 12px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+  }
+  
+  .mobile-error-icon {
+    width: 2rem;
+    height: 2rem;
+    margin: 0 auto 1rem;
+  }
+  
+  .mobile-error-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .mobile-error-message {
+    font-size: 0.875rem;
+    color: #7f1d1d;
+  }
+}
+
+/* Mobile Success Enhancements */
+@media (max-width: 768px) {
+  .mobile-success {
+    padding: 1.5rem;
+    text-align: center;
+    border-radius: 12px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+  }
+  
+  .mobile-success-icon {
+    width: 2rem;
+    height: 2rem;
+    margin: 0 auto 1rem;
+  }
+  
+  .mobile-success-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .mobile-success-message {
+    font-size: 0.875rem;
+    color: #14532d;
+  }
+}
+
 /* Loading Animation for Buttons */
 @keyframes spin {
   to {
