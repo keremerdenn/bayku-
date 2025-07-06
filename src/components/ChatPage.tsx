@@ -25,14 +25,6 @@ const Avatar = ({ name = "User", size = 32, className = "" }: { name?: string; s
   );
 };
 
-const exampleUsers = [
-  { name: "Ayşe" },
-  { name: "Mehmet" },
-  { name: "Zeynep" },
-  { name: "Can" },
-];
-const currentUser = { name: "Ben" };
-
 type Message = {
   id: number;
   text: string;

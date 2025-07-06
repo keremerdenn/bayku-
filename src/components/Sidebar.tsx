@@ -1,20 +1,16 @@
 "use client";
 import React, { useState, useEffect } from "react";
-// Heroicons yeni sürüm importları
+import LogoutButton from "./LogoutButton";
 import {
   HomeIcon,
   PencilIcon,
   ChatBubbleLeftRightIcon,
-  UserGroupIcon,
   BookOpenIcon,
-  ClipboardDocumentListIcon,
-  WalletIcon,
   ChartBarIcon,
   Bars3Icon,
   XMarkIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
-import LogoutButton from "./LogoutButton";
 
 // Gradientli Baykuş SVG ikonu
 const OwlIcon = () => (
