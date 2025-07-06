@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// Basit in-memory kullanıcı veritabanı (gerçek projede database kullanılır)
-let users: Array<{username: string; email: string; password: string}> = [
-  { username: 'test', email: 'test@test.com', password: '123456' }
-];
+import { supabase } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,10 +20,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Kullanıcı kontrolü
-    const user = users.find(u => u.email === email && u.password === password);
+    // Supabase'den kullanıcı kontrolü
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('username, email, password')
+      .eq('email', email)
+      .eq('password', password)
+      .single();
 
-    if (!user) {
+    if (error || !user) {
       return NextResponse.json(
         { error: 'Email veya şifre hatalı. Lütfen önce kayıt olun.' },
         { status: 401 }

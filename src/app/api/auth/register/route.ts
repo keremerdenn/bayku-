@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// Basit in-memory kullanıcı veritabanı (gerçek projede database kullanılır)
-let users: Array<{username: string; email: string; password: string}> = [
-  { username: 'test', email: 'test@test.com', password: '123456' }
-];
+import { supabase } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,7 +37,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Kullanıcı zaten kayıtlı mı kontrol et
-    const existingUser = users.find(u => u.email === email);
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('email')
+      .eq('email', email)
+      .single();
+
     if (existingUser) {
       return NextResponse.json(
         { error: 'Bu email adresi zaten kayıtlı. Lütfen giriş yapın.' },
@@ -50,13 +51,24 @@ export async function POST(request: NextRequest) {
     }
 
     // Yeni kullanıcı kaydet
-    const newUser = { username, email, password };
-    users.push(newUser);
+    const { data: newUser, error } = await supabase
+      .from('users')
+      .insert([{ username, email, password }])
+      .select('username, email')
+      .single();
+
+    if (error) {
+      console.error('Supabase insert error:', error);
+      return NextResponse.json(
+        { error: 'Kullanıcı kaydedilemedi' },
+        { status: 500 }
+      );
+    }
 
     // Başarılı kayıt
     return NextResponse.json({
       success: true,
-      user: { username, email }
+      user: newUser
     });
 
   } catch (error) {
