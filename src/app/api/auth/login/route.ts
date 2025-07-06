@@ -5,28 +5,22 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
 
-    // Validation
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email ve şifre gereklidir' },
-        { status: 400 }
-      );
-    }
+    // Debug logları
+    console.log('Gelen email:', email);
+    console.log('Gelen password:', password);
+    console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+    console.log('Supabase ANON KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
-    if (password.length < 6) {
-      return NextResponse.json(
-        { error: 'Şifre en az 6 karakter olmalıdır' },
-        { status: 400 }
-      );
-    }
-
-    // Supabase'den kullanıcı kontrolü
+    // Sorgu
     const { data: user, error } = await supabase
       .from('users')
-      .select('username, email, password')
+      .select('*')
       .eq('email', email)
       .eq('password', password)
       .single();
+
+    console.log('Supabase user:', user);
+    console.log('Supabase error:', error);
 
     if (error || !user) {
       return NextResponse.json(
@@ -35,7 +29,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Başarılı giriş
     return NextResponse.json({
       success: true,
       user: { username: user.username, email: user.email }
