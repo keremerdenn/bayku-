@@ -78,60 +78,64 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Sidebar - Modern ve kompakt */}
-      <aside className={`glass-sidebar w-[85vw] max-w-xs h-screen fixed top-0 left-0 flex flex-col z-[55] transition-all duration-300 ease-in-out shadow-2xl md:w-64 md:translate-x-0 ${
-        isOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
-        {/* Üstte logo ve X aynı hizada */}
-        <div className="flex items-center justify-between px-3 pt-3 pb-1">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 flex items-center justify-center bg-sky-100 rounded-full">
-              <OwlIcon />
-            </div>
-            <span className="font-extrabold text-base tracking-tight bg-gradient-to-r from-sky-400 to-blue-500 text-transparent bg-clip-text">Baykuş</span>
+      {/* Sidebar - Eski klasik ve koyu mavi gradientli */}
+      <aside className={`glass-sidebar w-64 h-screen fixed top-0 left-0 flex flex-col z-[55] transition-all duration-300 ease-in-out shadow-2xl ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+        {/* Logo ve başlık */}
+        <div className="flex items-center gap-3 px-6 pt-6 pb-2">
+          <div className="w-10 h-10 flex items-center justify-center bg-white/10 rounded-full">
+            <OwlIcon />
           </div>
-          <button onClick={()=>setIsOpen(false)} className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 shadow-sm p-0.5">
-            <XMarkIcon className="w-5 h-5 text-sky-600" />
-          </button>
+          <span className="text-2xl font-extrabold tracking-tight text-white">Baykuş</span>
         </div>
         {/* Menü Linkleri */}
-        <nav className="flex-1 px-1 pb-2 space-y-1 mt-1">
-          <a href="#/dashboard" className="nav-link flex items-center gap-2 p-2 rounded-xl sidebar-link-active shadow bg-gradient-to-r from-sky-100 to-sky-200 border border-sky-300 text-sm">
-            <HomeIcon className="w-4 h-4 text-sky-600" />
-            <span className="font-semibold">Panelim</span>
+        <nav className="flex-1 px-2 pt-2 pb-4 space-y-1">
+          <a href="#/dashboard" className="nav-link sidebar-link-active flex items-center gap-2">
+            <HomeIcon className="w-5 h-5" />
+            <span>Panelim</span>
           </a>
-          <a href="#/sorucozme" className="nav-link flex items-center gap-2 p-2 rounded-xl hover:bg-sky-50 transition text-sm">
-            <PencilIcon className="w-4 h-4 text-sky-500" />
-            <span className="font-medium">Soru Çöz</span>
+          <a href="#/sorucozme" className="nav-link flex items-center gap-2">
+            <PencilIcon className="w-5 h-5" />
+            <span>Soru Çöz</span>
           </a>
-          <a href="#/sohbet" className="nav-link flex items-center gap-2 p-2 rounded-xl hover:bg-sky-50 transition text-sm">
-            <ChatBubbleLeftRightIcon className="w-4 h-4 text-sky-500" />
-            <span className="font-medium">Sohbet</span>
+          <a href="#/sohbet" className="nav-link flex items-center gap-2">
+            <ChatBubbleLeftRightIcon className="w-5 h-5" />
+            <span>Sohbet</span>
           </a>
-          <a href="#/derslerim" className="nav-link flex items-center gap-2 p-2 rounded-xl hover:bg-sky-50 transition text-sm">
-            <BookOpenIcon className="w-4 h-4 text-sky-500" />
-            <span className="font-medium">Derslerim</span>
+          <a href="#/sorutartisma" className="nav-link flex items-center gap-2">
+            <ChatBubbleLeftRightIcon className="w-5 h-5" />
+            <span>Soru Tartışması</span>
           </a>
-          <a href="#/verilerim" className="nav-link flex items-center gap-2 p-2 rounded-xl hover:bg-sky-50 transition text-sm">
-            <ChartBarIcon className="w-4 h-4 text-sky-500" />
-            <span className="font-medium">Verilerim</span>
+          <a href="#/derslerim" className="nav-link flex items-center gap-2">
+            <BookOpenIcon className="w-5 h-5" />
+            <span>Derslerim</span>
           </a>
-          <a href="#/ayarlar" className="nav-link flex items-center gap-2 p-2 rounded-xl hover:bg-sky-50 transition text-sm">
-            <Cog6ToothIcon className="w-4 h-4 text-sky-500" />
-            <span className="font-medium">Ayarlar</span>
+          <a href="#/denemelerim" className="nav-link flex items-center gap-2">
+            <ChartBarIcon className="w-5 h-5" />
+            <span>Denemelerim</span>
+          </a>
+          <a href="#/sorucuzdanim" className="nav-link flex items-center gap-2">
+            <BookOpenIcon className="w-5 h-5" />
+            <span>Soru Cüzdanım</span>
+          </a>
+          <a href="#/verilerim" className="nav-link flex items-center gap-2">
+            <ChartBarIcon className="w-5 h-5" />
+            <span>Verilerim</span>
           </a>
         </nav>
-        {/* Kullanıcı Profili */}
-        <div className="sidebar-profile px-3 pb-3 mt-auto">
-          <div className="sidebar-profile-box p-2 flex items-center gap-2">
-            <div className="sidebar-profile-avatar w-7 h-7 flex items-center justify-center text-white font-bold text-xs">
+        {/* Kullanıcı Profili ve Çıkış Butonu */}
+        <div className="px-4 pb-6">
+          <div className="sidebar-profile-box flex items-center gap-3 mb-2">
+            <div className="sidebar-profile-avatar w-10 h-10 flex items-center justify-center text-white text-lg font-bold">
               {initial}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white font-semibold text-xs truncate">{username}</p>
-              <p className="text-sky-200 text-[10px] truncate">{email}</p>
+              <p className="text-white font-semibold text-sm truncate">{username}</p>
+              <p className="text-white/70 text-xs truncate">{email}</p>
             </div>
           </div>
+          <button className="logout-btn-modern" onClick={() => {/* Çıkış işlemi */}}>
+            Çıkış Yap
+          </button>
         </div>
       </aside>
     </>
