@@ -5,29 +5,40 @@ import AuthModal from "./AuthModal";
 
 const USER_KEY = "sinavPusulasiUser";
 
-// Basit localStorage fonksiyonları
+// Basit sessionStorage fonksiyonları (mobil uyumlu)
 const getStoredUsers = () => {
   try {
-    const stored = localStorage.getItem('registeredUsers');
+    // Önce sessionStorage'ı dene
+    let stored = sessionStorage.getItem('registeredUsers');
     if (stored) {
-      console.log('Kullanıcılar bulundu:', JSON.parse(stored));
+      console.log('Kullanıcılar sessionStorage\'da bulundu:', JSON.parse(stored));
       return JSON.parse(stored);
     }
+    
+    // Sonra localStorage'ı dene
+    stored = localStorage.getItem('registeredUsers');
+    if (stored) {
+      console.log('Kullanıcılar localStorage\'da bulundu:', JSON.parse(stored));
+      return JSON.parse(stored);
+    }
+    
     console.log('Kullanıcı bulunamadı');
     return [];
   } catch (error) {
-    console.error('localStorage okuma hatası:', error);
+    console.error('Storage okuma hatası:', error);
     return [];
   }
 };
 
 const setStoredUsers = (users: Array<{username: string; email: string; password: string}>) => {
   try {
+    // Her iki storage'a da yaz
+    sessionStorage.setItem('registeredUsers', JSON.stringify(users));
     localStorage.setItem('registeredUsers', JSON.stringify(users));
-    console.log('Kullanıcılar kaydedildi:', users);
+    console.log('Kullanıcılar her iki storage\'a da kaydedildi:', users);
     return true;
   } catch (error) {
-    console.error('localStorage yazma hatası:', error);
+    console.error('Storage yazma hatası:', error);
     return false;
   }
 };
