@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import LogoutButton from "./LogoutButton";
 import {
   HomeIcon,
   PencilIcon,
@@ -130,11 +129,6 @@ export default function Sidebar() {
                 <p className="text-sky-200 text-sm md:text-xs truncate">{email}</p>
               </div>
             </div>
-          </div>
-          
-          {/* Çıkış Butonu - Mobil için optimize */}
-          <div className="mt-4">
-            <LogoutButton />
           </div>
         </div>
       </aside>
