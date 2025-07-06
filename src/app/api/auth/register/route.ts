@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ 
         error: 'Kullanıcı kaydedilemedi', 
         detail: error,
-        message: (error as any)?.message || 'Bilinmeyen hata'
+        message: error && typeof error === 'object' && 'message' in error ? String(error.message) : 'Bilinmeyen hata'
       }, { status: 500 });
     }
 
