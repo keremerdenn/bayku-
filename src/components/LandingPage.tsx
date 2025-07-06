@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from "react";
 import AuthModal from "./AuthModal";
 
 const USER_KEY = "sinavPusulasiUser";
-const USERS_KEY = "registeredUsers";
 
 // Basit localStorage fonksiyonları
 const getStoredUsers = () => {
