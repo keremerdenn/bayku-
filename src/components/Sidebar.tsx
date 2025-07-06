@@ -13,7 +13,7 @@ import {
 
 // Gradientli Baykuş SVG ikonu
 const OwlIcon = () => (
-  <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
     <ellipse cx="16" cy="22" rx="10" ry="7" fill="url(#owlGradient)"/>
     <ellipse cx="11.5" cy="14" rx="3.5" ry="4" fill="#fff"/>
     <ellipse cx="20.5" cy="14" rx="3.5" ry="4" fill="#fff"/>
@@ -56,78 +56,80 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobil Menü Butonu - Z-index ve konumlandırma düzeltildi */}
+      {/* Mobil Menü Butonu - Modern ve hizalı */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed top-6 left-6 z-[60] p-3 bg-white text-sky-600 rounded-xl shadow-xl hover:bg-sky-50 transition-all duration-200 border border-gray-200"
+        className="md:hidden fixed top-4 left-4 z-[60] w-10 h-10 flex items-center justify-center bg-white/90 border border-gray-200 shadow-md rounded-full p-0.5 focus:outline-none focus:ring-2 focus:ring-sky-400 transition-all"
         aria-label="Menüyü aç/kapat"
+        style={{boxShadow: '0 2px 8px rgba(0,0,0,0.08)'}}
       >
         {isOpen ? (
-          <XMarkIcon className="w-6 h-6" />
+          <XMarkIcon className="w-6 h-6 text-sky-600" />
         ) : (
-          <Bars3Icon className="w-6 h-6" />
+          <Bars3Icon className="w-6 h-6 text-sky-600" />
         )}
       </button>
 
-      {/* Mobil Overlay - Z-index düzeltildi */}
+      {/* Mobil Overlay */}
       {isOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/60 z-50 backdrop-blur-sm"
+          className="md:hidden fixed inset-0 bg-black/40 z-50 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* Sidebar - Z-index düzeltildi */}
-      <aside className={`glass-sidebar text-sky-900 w-80 md:w-64 h-screen fixed top-0 left-0 flex flex-col z-[55] transition-all duration-300 ease-in-out shadow-2xl md:translate-x-0 ${
+      {/* Sidebar - Modern ve kompakt */}
+      <aside className={`glass-sidebar w-[85vw] max-w-xs h-screen fixed top-0 left-0 flex flex-col z-[55] transition-all duration-300 ease-in-out shadow-2xl md:w-64 md:translate-x-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        {/* Logo ve başlık - Mobil için optimize */}
-        <div className="flex items-center gap-3 px-6 pt-6 pb-4 md:pt-8 md:pb-6">
-          <div className="w-12 h-12 md:w-10 md:h-10 flex items-center justify-center">
-            <OwlIcon />
+        {/* Üstte logo ve X aynı hizada */}
+        <div className="flex items-center justify-between px-4 pt-4 pb-2">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 flex items-center justify-center bg-sky-100 rounded-full">
+              <OwlIcon />
+            </div>
+            <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-sky-400 to-blue-500 text-transparent bg-clip-text">Baykuş</span>
           </div>
-          <span className="font-extrabold text-2xl md:text-xl tracking-tight bg-gradient-to-r from-sky-400 to-blue-500 text-transparent bg-clip-text">Baykuş</span>
+          <button onClick={()=>setIsOpen(false)} className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 shadow-sm p-0.5">
+            <XMarkIcon className="w-5 h-5 text-sky-600" />
+          </button>
         </div>
-        
-        {/* Menü Linkleri - Mobil için optimize */}
-        <nav className="flex-1 px-4 pb-2 space-y-3">
-          <a href="#/dashboard" className="nav-link flex items-center p-4 md:p-3 rounded-xl sidebar-link-active shadow-md bg-gradient-to-r from-sky-100 to-sky-200 border border-sky-300">
-            <HomeIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-600" />
-            <span className="font-semibold text-lg md:text-sm">Panelim</span>
+        {/* Menü Linkleri */}
+        <nav className="flex-1 px-2 pb-2 space-y-1 mt-2">
+          <a href="#/dashboard" className="nav-link flex items-center gap-2 p-3 rounded-xl sidebar-link-active shadow bg-gradient-to-r from-sky-100 to-sky-200 border border-sky-300 text-base">
+            <HomeIcon className="w-5 h-5 text-sky-600" />
+            <span className="font-semibold">Panelim</span>
           </a>
-          <a href="#/sorucozme" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
-            <PencilIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
-            <span className="font-medium text-lg md:text-sm">Soru Çöz</span>
+          <a href="#/sorucozme" className="nav-link flex items-center gap-2 p-3 rounded-xl hover:bg-sky-50 transition text-base">
+            <PencilIcon className="w-5 h-5 text-sky-500" />
+            <span className="font-medium">Soru Çöz</span>
           </a>
-          <a href="#/sohbet" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
-            <ChatBubbleLeftRightIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
-            <span className="font-medium text-lg md:text-sm">Sohbet</span>
+          <a href="#/sohbet" className="nav-link flex items-center gap-2 p-3 rounded-xl hover:bg-sky-50 transition text-base">
+            <ChatBubbleLeftRightIcon className="w-5 h-5 text-sky-500" />
+            <span className="font-medium">Sohbet</span>
           </a>
-          <a href="#/derslerim" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
-            <BookOpenIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
-            <span className="font-medium text-lg md:text-sm">Derslerim</span>
+          <a href="#/derslerim" className="nav-link flex items-center gap-2 p-3 rounded-xl hover:bg-sky-50 transition text-base">
+            <BookOpenIcon className="w-5 h-5 text-sky-500" />
+            <span className="font-medium">Derslerim</span>
           </a>
-          <a href="#/verilerim" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
-            <ChartBarIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
-            <span className="font-medium text-lg md:text-sm">Verilerim</span>
+          <a href="#/verilerim" className="nav-link flex items-center gap-2 p-3 rounded-xl hover:bg-sky-50 transition text-base">
+            <ChartBarIcon className="w-5 h-5 text-sky-500" />
+            <span className="font-medium">Verilerim</span>
           </a>
-          <a href="#/ayarlar" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
-            <Cog6ToothIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
-            <span className="font-medium text-lg md:text-sm">Ayarlar</span>
+          <a href="#/ayarlar" className="nav-link flex items-center gap-2 p-3 rounded-xl hover:bg-sky-50 transition text-base">
+            <Cog6ToothIcon className="w-5 h-5 text-sky-500" />
+            <span className="font-medium">Ayarlar</span>
           </a>
         </nav>
-        
-        {/* Kullanıcı Profili - Mobil için optimize */}
-        <div className="sidebar-profile px-4 pb-6">
-          <div className="sidebar-profile-box p-4 md:p-3">
-            <div className="flex items-center space-x-3">
-              <div className="sidebar-profile-avatar w-12 h-12 md:w-10 md:h-10 flex items-center justify-center text-white font-bold text-lg md:text-base">
-                {initial}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-white font-semibold text-base md:text-sm truncate">{username}</p>
-                <p className="text-sky-200 text-sm md:text-xs truncate">{email}</p>
-              </div>
+        {/* Kullanıcı Profili */}
+        <div className="sidebar-profile px-4 pb-4 mt-auto">
+          <div className="sidebar-profile-box p-3 flex items-center gap-3">
+            <div className="sidebar-profile-avatar w-9 h-9 flex items-center justify-center text-white font-bold text-base">
+              {initial}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-semibold text-sm truncate">{username}</p>
+              <p className="text-sky-200 text-xs truncate">{email}</p>
             </div>
           </div>
         </div>

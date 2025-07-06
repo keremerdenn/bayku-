@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 // Avatar bileşeni - yerel SVG oluşturur
-const Avatar = ({ name = "User", size = 32, className = "" }: { name?: string; size?: number; className?: string }) => {
+const Avatar = ({ name = "User", size = 28, className = "" }: { name?: string; size?: number; className?: string }) => {
   const colors = [
     '#ec4899', '#8b5cf6', '#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#8b5cf6', '#06b6d4'
   ];
@@ -97,34 +97,32 @@ const ChatPage = () => {
 
   return (
     <div className="h-full flex flex-col bg-gray-50">
-      {/* Chat Header - Mobil için optimize */}
-      <div className="bg-white p-3 md:p-6 border-b border-gray-200 rounded-t-2xl shadow-sm">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 md:w-10 md:h-10 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-lg">
-            🦉
-          </div>
-          <div className="flex-1 min-w-0">
-            <h2 className="text-base md:text-xl font-bold text-gray-900 truncate">Baykuş AI Asistan</h2>
-            <p className="text-xs md:text-base text-gray-600 truncate">Sınav konularında size yardımcı oluyorum</p>
-          </div>
+      {/* Chat Header - Mobilde spacing ve hizalama düzeltildi */}
+      <div className="bg-white px-2 py-2 md:p-6 border-b border-gray-200 rounded-t-2xl shadow-sm flex items-center gap-2 md:gap-3 min-h-[56px]">
+        <div className="w-8 h-8 md:w-10 md:h-10 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-lg">
+          🦉
+        </div>
+        <div className="flex-1 min-w-0">
+          <h2 className="text-base md:text-xl font-bold text-gray-900 truncate">Baykuş AI Asistan</h2>
+          <p className="text-xs md:text-base text-gray-600 truncate">Sınav konularında size yardımcı oluyorum</p>
         </div>
       </div>
 
-      {/* Chat Messages - Mobil için optimize */}
-      <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-3 md:space-y-4 chat-container">
+      {/* Chat Messages - Mobilde spacing ve balonlar küçültüldü */}
+      <div className="flex-1 overflow-y-auto px-2 py-2 md:p-6 space-y-2 md:space-y-4 chat-container">
         {messages.map((msg, i) =>
           msg.type === "sent" ? (
             <div key={i} className="flex justify-end">
-              <div className="chat-bubble-sent px-3 py-2 md:px-4 md:py-2 max-w-[75%] md:max-w-md lg:max-w-lg break-words chat-message text-sm md:text-base">
+              <div className="chat-bubble-sent px-3 py-2 md:px-4 md:py-2 max-w-[80%] md:max-w-md lg:max-w-lg break-words chat-message text-sm md:text-base">
                 {msg.text}
               </div>
             </div>
           ) : (
             <div key={i} className="flex justify-start items-end space-x-2">
-              <Avatar name={msg.sender?.name || "User"} size={28} className="md:w-8 md:h-8" />
+              <Avatar name={msg.sender?.name || "User"} size={24} className="md:w-8 md:h-8" />
               <div className="flex-1 min-w-0">
                 <p className="text-xs md:text-sm text-gray-500 mb-1 truncate">{msg.sender?.name || "User"}</p>
-                <div className="chat-bubble-received px-3 py-2 md:px-4 md:py-2 max-w-[75%] md:max-w-md lg:max-w-lg break-words chat-message text-sm md:text-base">
+                <div className="chat-bubble-received px-3 py-2 md:px-4 md:py-2 max-w-[80%] md:max-w-md lg:max-w-lg break-words chat-message text-sm md:text-base">
                   {msg.text}
                 </div>
               </div>
@@ -134,7 +132,7 @@ const ChatPage = () => {
         
         {isTyping && (
           <div className="flex justify-start items-end space-x-2">
-            <Avatar name="Baykuş AI" size={28} className="md:w-8 md:h-8" />
+            <Avatar name="Baykuş AI" size={24} className="md:w-8 md:h-8" />
             <div className="flex-1 min-w-0">
               <p className="text-xs md:text-sm text-gray-500 mb-1">Baykuş AI</p>
               <div className="chat-bubble-received px-3 py-2 md:px-4 md:py-2">
@@ -149,8 +147,8 @@ const ChatPage = () => {
         )}
       </div>
       
-      {/* Chat Input - Mobil için optimize */}
-      <div className="bg-white p-3 md:p-6 border-t border-gray-200 rounded-b-2xl chat-input shadow-sm">
+      {/* Chat Input - Mobilde daha kompakt */}
+      <div className="bg-white px-2 py-2 md:p-6 border-t border-gray-200 rounded-b-2xl chat-input shadow-sm">
         <div className="flex space-x-2 md:space-x-3">
           <input
             type="text"
@@ -164,7 +162,7 @@ const ChatPage = () => {
           <button
             onClick={handleSendMessage}
             disabled={!newMessage.trim() || isTyping}
-            className="px-4 py-2 md:px-6 md:py-3 bg-sky-500 text-white rounded-xl hover:bg-sky-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed form-button flex-shrink-0"
+            className="px-3 py-2 md:px-6 md:py-3 bg-sky-500 text-white rounded-xl hover:bg-sky-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed form-button flex-shrink-0"
           >
             <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
