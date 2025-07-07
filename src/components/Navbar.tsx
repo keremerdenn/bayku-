@@ -47,13 +47,6 @@ const Navbar: React.FC<NavbarProps> = ({ onLogin, onRegister }) => {
           <a href="#" className="text-white/80 hover:text-white font-medium transition-colors">Hakkımızda</a>
         </div>
         
-        {/* Sağ üstte Çıkış Yap butonu */}
-        {isLoggedIn && (
-          <div className="hidden md:flex items-center ml-4">
-            <LogoutButton navbarMode />
-          </div>
-        )}
-        
         <div className="hidden md:flex items-center space-x-4">
           <button className="auth-trigger-btn text-white font-semibold hover:text-gray-200 transition-colors" onClick={onLogin}>
             Giriş Yap

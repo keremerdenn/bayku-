@@ -10,6 +10,7 @@ import {
   XMarkIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
+import LogoutButton from "./LogoutButton";
 
 // Gradientli Baykuş SVG ikonu
 const OwlIcon = () => (
@@ -34,10 +35,12 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userStr = localStorage.getItem("sinavPusulasiUser");
+      setIsLoggedIn(!!userStr);
       if (userStr) {
         try {
           const user = JSON.parse(userStr);
@@ -130,6 +133,12 @@ export default function Sidebar() {
               </div>
             </div>
           </div>
+          {/* Çıkış Yap butonu - sadece giriş yapılmışsa */}
+          {isLoggedIn && (
+            <div className="mt-4 flex justify-center">
+              <LogoutButton sidebarMode />
+            </div>
+          )}
         </div>
       </aside>
     </>
