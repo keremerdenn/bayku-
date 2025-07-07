@@ -13,6 +13,11 @@ interface Room {
   rooms?: { name: string } | null;
 }
 
+interface SupabaseRoomRaw {
+  room_id: string;
+  rooms?: { name: string }[] | { name: string } | null;
+}
+
 const RoomsPage = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [roomName, setRoomName] = useState("");
@@ -51,9 +56,9 @@ const RoomsPage = () => {
     if (error) setError(error.message);
     else if (data) {
       // rooms alanı dizi olarak gelirse ilk elemanı al
-      const fixed = (data as unknown as Room[]).map((item: Room) => ({
+      const fixed = (data as SupabaseRoomRaw[]).map((item: SupabaseRoomRaw) => ({
         ...item,
-        rooms: Array.isArray(item.rooms) ? (item.rooms[0] as { name: string }) : item.rooms
+        rooms: Array.isArray(item.rooms) ? item.rooms[0] : item.rooms
       }));
       setRooms(fixed);
     } else setRooms([]);
