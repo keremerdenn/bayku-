@@ -8,8 +8,19 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const USER_KEY = "sinavPusulasiUser";
 
+interface Room {
+  room_id: string;
+  rooms?: { name: string } | null;
+}
+
+interface RoomMember {
+  room_id: string;
+  user_email: string;
+  is_admin?: boolean;
+}
+
 const RoomsPage = () => {
-  const [rooms, setRooms] = useState<any[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [roomName, setRoomName] = useState("");
   const [inviteEmail, setInviteEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,7 +55,14 @@ const RoomsPage = () => {
       .select("room_id, rooms(name)")
       .eq("user_email", userEmail);
     if (error) setError(error.message);
-    else setRooms(data || []);
+    else if (data) {
+      // rooms alanı dizi olarak gelirse ilk elemanı al
+      const fixed = (data as any[]).map((item) => ({
+        ...item,
+        rooms: Array.isArray(item.rooms) ? item.rooms[0] : item.rooms
+      }));
+      setRooms(fixed);
+    } else setRooms([]);
     setLoading(false);
   };
 
@@ -115,8 +133,8 @@ const RoomsPage = () => {
           <div>Henüz bir odan yok.</div>
         ) : (
           <ul className="space-y-2">
-            {rooms.map((r, i) => (
-              <li key={i} className="bg-gray-100 rounded-lg px-4 py-3 flex items-center justify-between">
+            {rooms.map((r) => (
+              <li key={r.room_id} className="bg-gray-100 rounded-lg px-4 py-3 flex items-center justify-between">
                 <span>{r.rooms?.name || "Oda"}</span>
                 <button className="text-sky-600 font-bold hover:underline" onClick={() => setActiveRoom({ id: r.room_id, name: r.rooms?.name })}>Giriş Yap</button>
               </li>

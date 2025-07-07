@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -43,7 +43,7 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
     }
   }, []);
 
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase
       .from("messages")
@@ -52,12 +52,11 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
       .order("created_at", { ascending: true });
     if (!error) setMessages((data as Message[]) || []);
     setLoading(false);
-  };
+  }, [roomId]);
 
   useEffect(() => {
     if (roomId) fetchMessages();
-    // eslint-disable-next-line
-  }, [roomId]);
+  }, [roomId, fetchMessages]);
 
   // Supabase Realtime subscription
   useEffect(() => {
