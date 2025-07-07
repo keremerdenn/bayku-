@@ -56,7 +56,7 @@ const RoomsPage = () => {
     if (error) setError(error.message);
     else if (data) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const fixed = (data as SupabaseRoomRaw[]).map((item) => {
+      const fixed = (data as SupabaseRoomRaw[]).map((item: any) => {
         return {
           ...item,
           rooms: Array.isArray(item.rooms) ? item.rooms[0] : item.rooms
