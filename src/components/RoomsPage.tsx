@@ -51,7 +51,7 @@ const RoomsPage = () => {
     if (error) setError(error.message);
     else if (data) {
       // rooms alanı dizi olarak gelirse ilk elemanı al
-      const fixed = (data as unknown as Room[]).map((item) => ({
+      const fixed = (data as unknown as Room[]).map((item: Room) => ({
         ...item,
         rooms: Array.isArray(item.rooms) ? (item.rooms[0] as { name: string }) : item.rooms
       }));
