@@ -2,11 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // SSR/SSG Optimizasyonları
-  experimental: {
-    // Server Components optimizasyonu
-    serverComponentsExternalPackages: ['@supabase/supabase-js'],
-  },
-  
+  serverExternalPackages: ['@supabase/supabase-js'],
+
   // Compiler optimizasyonları
   compiler: {
     // Gereksiz console.log'ları production'da kaldır
