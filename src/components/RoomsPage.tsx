@@ -13,12 +13,6 @@ interface Room {
   rooms?: { name: string } | null;
 }
 
-interface RoomMember {
-  room_id: string;
-  user_email: string;
-  is_admin?: boolean;
-}
-
 const RoomsPage = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [roomName, setRoomName] = useState("");
@@ -57,9 +51,9 @@ const RoomsPage = () => {
     if (error) setError(error.message);
     else if (data) {
       // rooms alanı dizi olarak gelirse ilk elemanı al
-      const fixed = (data as any[]).map((item) => ({
+      const fixed = (data as unknown as Room[]).map((item) => ({
         ...item,
-        rooms: Array.isArray(item.rooms) ? item.rooms[0] : item.rooms
+        rooms: Array.isArray(item.rooms) ? (item.rooms[0] as { name: string }) : item.rooms
       }));
       setRooms(fixed);
     } else setRooms([]);
