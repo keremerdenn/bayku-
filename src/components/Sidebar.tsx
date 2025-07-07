@@ -51,7 +51,7 @@ export default function Sidebar() {
           const user = JSON.parse(userStr);
           setUsername(user.username || "Kullanıcı");
           setEmail(user.email || "");
-          setIsAdmin(user.role === "admin");
+          setIsAdmin(user.email === "keremerdeen@gmail.com");
         } catch {
           setUsername("Kullanıcı");
           setEmail("");

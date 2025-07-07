@@ -33,6 +33,7 @@ const LazyDoughnutChart = dynamic(() => import("./DoughnutChart"), { ssr: false,
 
 const Dashboard = () => {
   let username = "Kullanıcı";
+  let email = "";
   let isAdmin = false;
   if (typeof window !== "undefined") {
     const userStr = localStorage.getItem(USER_KEY);
@@ -40,7 +41,8 @@ const Dashboard = () => {
       try {
         const user = JSON.parse(userStr);
         username = user.username || username;
-        isAdmin = user.role === "admin";
+        email = user.email || "";
+        isAdmin = (email === "keremerdeen@gmail.com");
       } catch {}
     }
   }
