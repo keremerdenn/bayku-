@@ -55,11 +55,11 @@ const RoomsPage = () => {
       .eq("user_email", userEmail);
     if (error) setError(error.message);
     else if (data) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const fixed = (data as SupabaseRoomRaw[]).map((item: any) => {
+      const fixed = (data as unknown[]).map((item) => {
+        const raw = item as SupabaseRoomRaw;
         return {
-          ...item,
-          rooms: Array.isArray(item.rooms) ? item.rooms[0] : item.rooms
+          ...raw,
+          rooms: Array.isArray(raw.rooms) ? raw.rooms[0] : raw.rooms
         } as Room;
       });
       setRooms(fixed);
