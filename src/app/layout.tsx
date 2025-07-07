@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import LogoutButton from "../components/LogoutButton";
 
 export const metadata: Metadata = {
   title: "Baykuş - Sınav Başarısına Giden Yolda En Güçlü Rehberin",
@@ -15,7 +14,6 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body className="font-sans antialiased">
-        <LogoutButton />
         {children}
       </body>
     </html>
