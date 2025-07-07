@@ -13,6 +13,7 @@ import NotificationSystem from "./NotificationSystem";
 import ThemeToggle from "./ThemeToggle";
 import ProfilePage from "./ProfilePage";
 import AdminPanel from "./AdminPanel";
+import RoomsPage from "./RoomsPage";
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -67,7 +68,8 @@ const Dashboard = () => {
       <>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Hoş Geldin, {username}!</h1>
         <p className="text-base md:text-lg text-gray-600 mb-6 md:mb-8">Bugün hedeflerine bir adım daha yaklaşma zamanı.</p>
-        {/* Görsel Optimizasyonu Örneği */}
+        {/* Görsel Optimizasyonu Örneği - Sadece admin */}
+        {isAdmin && (
         <div className="mb-6 md:mb-8">
           <h3 className="text-base md:text-lg font-semibold mb-4 text-gray-900">Optimize Edilmiş Görsel Örneği</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -90,6 +92,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+        )}
         {/* SSR/SSG Optimizasyonu Örneği */}
         {isAdmin && (
           <div className="mb-6 md:mb-8">
@@ -126,6 +129,8 @@ const Dashboard = () => {
   } else if (activePage === "admin" && isAdmin) {
     pageContent = <AdminPanel />;
   } else if (activePage === "sohbet") {
+    pageContent = <RoomsPage />;
+  } else if (activePage === "ai-asistan") {
     pageContent = <ChatPage />;
   } else if (activePage === "derslerim") {
     pageContent = <DerslerimPage />;
