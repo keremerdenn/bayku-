@@ -3,11 +3,15 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import StatCard from "./StatCard";
-import LineChart from "./LineChart";
-import DoughnutChart from "./DoughnutChart";
 import ChatPage from "./ChatPage";
 import DerslerimPage from "./DerslerimPage";
 import VerilerimPage from "./VerilerimPage";
+import dynamic from "next/dynamic";
+import OptimizedImage from "./OptimizedImage";
+import SSRExample from "./SSRExample";
+import NotificationSystem from "./NotificationSystem";
+import ThemeToggle from "./ThemeToggle";
+import ProfilePage from "./ProfilePage";
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -21,6 +25,10 @@ const pageTitles: Record<string, string> = {
   sorucuzdanim: "Soru Cüzdanım",
   verilerim: "Verilerim",
 };
+
+// LineChart ve DoughnutChart'u lazy load ile ekle
+const LazyLineChart = dynamic(() => import("./LineChart"), { ssr: false, loading: () => <div>Grafik yükleniyor...</div> });
+const LazyDoughnutChart = dynamic(() => import("./DoughnutChart"), { ssr: false, loading: () => <div>Grafik yükleniyor...</div> });
 
 const Dashboard = () => {
   let username = "Kullanıcı";
@@ -54,6 +62,36 @@ const Dashboard = () => {
       <>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Hoş Geldin, {username}!</h1>
         <p className="text-base md:text-lg text-gray-600 mb-6 md:mb-8">Bugün hedeflerine bir adım daha yaklaşma zamanı.</p>
+        {/* Görsel Optimizasyonu Örneği */}
+        <div className="mb-6 md:mb-8">
+          <h3 className="text-base md:text-lg font-semibold mb-4 text-gray-900">Optimize Edilmiş Görsel Örneği</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <OptimizedImage 
+              src="/globe.svg" 
+              alt="Optimize edilmiş görsel örneği" 
+              width={400} 
+              height={200}
+              className="w-full"
+            />
+            <div className="bg-white p-4 rounded-xl shadow">
+              <h4 className="font-semibold mb-2">Next.js Image Avantajları:</h4>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Otomatik boyutlandırma</li>
+                <li>• Lazy loading</li>
+                <li>• WebP formatı desteği</li>
+                <li>• Blur placeholder</li>
+                <li>• Responsive görseller</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        {/* SSR/SSG Optimizasyonu Örneği */}
+        <div className="mb-6 md:mb-8">
+          <SSRExample 
+            serverTime={new Date().toLocaleString('tr-TR')}
+            staticData="Bu veri build zamanında oluşturulur"
+          />
+        </div>
         {/* İstatistik Kartları - Mobil için optimize */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
           <StatCard title="Toplam Çözülen Soru" value="1,245" icon={<svg className="w-5 h-5 md:w-6 md:h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h3m-3-10h.01M9 10h.01M12 10h.01M15 10h.01M9 13h.01M12 13h.01M15 13h.01M4 7h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z" /></svg>} />
@@ -66,13 +104,13 @@ const Dashboard = () => {
           <div className="lg:col-span-2 bg-white p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-base md:text-lg font-semibold mb-4 text-gray-900">Haftalık Net Değişimi</h3>
             <div className="relative h-48 md:h-64 lg:h-80 flex items-center justify-center">
-              <LineChart />
+              <LazyLineChart />
             </div>
           </div>
           <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-base md:text-lg font-semibold mb-4 text-gray-900">Soru Dağılımı</h3>
             <div className="relative h-48 md:h-64 lg:h-80 flex items-center justify-center">
-              <DoughnutChart />
+              <LazyDoughnutChart />
             </div>
           </div>
         </div>
@@ -84,6 +122,8 @@ const Dashboard = () => {
     pageContent = <DerslerimPage />;
   } else if (activePage === "verilerim") {
     pageContent = <VerilerimPage />;
+  } else if (activePage === "profil") {
+    pageContent = <ProfilePage username={username} />;
   } else {
     pageContent = (
       <div className="w-full p-6 md:p-8 text-center text-gray-500">
@@ -114,6 +154,8 @@ const Dashboard = () => {
             <span className="text-lg font-bold text-gray-800">Baykuş</span>
           </div>
           <div className="flex items-center space-x-2">
+            <ThemeToggle />
+            <NotificationSystem />
             <div className="w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm mobile-header-avatar">
               {username?.[0]?.toUpperCase() || "U"}
             </div>

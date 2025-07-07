@@ -10,6 +10,7 @@ import {
   XMarkIcon,
   Cog6ToothIcon,
   AcademicCapIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import LogoutButton from "./LogoutButton";
 
@@ -118,6 +119,10 @@ export default function Sidebar() {
           <a href="#/verilerim" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
             <ChartBarIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
             <span className="font-medium text-lg md:text-sm">Verilerim</span>
+          </a>
+          <a href="#/profil" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
+            <UserIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
+            <span className="font-medium text-lg md:text-sm">Profilim</span>
           </a>
           <a href="#/ayarlar" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
             <Cog6ToothIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />

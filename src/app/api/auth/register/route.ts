@@ -9,8 +9,8 @@ export async function POST(request: NextRequest) {
     console.log('Gelen username:', username);
     console.log('Gelen email:', email);
     console.log('Gelen password:', password);
-    console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-    console.log('Supabase ANON KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+    console.log('Supabase URL:', process.env.SUPABASE_URL);
+    console.log('Supabase ANON KEY:', process.env.SUPABASE_ANON_KEY);
 
     // Email zaten var mı?
     let existingUser, findError;
