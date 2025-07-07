@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import LogoutButton from "./LogoutButton";
+import React, { useState } from "react";
 
 type NavbarProps = {
   onLogin: () => void;
@@ -21,14 +20,6 @@ const OwlIcon = () => (
 
 const Navbar: React.FC<NavbarProps> = ({ onLogin, onRegister }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const user = localStorage.getItem("sinavPusulasiUser");
-      setIsLoggedIn(!!user);
-    }
-  }, []);
 
   return (
     <header className="p-4">
