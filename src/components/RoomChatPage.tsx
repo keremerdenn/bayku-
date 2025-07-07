@@ -7,12 +7,25 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const USER_KEY = "sinavPusulasiUser";
 
+interface Message {
+  id: string;
+  room_id: string;
+  sender_email: string;
+  content: string;
+  created_at: string;
+}
+
+interface Member {
+  user_email: string;
+  is_admin?: boolean;
+}
+
 const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string }) => {
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [members, setMembers] = useState<string[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteError, setInviteError] = useState("");
@@ -30,27 +43,21 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
     }
   }, []);
 
+  const fetchMessages = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("messages")
+      .select("*")
+      .eq("room_id", roomId)
+      .order("created_at", { ascending: true });
+    if (!error) setMessages((data as Message[]) || []);
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (roomId) fetchMessages();
     // eslint-disable-next-line
   }, [roomId]);
-
-  useEffect(() => {
-    if (!roomId) return;
-    const fetchMembers = async () => {
-      const { data, error } = await supabase
-        .from("room_members")
-        .select("user_email, is_admin")
-        .eq("room_id", roomId);
-      if (!error) {
-        setMembers((data || []).map((m: any) => m.user_email));
-        // Kullanıcı admin mi?
-        const me = (data || []).find((m: any) => m.user_email === userEmail);
-        setIsAdmin(!!me?.is_admin);
-      }
-    };
-    fetchMembers();
-  }, [roomId, userEmail]);
 
   // Supabase Realtime subscription
   useEffect(() => {
@@ -67,23 +74,30 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
       })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, [roomId]);
+  }, [roomId, fetchMessages]);
 
   // Scroll to bottom on new message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const fetchMessages = async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("messages")
-      .select("*")
-      .eq("room_id", roomId)
-      .order("created_at", { ascending: true });
-    if (!error) setMessages(data || []);
-    setLoading(false);
-  };
+  useEffect(() => {
+    if (!roomId) return;
+    const fetchMembers = async () => {
+      const { data, error } = await supabase
+        .from("room_members")
+        .select("user_email, is_admin")
+        .eq("room_id", roomId);
+      if (!error) {
+        const membersData = (data as Member[]) || [];
+        setMembers(membersData);
+        // Kullanıcı admin mi?
+        const me = membersData.find((m) => m.user_email === userEmail);
+        setIsAdmin(!!me?.is_admin);
+      }
+    };
+    fetchMembers();
+  }, [roomId, userEmail]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,7 +117,7 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
     e.preventDefault();
     setInviteError("");
     if (!inviteEmail.trim()) return;
-    if (members.includes(inviteEmail)) {
+    if (members.some((m) => m.user_email === inviteEmail)) {
       setInviteError("Bu kullanıcı zaten üye.");
       return;
     }
@@ -117,9 +131,9 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
     // Üyeler listesini güncelle
     const { data } = await supabase
       .from("room_members")
-      .select("user_email")
+      .select("user_email, is_admin")
       .eq("room_id", roomId);
-    setMembers((data || []).map((m: any) => m.user_email));
+    setMembers((data as Member[]) || []);
   };
 
   return (
@@ -127,8 +141,8 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
       <h2 className="text-xl font-bold mb-2">{roomName || "Oda Sohbeti"}</h2>
       <div className="mb-2 text-sm text-gray-600 flex flex-wrap gap-2 items-center">
         <span className="font-semibold">Üyeler:</span>
-        {members.map((email, i) => (
-          <span key={i} className="bg-sky-100 text-sky-700 px-2 py-1 rounded-lg">{email}</span>
+        {members.map((member, i) => (
+          <span key={i} className="bg-sky-100 text-sky-700 px-2 py-1 rounded-lg">{member.user_email}</span>
         ))}
       </div>
       {isAdmin && (
