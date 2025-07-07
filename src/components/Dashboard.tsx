@@ -12,6 +12,7 @@ import SSRExample from "./SSRExample";
 import NotificationSystem from "./NotificationSystem";
 import ThemeToggle from "./ThemeToggle";
 import ProfilePage from "./ProfilePage";
+import AdminPanel from "./AdminPanel";
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -32,12 +33,14 @@ const LazyDoughnutChart = dynamic(() => import("./DoughnutChart"), { ssr: false,
 
 const Dashboard = () => {
   let username = "Kullanıcı";
+  let isAdmin = false;
   if (typeof window !== "undefined") {
     const userStr = localStorage.getItem(USER_KEY);
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
         username = user.username || username;
+        isAdmin = user.role === "admin";
       } catch {}
     }
   }
@@ -86,12 +89,14 @@ const Dashboard = () => {
           </div>
         </div>
         {/* SSR/SSG Optimizasyonu Örneği */}
-        <div className="mb-6 md:mb-8">
-          <SSRExample 
-            serverTime={new Date().toLocaleString('tr-TR')}
-            staticData="Bu veri build zamanında oluşturulur"
-          />
-        </div>
+        {isAdmin && (
+          <div className="mb-6 md:mb-8">
+            <SSRExample 
+              serverTime={new Date().toLocaleString('tr-TR')}
+              staticData="Bu veri build zamanında oluşturulur"
+            />
+          </div>
+        )}
         {/* İstatistik Kartları - Mobil için optimize */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
           <StatCard title="Toplam Çözülen Soru" value="1,245" icon={<svg className="w-5 h-5 md:w-6 md:h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h3m-3-10h.01M9 10h.01M12 10h.01M15 10h.01M9 13h.01M12 13h.01M15 13h.01M4 7h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z" /></svg>} />
@@ -116,6 +121,8 @@ const Dashboard = () => {
         </div>
       </>
     );
+  } else if (activePage === "admin" && isAdmin) {
+    pageContent = <AdminPanel />;
   } else if (activePage === "sohbet") {
     pageContent = <ChatPage />;
   } else if (activePage === "derslerim") {

@@ -33,21 +33,25 @@ const OwlIcon = () => (
   </svg>
 );
 
+const USER_KEY = "sinavPusulasiUser";
+
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const userStr = localStorage.getItem("sinavPusulasiUser");
+      const userStr = localStorage.getItem(USER_KEY);
       setIsLoggedIn(!!userStr);
       if (userStr) {
         try {
           const user = JSON.parse(userStr);
           setUsername(user.username || "Kullanıcı");
           setEmail(user.email || "");
+          setIsAdmin(user.role === "admin");
         } catch {
           setUsername("Kullanıcı");
           setEmail("");
@@ -128,6 +132,12 @@ export default function Sidebar() {
             <Cog6ToothIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
             <span className="font-medium text-lg md:text-sm">Ayarlar</span>
           </a>
+          {isAdmin && (
+            <a href="#/admin" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
+              <AcademicCapIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-indigo-500" />
+              <span className="font-medium text-lg md:text-sm">Admin Paneli</span>
+            </a>
+          )}
         </nav>
         
         {/* Kullanıcı Profili - Mobil için optimize */}
