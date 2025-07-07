@@ -10,8 +10,8 @@ export async function POST(request: NextRequest) {
     console.log('Gelen username:', username);
     console.log('Gelen email:', email);
     console.log('Gelen password:', password);
-    console.log('Supabase URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET');
-    console.log('Supabase ANON KEY:', process.env.SUPABASE_ANON_KEY ? 'SET' : 'NOT SET');
+    console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL ? 'SET' : 'NOT SET');
+    console.log('Supabase ANON KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'SET' : 'NOT SET');
 
     // Validation
     if (!username || !email || !password) {
