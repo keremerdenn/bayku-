@@ -6,11 +6,43 @@ export async function POST(request: NextRequest) {
     const { username, email, password } = await request.json();
 
     // Debug logları
+    console.log('=== REGISTER API DEBUG ===');
     console.log('Gelen username:', username);
     console.log('Gelen email:', email);
     console.log('Gelen password:', password);
-    console.log('Supabase URL:', process.env.SUPABASE_URL);
-    console.log('Supabase ANON KEY:', process.env.SUPABASE_ANON_KEY);
+    console.log('Supabase URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET');
+    console.log('Supabase ANON KEY:', process.env.SUPABASE_ANON_KEY ? 'SET' : 'NOT SET');
+
+    // Validation
+    if (!username || !email || !password) {
+      return NextResponse.json(
+        { error: 'Tüm alanlar gereklidir' },
+        { status: 400 }
+      );
+    }
+
+    if (username.length < 3) {
+      return NextResponse.json(
+        { error: 'Kullanıcı adı en az 3 karakter olmalıdır' },
+        { status: 400 }
+      );
+    }
+
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: 'Şifre en az 6 karakter olmalıdır' },
+        { status: 400 }
+      );
+    }
+
+    // Email format kontrolü
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: 'Geçerli bir email adresi giriniz' },
+        { status: 400 }
+      );
+    }
 
     // Email zaten var mı?
     let existingUser, findError;
@@ -31,7 +63,10 @@ export async function POST(request: NextRequest) {
     console.log('Mevcut kullanıcı hata:', findError);
     
     if (existingUser) {
-      return NextResponse.json({ error: 'Bu email ile zaten bir kullanıcı var.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Bu email ile zaten bir kullanıcı var.' },
+        { status: 400 }
+      );
     }
 
     // Kayıt - retry mekanizması ile
@@ -66,12 +101,15 @@ export async function POST(request: NextRequest) {
       }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, user: { username: data.username, email: data.email } });
+    console.log('Kayıt başarılı:', data.username);
+    return NextResponse.json({ 
+      success: true, 
+      user: { username: data.username, email: data.email } 
+    });
   } catch (error) {
     console.error('Register API error:', error);
     return NextResponse.json({ 
-      error: 'Sunucu hatası',
-      detail: error instanceof Error ? error.message : 'Bilinmeyen hata'
+      error: 'Sunucu hatası: ' + (error instanceof Error ? error.message : 'Bilinmeyen hata')
     }, { status: 500 });
   }
 } 

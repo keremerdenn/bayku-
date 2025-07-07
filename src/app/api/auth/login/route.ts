@@ -6,10 +6,18 @@ export async function POST(request: NextRequest) {
     const { email, password } = await request.json();
 
     // Debug logları
+    console.log('=== LOGIN API DEBUG ===');
     console.log('Gelen email:', email);
     console.log('Gelen password:', password);
-    console.log('Supabase URL:', process.env.SUPABASE_URL);
-    console.log('Supabase ANON KEY:', process.env.SUPABASE_ANON_KEY);
+    console.log('Supabase URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET');
+    console.log('Supabase ANON KEY:', process.env.SUPABASE_ANON_KEY ? 'SET' : 'NOT SET');
+
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: 'Email ve şifre gereklidir' },
+        { status: 400 }
+      );
+    }
 
     // Sorgu
     const { data: user, error } = await supabase
@@ -22,13 +30,22 @@ export async function POST(request: NextRequest) {
     console.log('Supabase user:', user);
     console.log('Supabase error:', error);
 
-    if (error || !user) {
+    if (error) {
+      console.error('Supabase query error:', error);
+      return NextResponse.json(
+        { error: 'Veritabanı hatası: ' + error.message },
+        { status: 500 }
+      );
+    }
+
+    if (!user) {
       return NextResponse.json(
         { error: 'Email veya şifre hatalı. Lütfen önce kayıt olun.' },
         { status: 401 }
       );
     }
 
+    console.log('Login başarılı:', user.username);
     return NextResponse.json({
       success: true,
       user: { username: user.username, email: user.email }
@@ -37,7 +54,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Login API error:', error);
     return NextResponse.json(
-      { error: 'Sunucu hatası' },
+      { error: 'Sunucu hatası: ' + (error instanceof Error ? error.message : 'Bilinmeyen hata') },
       { status: 500 }
     );
   }
