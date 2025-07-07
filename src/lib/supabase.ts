@@ -1,14 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.SUPABASE_URL || 'https://knqjsyocpmgteujnqxds.supabase.co';
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtucWpzeW9jcG1ndGV1am5xeGRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE5MjU4MjksImV4cCI6MjA2NzUwMTgyOX0.5K83VZhIvmfg5mFdYFpocjx9VJvAehCpWg-0v-g_iWg';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Supabase environment variables are not set!');
-  console.error('SUPABASE_URL:', supabaseUrl);
-  console.error('SUPABASE_ANON_KEY:', supabaseAnonKey ? 'SET' : 'NOT SET');
-  throw new Error('Supabase environment variables are required');
-}
+console.log('Supabase URL:', supabaseUrl ? 'SET' : 'NOT SET');
+console.log('Supabase ANON KEY:', supabaseAnonKey ? 'SET' : 'NOT SET');
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
