@@ -8,7 +8,6 @@ import {
   ChartBarIcon,
   Bars3Icon,
   XMarkIcon,
-  Cog6ToothIcon,
   AcademicCapIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
