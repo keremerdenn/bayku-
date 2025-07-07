@@ -6,6 +6,7 @@ import StatCard from "./StatCard";
 import LineChart from "./LineChart";
 import DoughnutChart from "./DoughnutChart";
 import ChatPage from "./ChatPage";
+import RoomsPage from "./RoomsPage";
 import DerslerimPage from "./DerslerimPage";
 import VerilerimPage from "./VerilerimPage";
 
@@ -79,6 +80,8 @@ const Dashboard = () => {
       </>
     );
   } else if (activePage === "sohbet") {
+    pageContent = <RoomsPage />;
+  } else if (activePage === "ai-asistan") {
     pageContent = <ChatPage />;
   } else if (activePage === "derslerim") {
     pageContent = <DerslerimPage />;
