@@ -55,8 +55,8 @@ const RoomsPage = () => {
       .eq("user_email", userEmail);
     if (error) setError(error.message);
     else if (data) {
-      // rooms alanı dizi olarak gelirse ilk elemanı al
-      const fixed = (data as unknown[]).map((item: unknown) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const fixed = (data as unknown[]).map((item) => {
         const raw = item as SupabaseRoomRaw;
         return {
           ...raw,
