@@ -56,10 +56,13 @@ const RoomsPage = () => {
     if (error) setError(error.message);
     else if (data) {
       // rooms alanı dizi olarak gelirse ilk elemanı al
-      const fixed = (data as SupabaseRoomRaw[]).map((item: SupabaseRoomRaw) => ({
-        ...item,
-        rooms: Array.isArray(item.rooms) ? item.rooms[0] : item.rooms
-      }));
+      const fixed = (data as unknown[]).map((item: unknown) => {
+        const raw = item as SupabaseRoomRaw;
+        return {
+          ...raw,
+          rooms: Array.isArray(raw.rooms) ? raw.rooms[0] : raw.rooms
+        } as Room;
+      });
       setRooms(fixed);
     } else setRooms([]);
     setLoading(false);
