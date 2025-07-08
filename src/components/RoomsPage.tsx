@@ -49,11 +49,17 @@ const RoomsPage = () => {
   const fetchRooms = async () => {
     setLoading(true);
     setError("");
+    console.log("Kullanıcı email:", userEmail); // Debug için
+    
     // Kullanıcının üyesi olduğu odaları getir
     const { data, error } = await supabase
       .from("room_members")
       .select("room_id, rooms(name)")
       .eq("user_email", userEmail);
+    
+    console.log("Room members data:", data); // Debug için
+    console.log("Room members error:", error); // Debug için
+    
     if (error) setError(error.message);
     else if (data) {
       const fixed = (data as unknown[]).map((item) => {
@@ -63,6 +69,7 @@ const RoomsPage = () => {
           rooms: Array.isArray(raw.rooms) ? raw.rooms[0] : raw.rooms
         } as Room;
       });
+      console.log("İşlenmiş odalar:", fixed); // Debug için
       setRooms(fixed);
     } else setRooms([]);
     setLoading(false);
@@ -80,6 +87,9 @@ const RoomsPage = () => {
         .select()
         .single();
       if (roomError) throw roomError;
+      
+      console.log("Oluşturulan oda:", room); // Debug için
+      
       // 2. Kurucuyu ve davetliyi ekle
       await supabase.from("room_members").insert([
         { room_id: room.id, user_email: userEmail, is_admin: true },
@@ -89,6 +99,7 @@ const RoomsPage = () => {
       setInviteEmail("");
       fetchRooms();
     } catch (err: any) {
+      console.error("Oda oluşturma hatası:", err); // Debug için
       setError(err.message || "Oda oluşturulamadı");
     }
     setLoading(false);
