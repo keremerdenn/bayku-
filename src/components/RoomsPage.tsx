@@ -25,41 +25,48 @@ const RoomsPage = () => {
   const [inviteEmail, setInviteEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const [activeRoom, setActiveRoom] = useState<{ id: string, name?: string } | null>(null);
 
+  // Email'i localStorage'dan güvenli şekilde oku
   useEffect(() => {
-    // Kullanıcı emailini localStorage'dan al
     if (typeof window !== "undefined") {
-      const userStr = localStorage.getItem(USER_KEY);
-      if (userStr) {
-        try {
+      try {
+        const userStr = localStorage.getItem(USER_KEY);
+        if (userStr) {
           const user = JSON.parse(userStr);
-          setUserEmail(user.email || "");
-        } catch {}
+          if (user.email && typeof user.email === "string" && user.email.includes("@")) {
+            setUserEmail(user.email);
+          } else {
+            setUserEmail(null);
+          }
+        } else {
+          setUserEmail(null);
+        }
+      } catch {
+        setUserEmail(null);
       }
     }
   }, []);
 
   useEffect(() => {
     if (userEmail) fetchRooms();
-    // eslint-disable-next-line
   }, [userEmail]);
 
   const fetchRooms = async () => {
     setLoading(true);
     setError("");
-    console.log("Kullanıcı email:", userEmail); // Debug için
-    
+    if (!userEmail) {
+      setError("Kullanıcı emaili bulunamadı. Lütfen tekrar giriş yapın.");
+      setRooms([]);
+      setLoading(false);
+      return;
+    }
     // Kullanıcının üyesi olduğu odaları getir
     const { data, error } = await supabase
       .from("room_members")
       .select("room_id, rooms(name)")
       .eq("user_email", userEmail);
-    
-    console.log("Room members data:", data); // Debug için
-    console.log("Room members error:", error); // Debug için
-    
     if (error) setError(error.message);
     else if (data) {
       const fixed = (data as unknown[]).map((item) => {
@@ -69,7 +76,6 @@ const RoomsPage = () => {
           rooms: Array.isArray(raw.rooms) ? raw.rooms[0] : raw.rooms
         } as Room;
       });
-      console.log("İşlenmiş odalar:", fixed); // Debug için
       setRooms(fixed);
     } else setRooms([]);
     setLoading(false);
