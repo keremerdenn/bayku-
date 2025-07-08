@@ -164,15 +164,15 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
         ) : messages.length === 0 ? (
           <div>Henüz mesaj yok.</div>
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-4">
             {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.sender_email === userEmail ? "justify-end" : "justify-start"}`}>
-                <div className={`relative px-3 py-2 rounded-2xl max-w-xs min-w-[60px] break-words shadow-sm text-sm
+              <div key={i} className={`flex flex-col items-${msg.sender_email === userEmail ? "end" : "start"}`}>
+                <span className="mb-1 ml-1 text-xs text-gray-400 font-medium select-none" style={{ marginBottom: '2px', marginLeft: msg.sender_email === userEmail ? 0 : '4px', marginRight: msg.sender_email === userEmail ? '4px' : 0 }}>
+                  {msg.sender_email === userEmail ? "Siz" : msg.sender_email.split("@")[0]}
+                </span>
+                <div className={`px-3 py-2 rounded-2xl max-w-xs min-w-[60px] break-words shadow-sm text-sm
                   ${msg.sender_email === userEmail ? "bg-sky-500 text-white" : "bg-white text-gray-800 border"}
                 `}>
-                  <span className="absolute -top-4 left-2 text-xs text-gray-400 font-medium select-none">
-                    {msg.sender_email === userEmail ? "Siz" : msg.sender_email.split("@")[0]}
-                  </span>
                   <span className="block whitespace-pre-line">{msg.content}</span>
                 </div>
               </div>
