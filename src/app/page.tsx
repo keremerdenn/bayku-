@@ -3,6 +3,9 @@
 import React, { useEffect, useState, Suspense } from "react";
 import LandingPage from "@/components/LandingPage";
 import Dashboard from "@/components/Dashboard";
+import MobileProvider from "@/components/mobile/MobileProvider";
+import MobileLandingPage from "@/components/mobile/MobileLandingPage";
+import MobileDashboard from "@/components/mobile/MobileDashboard";
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -33,7 +36,17 @@ export default function Home() {
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      {isLoggedIn ? <Dashboard /> : <LandingPage />}
+      {isLoggedIn ? (
+        <MobileProvider 
+          mobileComponent={MobileDashboard}
+          desktopComponent={Dashboard}
+        />
+      ) : (
+        <MobileProvider 
+          mobileComponent={MobileLandingPage}
+          desktopComponent={LandingPage}
+        />
+      )}
     </Suspense>
   );
 }

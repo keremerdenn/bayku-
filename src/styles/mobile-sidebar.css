@@ -1,0 +1,161 @@
+/* Mobil Sidebar Özel Stilleri */
+
+/* Mobil nav link hover ve active efektleri */
+.mobile-nav-link {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.mobile-nav-link:hover::before {
+  left: 100%;
+}
+
+/* Mobil buton dokunma efektleri */
+.mobile-nav-link:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* Mobil sidebar açılma animasyonu */
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Mobil overlay animasyonu */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobil menü butonu pulse efekti */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Mobil responsive ayarlar */
+@media (max-width: 768px) {
+  /* Mobil cihazlarda daha büyük dokunma alanları */
+  .mobile-nav-link {
+    min-height: 80px;
+    padding: 20px 24px;
+  }
+  
+  /* Mobil buton hover efektleri */
+  .mobile-nav-link:hover {
+    background-color: rgba(14, 165, 233, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(14, 165, 233, 0.15);
+  }
+  
+  /* Mobil logo animasyonu */
+  .mobile-logo {
+    animation: pulse 2s infinite;
+  }
+  
+  /* Mobil profil kartı hover efekti */
+  .mobile-profile-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(14, 165, 233, 0.2);
+  }
+}
+
+/* Tablet için orta boyut ayarları */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .mobile-nav-link {
+    min-height: 70px;
+    padding: 16px 20px;
+  }
+}
+
+/* Mobil scroll davranışı */
+.mobile-sidebar-content {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Mobil dokunma geri bildirimi */
+.mobile-nav-link:active {
+  background-color: rgba(14, 165, 233, 0.2);
+}
+
+/* Mobil loading animasyonu */
+@keyframes mobileLoading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.mobile-loading {
+  animation: mobileLoading 1s linear infinite;
+}
+
+/* Mobil haptic feedback simülasyonu */
+.mobile-nav-link:active {
+  transition: all 0.1s ease;
+}
+
+/* Mobil accessibility iyileştirmeleri */
+.mobile-nav-link:focus {
+  outline: 2px solid #0ea5e9;
+  outline-offset: 2px;
+}
+
+/* Mobil dark mode desteği (gelecekte) */
+@media (prefers-color-scheme: dark) {
+  .mobile-sidebar {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+  
+  .mobile-nav-link {
+    color: #f9fafb;
+  }
+  
+  .mobile-nav-link:hover {
+    background-color: rgba(14, 165, 233, 0.2);
+  }
+} 

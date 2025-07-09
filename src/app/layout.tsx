@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "../styles/mobile-sidebar.css";
+import MobileProvider from "../components/mobile/MobileProvider";
+import MobileLayout from "../components/mobile/MobileLayout";
 
 export const metadata: Metadata = {
   title: "Baykuş - Sınav Başarısına Giden Yolda En Güçlü Rehberin",
@@ -24,6 +27,15 @@ export const metadata: Metadata = {
   },
 };
 
+// Normal Desktop Layout
+function DesktopLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative min-h-screen">
+      {children}
+    </div>
+  );
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
@@ -42,9 +54,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body className="font-sans antialiased">
-        <div className="relative min-h-screen">
-          {children}
-        </div>
+        <MobileProvider 
+          mobileComponent={MobileLayout}
+          desktopComponent={DesktopLayout}
+          props={{ children }}
+        />
       </body>
     </html>
   );
