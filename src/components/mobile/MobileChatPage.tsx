@@ -48,23 +48,6 @@ export default function MobileChatPage() {
     }
   }, []);
 
-  // Loading durumunda loading göster
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Yükleniyor...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Giriş yapmamış kullanıcılar için boş div (yönlendirme yapılacak)
-  if (!userEmail) {
-    return <div></div>;
-  }
-
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -95,6 +78,23 @@ export default function MobileChatPage() {
       minute: '2-digit' 
     });
   };
+
+  // Loading durumunda loading göster
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Giriş yapmamış kullanıcılar için boş div (yönlendirme yapılacak)
+  if (!userEmail) {
+    return <div></div>;
+  }
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
