@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { createClient } from "@supabase/supabase-js";
 import RoomChatPage from "./RoomChatPage";
 
@@ -49,11 +49,7 @@ const RoomsPage = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (userEmail) fetchRooms();
-  }, [userEmail]);
-
-  const fetchRooms = async () => {
+  const fetchRooms = useCallback(async () => {
     setLoading(true);
     setError("");
     if (!userEmail) {
@@ -81,7 +77,11 @@ const RoomsPage = () => {
       setRooms(fixed);
     } else setRooms([]);
     setLoading(false);
-  };
+  }, [userEmail]);
+
+  useEffect(() => {
+    if (userEmail) fetchRooms();
+  }, [userEmail, fetchRooms]);
 
   const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -12,8 +12,6 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline";
 import LogoutButton from "./LogoutButton";
-import ThemeToggle from "./ThemeToggle";
-import NotificationSystem from "./NotificationSystem";
 
 // Gradientli Baykuş SVG ikonu
 const OwlIcon = () => (
@@ -88,22 +86,15 @@ export default function Sidebar() {
       )}
 
       {/* Sidebar - Tamamen yeniden tasarlandı */}
-      <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-40 transform transition-transform duration-300 ease-in-out md:translate-x-0 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
+      <aside className={`glass-sidebar text-sky-900 w-80 md:w-64 h-screen fixed top-0 left-0 flex flex-col z-50 transition-all duration-300 ease-in-out shadow-2xl md:translate-x-0 sidebar-content ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
         {/* Logo ve başlık - Mobil için optimize */}
         <div className="flex items-center gap-3 px-6 pt-6 pb-4 md:pt-8 md:pb-6">
           <div className="w-12 h-12 md:w-10 md:h-10 flex items-center justify-center">
             <OwlIcon />
           </div>
           <span className="font-extrabold text-2xl md:text-xl tracking-tight bg-gradient-to-r from-sky-400 to-blue-500 text-transparent bg-clip-text">Baykuş</span>
-          {/* Karanlık mod ve bildirim ikonları */}
-          <div className="ml-auto flex items-center gap-2">
-            <ThemeToggle />
-            <NotificationSystem />
-          </div>
         </div>
         
         {/* Menü Linkleri - Mobil için optimize */}

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import TopRightActions from "../components/TopRightActions";
 
 export const metadata: Metadata = {
   title: "Baykuş - Sınav Başarısına Giden Yolda En Güçlü Rehberin",
@@ -44,7 +43,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="font-sans antialiased">
         <div className="relative min-h-screen">
-          <TopRightActions />
           {children}
         </div>
       </body>
