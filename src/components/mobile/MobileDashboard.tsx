@@ -21,7 +21,6 @@ const USER_KEY = "sinavPusulasiUser";
 
 export default function MobileDashboard() {
   const [activePage, setActivePage] = useState("dashboard");
-  const [username, setUsername] = useState("Kullanıcı");
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -30,7 +29,6 @@ export default function MobileDashboard() {
       if (userStr) {
         try {
           const user = JSON.parse(userStr);
-          setUsername(user.username || "Kullanıcı");
           setIsAdmin(user.email === "keremerdeen@gmail.com");
         } catch {}
       }
