@@ -99,11 +99,6 @@ export default function Sidebar() {
             <OwlIcon />
           </div>
           <span className="font-extrabold text-2xl md:text-xl tracking-tight bg-gradient-to-r from-sky-400 to-blue-500 text-transparent bg-clip-text">Baykuş</span>
-          {/* Karanlık mod ve bildirim ikonları */}
-          <div className="ml-auto flex items-center gap-2">
-            <ThemeToggle />
-            <NotificationSystem />
-          </div>
         </div>
         
         {/* Menü Linkleri - Mobil için optimize */}
@@ -163,6 +158,11 @@ export default function Sidebar() {
               <LogoutButton sidebarMode />
             </div>
           )}
+        </div>
+        {/* Karanlık mod ve bildirim ikonları - En alt kısım */}
+        <div className="flex items-center gap-2 px-6 pb-6 mt-auto">
+          <ThemeToggle />
+          <NotificationSystem />
         </div>
       </aside>
     </>
