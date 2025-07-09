@@ -27,21 +27,55 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
         const userStr = localStorage.getItem(USER_KEY);
-        if (userStr) {
-          const user = JSON.parse(userStr);
-          setUserEmail(user.email);
+        if (!userStr) {
+          // Kullanıcı giriş yapmamış, landing page'e yönlendir
+          window.location.href = "/";
+          return;
         }
+        
+        const user = JSON.parse(userStr);
+        if (!user.email) {
+          // Geçersiz user data, landing page'e yönlendir
+          localStorage.removeItem(USER_KEY);
+          window.location.href = "/";
+          return;
+        }
+        
+        setUserEmail(user.email);
       } catch {
-        console.error("Kullanıcı bilgisi alınamadı");
+        // Geçersiz user data, landing page'e yönlendir
+        localStorage.removeItem(USER_KEY);
+        window.location.href = "/";
+        return;
       }
+      
+      setIsLoading(false);
     }
   }, []);
+
+  // Loading durumunda loading göster
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Giriş yapmamış kullanıcılar için boş div (yönlendirme yapılacak)
+  if (!userEmail) {
+    return <div></div>;
+  }
 
   const fetchMessages = useCallback(async () => {
     setLoading(true);

@@ -10,6 +10,7 @@ type AuthModalProps = {
   onLogin: (email: string, password: string) => Promise<void>;
   onRegister: (username: string, email: string, password: string) => Promise<void>;
   isLoading?: boolean;
+  error?: string;
 };
 
 const AuthModal: React.FC<AuthModalProps> = ({ 
@@ -19,7 +20,8 @@ const AuthModal: React.FC<AuthModalProps> = ({
   onSwitchForm, 
   onLogin, 
   onRegister,
-  isLoading = false
+  isLoading = false,
+  error = ""
 }) => {
   const loginEmailRef = useRef<HTMLInputElement>(null);
   const loginPasswordRef = useRef<HTMLInputElement>(null);
@@ -80,6 +82,11 @@ const AuthModal: React.FC<AuthModalProps> = ({
         {!showRegister && (
           <>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 mb-3 sm:mb-4 md:mb-6 text-center pt-2">Giriş Yap</h2>
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm font-medium">{error}</p>
+              </div>
+            )}
             <form onSubmit={async e => {
               e.preventDefault();
               if (loginEmailRef.current && !isLoading) {
@@ -136,6 +143,11 @@ const AuthModal: React.FC<AuthModalProps> = ({
         {showRegister && (
           <>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 mb-3 sm:mb-4 md:mb-6 text-center pt-2">Hesap Oluştur</h2>
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm font-medium">{error}</p>
+              </div>
+            )}
             <form onSubmit={async e => {
               e.preventDefault();
               if (registerUsernameRef.current && registerEmailRef.current && !isLoading) {

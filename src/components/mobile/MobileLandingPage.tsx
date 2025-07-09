@@ -7,6 +7,7 @@ export default function MobileLandingPage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleAuthClick = () => {
     setShowAuthModal(true);
@@ -15,22 +16,39 @@ export default function MobileLandingPage() {
   const handleClose = () => {
     setShowAuthModal(false);
     setShowRegister(false);
+    setError("");
   };
 
   const handleSwitchForm = (register: boolean) => {
     setShowRegister(register);
+    setError("");
   };
 
   const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
+    setError("");
+    
     try {
-      // Burada gerçek login API çağrısı yapılacak
-      console.log("Login attempt:", email, password);
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Giriş başarısız');
+      }
+
       // Başarılı login sonrası
-      localStorage.setItem("sinavPusulasiUser", JSON.stringify({ email, username: email.split('@')[0] }));
+      localStorage.setItem("sinavPusulasiUser", JSON.stringify(data.user));
       window.location.reload();
     } catch (error) {
       console.error("Login error:", error);
+      setError(error instanceof Error ? error.message : 'Giriş başarısız');
     } finally {
       setIsLoading(false);
     }
@@ -38,14 +56,29 @@ export default function MobileLandingPage() {
 
   const handleRegister = async (username: string, email: string, password: string) => {
     setIsLoading(true);
+    setError("");
+    
     try {
-      // Burada gerçek register API çağrısı yapılacak
-      console.log("Register attempt:", username, email, password);
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Kayıt başarısız');
+      }
+
       // Başarılı kayıt sonrası
-      localStorage.setItem("sinavPusulasiUser", JSON.stringify({ email, username }));
+      localStorage.setItem("sinavPusulasiUser", JSON.stringify(data.user));
       window.location.reload();
     } catch (error) {
       console.error("Register error:", error);
+      setError(error instanceof Error ? error.message : 'Kayıt başarısız');
     } finally {
       setIsLoading(false);
     }
@@ -230,6 +263,7 @@ export default function MobileLandingPage() {
         onLogin={handleLogin}
         onRegister={handleRegister}
         isLoading={isLoading}
+        error={error}
       />
     </div>
   );

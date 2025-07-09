@@ -46,24 +46,51 @@ export default function MobileLayout({ children, currentPage = "dashboard" }: Mo
   const [email, setEmail] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userStr = localStorage.getItem(USER_KEY);
-      setIsLoggedIn(!!userStr);
-      if (userStr) {
-        try {
-          const user = JSON.parse(userStr);
-          setUsername(user.username || "Kullanıcı");
-          setEmail(user.email || "");
-          setIsAdmin(user.email === "keremerdeen@gmail.com");
-        } catch {
-          setUsername("Kullanıcı");
-          setEmail("");
-        }
+      
+      if (!userStr) {
+        // Kullanıcı giriş yapmamış, landing page'e yönlendir
+        window.location.href = "/";
+        return;
       }
+
+      try {
+        const user = JSON.parse(userStr);
+        setUsername(user.username || "Kullanıcı");
+        setEmail(user.email || "");
+        setIsAdmin(user.email === "keremerdeen@gmail.com");
+        setIsLoggedIn(true);
+      } catch {
+        // Geçersiz user data, landing page'e yönlendir
+        localStorage.removeItem(USER_KEY);
+        window.location.href = "/";
+        return;
+      }
+      
+      setIsLoading(false);
     }
   }, []);
+
+  // Loading durumunda loading göster
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Giriş yapmamış kullanıcılar için boş div (yönlendirme yapılacak)
+  if (!isLoggedIn) {
+    return <div></div>;
+  }
 
   const initial = username?.[0]?.toUpperCase() || "U";
 
