@@ -1,9 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface MobileProviderProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mobileComponent: React.ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   desktopComponent: React.ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   props?: any;
 }
 
