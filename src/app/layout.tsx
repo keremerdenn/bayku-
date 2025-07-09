@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ThemeToggle from "../components/ThemeToggle";
 import NotificationSystem from "../components/NotificationSystem";
+import TopRightActions from "../components/TopRightActions";
 
 export const metadata: Metadata = {
   title: "Baykuş - Sınav Başarısına Giden Yolda En Güçlü Rehberin",
@@ -47,11 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="font-sans antialiased">
         <div className="relative min-h-screen">
-          {/* Sağ üstte karanlık mod ve bildirim paneli */}
-          <div className="fixed top-4 right-6 z-50 flex items-center gap-4">
-            <ThemeToggle />
-            <NotificationSystem />
-          </div>
+          <TopRightActions />
           {children}
         </div>
       </body>
