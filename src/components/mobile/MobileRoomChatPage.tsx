@@ -12,8 +12,8 @@ const USER_KEY = "sinavPusulasiUser";
 interface Message {
   id: string;
   room_id: string;
-  user_email: string;
-  message: string;
+  sender_email: string;
+  content: string;
   created_at: string;
 }
 
@@ -78,12 +78,12 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
   }, [roomId]);
 
   useEffect(() => {
-    if (userEmail) {
+    if (userEmail && roomId) {
       fetchMessages();
       const unsubscribe = subscribeToMessages();
       return unsubscribe;
     }
-  }, [userEmail, fetchMessages, subscribeToMessages]);
+  }, [userEmail, roomId, fetchMessages, subscribeToMessages]);
 
   useEffect(() => {
     scrollToBottom();
@@ -93,18 +93,21 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
     e.preventDefault();
     if (!newMessage.trim() || !userEmail) return;
 
+    const messageToSend = newMessage.trim();
+    setNewMessage(""); // Hemen input'u temizle
+
     const { error } = await supabase
       .from("messages")
       .insert([{
         room_id: roomId,
-        user_email: userEmail,
-        message: newMessage.trim()
+        sender_email: userEmail,
+        content: messageToSend
       }]);
 
     if (error) {
       console.error("Mesaj gönderilemedi:", error);
-    } else {
-      setNewMessage("");
+      // Hata durumunda mesajı geri koy
+      setNewMessage(messageToSend);
     }
   };
 
@@ -156,7 +159,7 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
           </div>
         ) : (
           messages.map((message) => {
-            const isOwnMessage = message.user_email === userEmail;
+            const isOwnMessage = message.sender_email === userEmail;
             
             return (
               <div
@@ -166,7 +169,7 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
                 <div className={`max-w-xs lg:max-w-md ${isOwnMessage ? 'order-2' : 'order-1'}`}>
                   {!isOwnMessage && (
                     <p className="text-xs text-gray-500 mb-1 ml-2">
-                      {message.user_email === userEmail ? 'Sen' : message.user_email}
+                      {message.sender_email === userEmail ? 'Sen' : message.sender_email.split('@')[0]}
                     </p>
                   )}
                   <div
@@ -176,7 +179,7 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
                         : 'bg-white text-gray-900 border border-gray-200'
                     }`}
                   >
-                    <p className="text-sm">{message.message}</p>
+                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                     <p className={`text-xs mt-1 ${
                       isOwnMessage ? 'text-sky-100' : 'text-gray-500'
                     }`}>
@@ -199,7 +202,7 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Mesajını yaz..."
-            className="flex-1 p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+            className="flex-1 p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-transparent text-gray-900"
             disabled={!userEmail}
           />
           <button
