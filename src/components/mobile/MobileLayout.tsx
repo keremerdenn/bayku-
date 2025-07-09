@@ -10,6 +10,7 @@ import {
   AcademicCapIcon,
   Bars3Icon,
   XMarkIcon,
+  ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import LogoutButton from "../LogoutButton";
 
@@ -178,7 +179,7 @@ export default function MobileLayout({ children, currentPage = "dashboard" }: Mo
               </div>
             </div>
             {isLoggedIn && (
-              <div className="mt-4 flex justify-center">
+              <div className="mt-4">
                 <LogoutButton sidebarMode />
               </div>
             )}
@@ -194,7 +195,7 @@ export default function MobileLayout({ children, currentPage = "dashboard" }: Mo
       {/* Mobil Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40">
         <div className="flex items-center justify-around py-2">
-          {menuItems.slice(0, 4).map((item) => {
+          {menuItems.slice(0, 3).map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
             
@@ -211,6 +212,20 @@ export default function MobileLayout({ children, currentPage = "dashboard" }: Mo
               </a>
             );
           })}
+          
+          {/* Çıkış Yap Butonu */}
+          {isLoggedIn && (
+            <button
+              onClick={() => {
+                localStorage.removeItem(USER_KEY);
+                window.location.reload();
+              }}
+              className="flex flex-col items-center p-3 rounded-xl transition-all duration-200 text-red-600 hover:text-red-700"
+            >
+              <ArrowRightOnRectangleIcon className="w-6 h-6 mb-1" />
+              <span className="text-xs font-medium">Çıkış</span>
+            </button>
+          )}
         </div>
       </nav>
     </div>
