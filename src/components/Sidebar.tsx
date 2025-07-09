@@ -12,8 +12,8 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline";
 import LogoutButton from "./LogoutButton";
-import ThemeToggle from "./ThemeToggle";
-import NotificationSystem from "./NotificationSystem";
+// import ThemeToggle from "./ThemeToggle";
+// import NotificationSystem from "./NotificationSystem";
 
 // Gradientli Baykuş SVG ikonu
 const OwlIcon = () => (
@@ -159,11 +159,7 @@ export default function Sidebar() {
             </div>
           )}
         </div>
-        {/* Karanlık mod ve bildirim ikonları - En alt kısım */}
-        <div className="flex items-center gap-2 px-6 pb-6 mt-auto">
-          <ThemeToggle />
-          <NotificationSystem />
-        </div>
+        {/* Karanlık mod ve bildirim ikonları kaldırıldı */}
       </aside>
     </>
   );

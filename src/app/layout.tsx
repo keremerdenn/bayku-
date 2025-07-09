@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ThemeToggle from "../components/ThemeToggle";
+import NotificationSystem from "../components/NotificationSystem";
 
 export const metadata: Metadata = {
   title: "Baykuş - Sınav Başarısına Giden Yolda En Güçlü Rehberin",
@@ -24,13 +26,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr" suppressHydrationWarning>
+    <html lang="tr">
       <head>
         {/* Preload kritik kaynaklar */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,7 +44,14 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body className="font-sans antialiased">
-        {children}
+        <div className="relative min-h-screen">
+          {/* Sağ üstte karanlık mod ve bildirim paneli */}
+          <div className="fixed top-4 right-6 z-50 flex items-center gap-4">
+            <ThemeToggle />
+            <NotificationSystem />
+          </div>
+          {children}
+        </div>
       </body>
     </html>
   );
