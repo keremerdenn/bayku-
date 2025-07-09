@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ThemeToggle from "../components/ThemeToggle";
-import NotificationSystem from "../components/NotificationSystem";
 import TopRightActions from "../components/TopRightActions";
 
 export const metadata: Metadata = {
