@@ -1,8 +1,56 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { ArrowRightIcon, StarIcon, UserGroupIcon, AcademicCapIcon } from "@heroicons/react/24/outline";
+import AuthModal from "../AuthModal";
 
 export default function MobileLandingPage() {
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAuthClick = () => {
+    setShowAuthModal(true);
+  };
+
+  const handleClose = () => {
+    setShowAuthModal(false);
+    setShowRegister(false);
+  };
+
+  const handleSwitchForm = (register: boolean) => {
+    setShowRegister(register);
+  };
+
+  const handleLogin = async (email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      // Burada gerçek login API çağrısı yapılacak
+      console.log("Login attempt:", email, password);
+      // Başarılı login sonrası
+      localStorage.setItem("sinavPusulasiUser", JSON.stringify({ email, username: email.split('@')[0] }));
+      window.location.reload();
+    } catch (error) {
+      console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegister = async (username: string, email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      // Burada gerçek register API çağrısı yapılacak
+      console.log("Register attempt:", username, email, password);
+      // Başarılı kayıt sonrası
+      localStorage.setItem("sinavPusulasiUser", JSON.stringify({ email, username }));
+      window.location.reload();
+    } catch (error) {
+      console.error("Register error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100">
       {/* Header */}
@@ -16,12 +64,12 @@ export default function MobileLandingPage() {
               Baykuş
             </span>
           </div>
-          <a
-            href="#/auth"
+          <button
+            onClick={handleAuthClick}
             className="bg-sky-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-sky-600 transition-all duration-200"
           >
             Giriş Yap
-          </a>
+          </button>
         </div>
       </header>
 
@@ -40,20 +88,20 @@ export default function MobileLandingPage() {
           </p>
           
           <div className="flex flex-col space-y-3">
-            <a
-              href="#/auth"
+            <button
+              onClick={handleAuthClick}
               className="bg-gradient-to-r from-sky-500 to-blue-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-xl transition-all duration-200 active:scale-95 flex items-center justify-center space-x-2"
             >
               <span>Hemen Başla</span>
               <ArrowRightIcon className="w-5 h-5" />
-            </a>
+            </button>
             
-            <a
-              href="#/demo"
+            <button
+              onClick={handleAuthClick}
               className="border-2 border-sky-500 text-sky-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-sky-50 transition-all duration-200"
             >
               Demo İncele
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -137,13 +185,13 @@ export default function MobileLandingPage() {
           <p className="text-sky-100 mb-6">
             Hemen ücretsiz hesap oluştur ve sınav başarına giden yolda ilk adımını at!
           </p>
-          <a
-            href="#/auth"
+          <button
+            onClick={handleAuthClick}
             className="bg-white text-sky-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all duration-200 inline-flex items-center space-x-2"
           >
             <span>Ücretsiz Başla</span>
             <ArrowRightIcon className="w-5 h-5" />
-          </a>
+          </button>
         </div>
       </section>
 
@@ -172,6 +220,17 @@ export default function MobileLandingPage() {
           </p>
         </div>
       </footer>
+
+      {/* Auth Modal */}
+      <AuthModal 
+        visible={showAuthModal}
+        onClose={handleClose}
+        showRegister={showRegister}
+        onSwitchForm={handleSwitchForm}
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+        isLoading={isLoading}
+      />
     </div>
   );
 } 
