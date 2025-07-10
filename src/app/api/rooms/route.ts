@@ -13,9 +13,40 @@ export async function DELETE(request: Request) {
   if (!id) {
     return new Response(JSON.stringify({ error: "Eksik id" }), { status: 400 });
   }
-  const { error } = await supabase.from("rooms").delete().eq("id", id);
-  if (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+  
+  try {
+    // Önce room_members tablosundaki ilgili kayıtları sil
+    const { error: membersError } = await supabase
+      .from("room_members")
+      .delete()
+      .eq("room_id", id);
+    
+    if (membersError) {
+      return new Response(JSON.stringify({ error: "Üye kayıtları silinemedi: " + membersError.message }), { status: 500 });
+    }
+    
+    // Sonra messages tablosundaki ilgili mesajları sil
+    const { error: messagesError } = await supabase
+      .from("messages")
+      .delete()
+      .eq("room_id", id);
+    
+    if (messagesError) {
+      return new Response(JSON.stringify({ error: "Mesaj kayıtları silinemedi: " + messagesError.message }), { status: 500 });
+    }
+    
+    // En son odayı sil
+    const { error: roomError } = await supabase
+      .from("rooms")
+      .delete()
+      .eq("id", id);
+    
+    if (roomError) {
+      return new Response(JSON.stringify({ error: "Oda silinemedi: " + roomError.message }), { status: 500 });
+    }
+    
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: "Bilinmeyen hata: " + (error as Error).message }), { status: 500 });
   }
-  return new Response(JSON.stringify({ success: true }), { status: 200 });
 } 
