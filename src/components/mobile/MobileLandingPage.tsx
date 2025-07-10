@@ -73,52 +73,44 @@ export default function MobileLandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 flex flex-col justify-center items-center">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 px-4 py-3 w-full">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-sky-500 to-blue-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">🦉</span>
-            </div>
-            <span className="font-bold text-xl bg-gradient-to-r from-sky-500 to-blue-600 text-transparent bg-clip-text">
-              Baykuş
-            </span>
-          </div>
-          <button
-            onClick={handleAuthClick}
-            className="bg-sky-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-sky-600 transition-all duration-200"
-          >
-            Giriş Yap
-          </button>
-        </div>
+    <div className="min-h-screen bg-white flex flex-col justify-between items-center">
+      {/* Üstte büyük Baykuş logosu ve başlık */}
+      <header className="w-full flex flex-col items-center pt-10 pb-4">
+        <svg width="64" height="64" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-2">
+          <ellipse cx="16" cy="22" rx="10" ry="7" fill="#2563eb"/>
+          <ellipse cx="11.5" cy="14" rx="3.5" ry="4" fill="#fff"/>
+          <ellipse cx="20.5" cy="14" rx="3.5" ry="4" fill="#fff"/>
+          <circle cx="11.5" cy="14" r="1.2" fill="#2563eb"/>
+          <circle cx="20.5" cy="14" r="1.2" fill="#2563eb"/>
+          <ellipse cx="16" cy="18.5" rx="2.5" ry="1.2" fill="#e5e7eb"/>
+          <path d="M8 10 Q16 2 24 10" stroke="#2563eb" strokeWidth="2" fill="none"/>
+        </svg>
+        <span className="font-bold text-2xl text-gray-800 tracking-tight">Baykuş</span>
       </header>
 
-      {/* Hero Section */}
-      <section className="flex-1 flex flex-col justify-center items-center w-full px-4 py-8">
-        <div className="text-center space-y-6">
-          <h1 className="text-3xl font-bold text-gray-900 leading-tight">
-            Sınav Başarısına Giden Yolda
-            <span className="block bg-gradient-to-r from-sky-500 to-blue-600 text-transparent bg-clip-text">
-              Dijital Rehberin
-            </span>
-          </h1>
-          <p className="text-lg text-gray-600 leading-relaxed">
-            Kişiselleştirilmiş testler, topluluk desteği ve daha fazlası için hemen giriş yap veya kayıt ol.
-          </p>
+      {/* Hero ve Hakkımızda */}
+      <main className="flex-1 w-full flex flex-col items-center justify-center px-6">
+        <div className="text-center space-y-6 max-w-md mx-auto">
+          <h1 className="text-2xl font-semibold text-gray-900 leading-tight">Sınav Başarısına Giden Yolda <span className="block text-blue-600">Dijital Rehberin</span></h1>
+          <p className="text-base text-gray-600 leading-relaxed">Kişiselleştirilmiş testler, topluluk desteği ve akıllı analizlerle başarıya ulaş. Hemen giriş yap veya kayıt ol!</p>
           <button
             onClick={handleAuthClick}
-            className="bg-gradient-to-r from-sky-500 to-blue-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-xl transition-all duration-200 active:scale-95 flex items-center justify-center space-x-2"
+            className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold text-base hover:bg-blue-700 active:scale-95 transition flex items-center justify-center gap-2"
           >
-            <span>Hemen Başla</span>
+            <span>Giriş Yap / Kayıt Ol</span>
             <ArrowRightIcon className="w-5 h-5" />
           </button>
         </div>
-      </section>
+        {/* Hakkımızda */}
+        <div className="mt-10 bg-gray-50 border border-gray-100 rounded-xl p-5 w-full max-w-md mx-auto text-center">
+          <h2 className="text-lg font-semibold text-gray-800 mb-2">Hakkımızda</h2>
+          <p className="text-sm text-gray-600">Baykuş, öğrencilerin sınav başarısını artırmak için modern, sade ve kullanıcı dostu bir platform sunar. Akıllı testler, analizler ve topluluk desteğiyle her zaman yanınızdayız.</p>
+        </div>
+      </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white px-4 py-8 w-full text-center">
-        <span className="text-sm">&copy; {new Date().getFullYear()} Baykuş. Tüm hakları saklıdır.</span>
+      <footer className="w-full text-center py-6 text-xs text-gray-400 border-t border-gray-100 bg-white">
+        &copy; {new Date().getFullYear()} Baykuş. Tüm hakları saklıdır.
       </footer>
 
       <AuthModal
