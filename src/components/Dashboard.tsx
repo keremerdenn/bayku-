@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import ChatPage from "./ChatPage";
-import DerslerimPage from "./DerslerimPage";
 import VerilerimPage from "./VerilerimPage";
 import NotificationSystem from "./NotificationSystem";
 import ThemeToggle from "./ThemeToggle";
 import ProfilePage from "./ProfilePage";
 import AdminPanel from "./AdminPanel";
 import RoomsPage from "./RoomsPage";
+import LessonsPage from "./LessonsPage";
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -74,7 +74,7 @@ const Dashboard = () => {
   } else if (activePage === "ai-asistan") {
     pageContent = <ChatPage />;
   } else if (activePage === "derslerim") {
-    pageContent = <DerslerimPage />;
+    pageContent = <LessonsPage />;
   } else if (activePage === "verilerim") {
     pageContent = <VerilerimPage />;
   } else if (activePage === "profil") {
