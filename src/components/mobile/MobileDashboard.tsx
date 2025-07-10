@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import MobileLayout from "./MobileLayout";
 import MobileRoomsPage from "./MobileRoomsPage";
-import MobileChatPage from "./MobileChatPage";
+
 import MobileDerslerimPage from "./MobileDerslerimPage";
 import MobileVerilerimPage from "./MobileVerilerimPage";
 import MobileProfilePage from "./MobileProfilePage";

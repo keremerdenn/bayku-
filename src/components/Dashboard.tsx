@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
-import ChatPage from "./ChatPage";
+
 import VerilerimPage from "./VerilerimPage";
 import NotificationSystem from "./NotificationSystem";
 import ThemeToggle from "./ThemeToggle";
