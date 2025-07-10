@@ -64,7 +64,13 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         } else {
           console.log("ProfilePage - no user data found in localStorage");
           // Kullanıcı giriş yapmamış, ana sayfaya yönlendir
-          window.location.href = '/';
+          // Ama önce biraz bekle, belki localStorage henüz yüklenmemiştir
+          setTimeout(() => {
+            const retryUserStr = localStorage.getItem(USER_KEY);
+            if (!retryUserStr) {
+              window.location.href = '/';
+            }
+          }, 1000);
         }
       } catch (error) {
         console.error("Kullanıcı bilgisi alınamadı:", error);
