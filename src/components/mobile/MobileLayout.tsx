@@ -35,7 +35,7 @@ export default function MobileLayout({ children, currentPage = "dashboard" }: Mo
         return;
       }
       try {
-        const user = JSON.parse(userStr);
+        JSON.parse(userStr);
         setIsLoggedIn(true);
       } catch {
         localStorage.removeItem(USER_KEY);
