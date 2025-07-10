@@ -51,16 +51,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
       console.log("ProfilePage - checking localStorage...");
       console.log("ProfilePage - all localStorage keys:", Object.keys(localStorage));
       
-      // Test için manuel veri ekle
-      const testUser = {
-        email: "test@example.com",
-        username: "TestUser",
-        bio: "Test bio",
-        profileImage: null
-      };
-      localStorage.setItem(USER_KEY, JSON.stringify(testUser));
-      console.log("ProfilePage - added test user to localStorage");
-      
       try {
         const userStr = localStorage.getItem(USER_KEY);
         console.log("ProfilePage - localStorage data:", userStr);
@@ -71,9 +61,15 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
           setAboutValue(userData.bio || "");
           setProfileImage(userData.profileImage || null);
           console.log("ProfilePage - set profileImage:", userData.profileImage);
+        } else {
+          console.log("ProfilePage - no user data found in localStorage");
+          // Kullanıcı giriş yapmamış, ana sayfaya yönlendir
+          window.location.href = '/';
         }
       } catch (error) {
         console.error("Kullanıcı bilgisi alınamadı:", error);
+        // Hata durumunda da ana sayfaya yönlendir
+        window.location.href = '/';
       }
     }
   }, [username]);

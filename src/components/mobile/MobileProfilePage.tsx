@@ -50,16 +50,6 @@ export default function MobileProfilePage() {
       console.log("MobileProfilePage - checking localStorage...");
       console.log("MobileProfilePage - all localStorage keys:", Object.keys(localStorage));
       
-      // Test için manuel veri ekle
-      const testUser = {
-        email: "test@example.com",
-        username: "TestUser",
-        bio: "Test bio",
-        profileImage: null
-      };
-      localStorage.setItem(USER_KEY, JSON.stringify(testUser));
-      console.log("MobileProfilePage - added test user to localStorage");
-      
       try {
         const userStr = localStorage.getItem(USER_KEY);
         console.log("MobileProfilePage - localStorage data:", userStr);
@@ -74,9 +64,13 @@ export default function MobileProfilePage() {
           loadStats();
         } else {
           console.log("MobileProfilePage - no user data found in localStorage");
+          // Kullanıcı giriş yapmamış, ana sayfaya yönlendir
+          window.location.href = '/';
         }
       } catch (error) {
         console.error("Kullanıcı bilgisi alınamadı:", error);
+        // Hata durumunda da ana sayfaya yönlendir
+        window.location.href = '/';
       }
     }
   }, []);
