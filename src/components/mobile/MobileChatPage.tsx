@@ -113,9 +113,12 @@ export default function MobileChatPage() {
       </div>
 
       {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-gradient-to-br from-sky-50 via-blue-50 to-white">
         {messages.length === 0 ? (
-          <div className="text-center py-12 text-gray-400 text-sm">Henüz mesaj yok.</div>
+          <div className="flex flex-col items-center justify-center py-12 text-gray-400 text-sm">
+            <svg width="56" height="56" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span className="mt-4 text-base">Henüz mesaj yok.</span>
+          </div>
         ) : (
           messages.map((message) => {
             const isOwnMessage = message.user_email === userEmail;
@@ -126,18 +129,14 @@ export default function MobileChatPage() {
               >
                 <div className={`max-w-xs lg:max-w-md ${isOwnMessage ? 'order-2' : 'order-1'}`}>
                   <div
-                    className={`rounded-2xl px-4 py-3 ${
-                      isOwnMessage
-                        ? 'bg-sky-500 text-white'
-                        : 'bg-white text-gray-900 border border-gray-200'
-                    }`}
+                    className={`rounded-2xl px-5 py-3 shadow-lg transition-all duration-200 text-base font-medium break-words animate-fade-in
+                      ${isOwnMessage
+                        ? 'bg-gradient-to-br from-sky-400 to-blue-500 text-white border-2 border-sky-300'
+                        : 'bg-white text-gray-900 border-2 border-sky-100'}
+                    `}
                   >
-                    <p className="text-sm">{message.message}</p>
-                    <p className={`text-xs mt-1 ${
-                      isOwnMessage ? 'text-sky-100' : 'text-gray-500'
-                    }`}>
-                      {formatTime(message.created_at)}
-                    </p>
+                    <p className="text-base leading-snug">{message.message}</p>
+                    <p className={`text-xs mt-2 ${isOwnMessage ? 'text-sky-100' : 'text-gray-500'}`}>{formatTime(message.created_at)}</p>
                   </div>
                 </div>
               </div>
@@ -155,15 +154,15 @@ export default function MobileChatPage() {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Mesajınızı yazın..."
-            className="flex-1 p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+            className="flex-1 p-4 border-2 border-sky-200 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-sky-400 bg-sky-50 text-gray-900 text-base font-medium shadow-md"
             disabled={!userEmail}
           />
           <button
             type="submit"
             disabled={!newMessage.trim() || !userEmail}
-            className="p-4 bg-sky-500 text-white rounded-2xl hover:bg-sky-600 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-4 bg-gradient-to-br from-sky-500 to-blue-500 text-white rounded-2xl shadow-lg hover:from-sky-600 hover:to-blue-600 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
           >
-            <PaperAirplaneIcon className="w-5 h-5" />
+            <PaperAirplaneIcon className="w-6 h-6" />
           </button>
         </form>
       </div>
