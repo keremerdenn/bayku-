@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { createClient } from "@supabase/supabase-js";
 import MobileLayout from "./MobileLayout";
 import MobileRoomChatPage from "./MobileRoomChatPage";
-import { PlusIcon, ChatBubbleLeftRightIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
