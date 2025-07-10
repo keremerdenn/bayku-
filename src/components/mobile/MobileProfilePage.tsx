@@ -10,6 +10,16 @@ interface User {
   email: string;
   username?: string;
   bio?: string;
+  profileImage?: string;
+}
+
+interface StatsData {
+  totalQuestions: number;
+  successRate: number;
+  dailyStreak: number;
+  todayQuestions: number;
+  weekQuestions: number;
+  monthQuestions: number;
 }
 
 export default function MobileProfilePage() {
@@ -24,6 +34,15 @@ export default function MobileProfilePage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [statsData, setStatsData] = useState<StatsData>({
+    totalQuestions: 0,
+    successRate: 0,
+    dailyStreak: 0,
+    todayQuestions: 0,
+    weekQuestions: 0,
+    monthQuestions: 0
+  });
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -35,6 +54,8 @@ export default function MobileProfilePage() {
           setUser(userData);
           setEditUsername(userData.username || "");
           setEditBio(userData.bio || "");
+          setProfileImage(userData.profileImage || null);
+          loadStats();
         }
       } catch {
         console.error("Kullanıcı bilgisi alınamadı");
@@ -42,12 +63,45 @@ export default function MobileProfilePage() {
     }
   }, []);
 
+  const loadStats = async () => {
+    setLoading(true);
+    try {
+      // Gerçek API çağrıları burada yapılacak
+      // Şimdilik localStorage'dan basit veriler alıyoruz
+      const userStr = localStorage.getItem(USER_KEY);
+      if (userStr) {
+        const userData = JSON.parse(userStr);
+        // Burada gerçek API çağrıları yapılacak
+        // Şimdilik örnek veriler
+        setStatsData({
+          totalQuestions: 1245,
+          successRate: 78.2,
+          dailyStreak: 12,
+          todayQuestions: 15,
+          weekQuestions: 89,
+          monthQuestions: 342
+        });
+      }
+    } catch (error) {
+      console.error("İstatistik verileri yüklenemedi:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setProfileImage(e.target?.result as string);
+        const imageData = e.target?.result as string;
+        setProfileImage(imageData);
+        // Fotoğrafı hemen kaydet
+        if (user) {
+          const updatedUser = { ...user, profileImage: imageData };
+          setUser(updatedUser);
+          localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -91,7 +145,7 @@ export default function MobileProfilePage() {
         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-4">
           <div className="flex flex-col items-center">
             <div className="relative mb-4">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-white text-3xl font-bold overflow-hidden">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-white text-3xl font-bold overflow-hidden relative">
                 {profileImage ? (
                   <Image src={profileImage} alt="Profil" fill className="object-cover" />
                 ) : (
@@ -141,16 +195,22 @@ export default function MobileProfilePage() {
         {/* İstatistikler */}
         <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm mb-4">
           <h3 className="text-lg font-semibold text-gray-800 mb-3">İstatistikler</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-3 rounded-lg text-center">
-              <div className="text-xl font-bold">1,245</div>
-              <div className="text-xs opacity-90">Çözülen Soru</div>
+          {loading ? (
+            <div className="flex items-center justify-center py-4">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-sky-500"></div>
             </div>
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-3 rounded-lg text-center">
-              <div className="text-xl font-bold">78.2%</div>
-              <div className="text-xs opacity-90">Başarı Oranı</div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-3 rounded-lg text-center">
+                <div className="text-xl font-bold">{statsData.totalQuestions.toLocaleString()}</div>
+                <div className="text-xs opacity-90">Çözülen Soru</div>
+              </div>
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-3 rounded-lg text-center">
+                <div className="text-xl font-bold">{statsData.successRate}%</div>
+                <div className="text-xs opacity-90">Başarı Oranı</div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Ayarlar */}

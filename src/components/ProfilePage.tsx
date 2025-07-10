@@ -1,8 +1,24 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 
 interface ProfilePageProps {
   username: string;
+}
+
+interface UserData {
+  email: string;
+  username?: string;
+  bio?: string;
+  profileImage?: string;
+}
+
+interface StatsData {
+  totalQuestions: number;
+  successRate: number;
+  dailyStreak: number;
+  todayQuestions: number;
+  weekQuestions: number;
+  monthQuestions: number;
 }
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
@@ -16,21 +32,99 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [statsData, setStatsData] = useState<StatsData>({
+    totalQuestions: 0,
+    successRate: 0,
+    dailyStreak: 0,
+    todayQuestions: 0,
+    weekQuestions: 0,
+    monthQuestions: 0
+  });
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const tabs = [
-    { id: 'profile', name: 'Profil', icon: '👤' },
-    { id: 'password', name: 'Şifre', icon: '🔒' },
-    { id: 'stats', name: 'İstatistikler', icon: '📊' },
-    { id: 'settings', name: 'Ayarlar', icon: '⚙️' }
-  ];
+  const USER_KEY = "sinavPusulasiUser";
+
+  useEffect(() => {
+    // localStorage'dan kullanıcı verilerini yükle
+    if (typeof window !== "undefined") {
+      try {
+        const userStr = localStorage.getItem(USER_KEY);
+        if (userStr) {
+          const userData: UserData = JSON.parse(userStr);
+          setUsernameValue(userData.username || username);
+          setAboutValue(userData.bio || "");
+          setProfileImage(userData.profileImage || null);
+        }
+      } catch {
+        console.error("Kullanıcı bilgisi alınamadı");
+      }
+    }
+  }, [username]);
+
+  useEffect(() => {
+    // İstatistik verilerini yükle
+    if (activeTab === 'stats') {
+      loadStats();
+    }
+  }, [activeTab]);
+
+  const loadStats = async () => {
+    setLoading(true);
+    try {
+      // Gerçek API çağrıları burada yapılacak
+      // Şimdilik localStorage'dan basit veriler alıyoruz
+      const userStr = localStorage.getItem(USER_KEY);
+      if (userStr) {
+        const userData = JSON.parse(userStr);
+        // Burada gerçek API çağrıları yapılacak
+        // Şimdilik örnek veriler
+        setStatsData({
+          totalQuestions: 1245,
+          successRate: 78.2,
+          dailyStreak: 12,
+          todayQuestions: 15,
+          weekQuestions: 89,
+          monthQuestions: 342
+        });
+      }
+    } catch (error) {
+      console.error("İstatistik verileri yüklenemedi:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveUserData = () => {
+    try {
+      const userData: UserData = {
+        email: "kullanici@example.com",
+        username: usernameValue,
+        bio: aboutValue,
+        profileImage: profileImage
+      };
+      localStorage.setItem(USER_KEY, JSON.stringify(userData));
+      alert("Değişiklikler kaydedildi!");
+    } catch (error) {
+      console.error("Veriler kaydedilemedi:", error);
+      alert("Değişiklikler kaydedilemedi!");
+    }
+  };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setProfileImage(e.target?.result as string);
+        const imageData = e.target?.result as string;
+        setProfileImage(imageData);
+        // Fotoğrafı hemen kaydet
+        const userStr = localStorage.getItem(USER_KEY);
+        if (userStr) {
+          const userData = JSON.parse(userStr);
+          userData.profileImage = imageData;
+          localStorage.setItem(USER_KEY, JSON.stringify(userData));
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -57,17 +151,24 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
     setConfirmPassword("");
   };
 
+  const tabs = [
+    { id: 'profile', name: 'Profil', icon: '👤' },
+    { id: 'password', name: 'Şifre', icon: '🔒' },
+    { id: 'stats', name: 'İstatistikler', icon: '📊' },
+    { id: 'settings', name: 'Ayarlar', icon: '⚙️' }
+  ];
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
         <div className="flex items-center space-x-6">
           <div className="relative">
-            <div className="w-20 h-20 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold overflow-hidden">
+            <div className="w-20 h-20 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold overflow-hidden relative">
               {profileImage ? (
                 <Image src={profileImage} alt="Profil" fill className="object-cover" />
               ) : (
-                username?.[0]?.toUpperCase() || "U"
+                usernameValue?.[0]?.toUpperCase() || "U"
               )}
             </div>
             <button
@@ -85,7 +186,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
             />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{username}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{usernameValue}</h1>
             <p className="text-gray-600">Aktif Kullanıcı</p>
             {aboutValue && (
               <p className="text-sm text-gray-500 mt-1">{aboutValue}</p>
@@ -180,7 +281,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
               </div>
 
               <div className="flex justify-end">
-                <button className="bg-sky-500 text-white px-6 py-2 rounded-md hover:bg-sky-600 transition-colors">
+                <button 
+                  onClick={saveUserData}
+                  className="bg-sky-500 text-white px-6 py-2 rounded-md hover:bg-sky-600 transition-colors"
+                >
                   Değişiklikleri Kaydet
                 </button>
               </div>
@@ -243,38 +347,46 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
             <div className="space-y-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Detaylı İstatistikler</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-lg">
-                  <div className="text-2xl font-bold">1,245</div>
-                  <div className="text-sm opacity-90">Toplam Çözülen Soru</div>
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500"></div>
                 </div>
-                <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-4 rounded-lg">
-                  <div className="text-2xl font-bold">78.2%</div>
-                  <div className="text-sm opacity-90">Başarı Oranı</div>
-                </div>
-                <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-4 rounded-lg">
-                  <div className="text-2xl font-bold">12</div>
-                  <div className="text-sm opacity-90">Günlük Seri</div>
-                </div>
-              </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-lg">
+                      <div className="text-2xl font-bold">{statsData.totalQuestions.toLocaleString()}</div>
+                      <div className="text-sm opacity-90">Toplam Çözülen Soru</div>
+                    </div>
+                    <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-4 rounded-lg">
+                      <div className="text-2xl font-bold">{statsData.successRate}%</div>
+                      <div className="text-sm opacity-90">Başarı Oranı</div>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-4 rounded-lg">
+                      <div className="text-2xl font-bold">{statsData.dailyStreak}</div>
+                      <div className="text-sm opacity-90">Günlük Seri</div>
+                    </div>
+                  </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-2">Son Aktiviteler</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>Bugün çözülen soru</span>
-                    <span className="font-medium">15</span>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 mb-2">Son Aktiviteler</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Bugün çözülen soru</span>
+                        <span className="font-medium">{statsData.todayQuestions}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Bu hafta çözülen soru</span>
+                        <span className="font-medium">{statsData.weekQuestions}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Bu ay çözülen soru</span>
+                        <span className="font-medium">{statsData.monthQuestions}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Bu hafta çözülen soru</span>
-                    <span className="font-medium">89</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Bu ay çözülen soru</span>
-                    <span className="font-medium">342</span>
-                  </div>
-                </div>
-              </div>
+                </>
+              )}
             </div>
           )}
 
