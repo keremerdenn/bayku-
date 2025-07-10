@@ -107,8 +107,8 @@ export async function POST(request: NextRequest) {
       user: { 
         username: data.username, 
         email: data.email,
-        profileImage: data.profile_image || null,
-        bio: data.bio || null
+        profileImage: null, // Şimdilik null
+        bio: null // Şimdilik null
       } 
     });
   } catch (error) {

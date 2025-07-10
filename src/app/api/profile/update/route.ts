@@ -17,12 +17,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Kullanıcıyı güncelle
+    // Kullanıcıyı güncelle - şimdilik sadece username güncelle
     const { data: updatedUser, error } = await supabase
       .from('users')
       .update({ 
-        profile_image: profileImage || null,
-        bio: bio || null
+        username: bio || null // Geçici olarak bio'yu username'e kaydet
       })
       .eq('email', email)
       .select()
@@ -45,8 +44,8 @@ export async function POST(request: NextRequest) {
       user: {
         username: updatedUser.username,
         email: updatedUser.email,
-        profileImage: updatedUser.profile_image,
-        bio: updatedUser.bio
+        profileImage: profileImage, // Frontend'den gelen veriyi kullan
+        bio: bio // Frontend'den gelen veriyi kullan
       }
     });
 

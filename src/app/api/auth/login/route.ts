@@ -51,8 +51,8 @@ export async function POST(request: NextRequest) {
       user: { 
         username: user.username, 
         email: user.email,
-        profileImage: user.profile_image || null,
-        bio: user.bio || null
+        profileImage: null, // Şimdilik null
+        bio: null // Şimdilik null
       }
     });
 
