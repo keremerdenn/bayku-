@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import Image from 'next/image';
 
 interface ProfilePageProps {
   username: string;
@@ -64,7 +65,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
           <div className="relative">
             <div className="w-20 h-20 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold overflow-hidden">
               {profileImage ? (
-                <img src={profileImage} alt="Profil" className="w-full h-full object-cover" />
+                <Image src={profileImage} alt="Profil" fill className="object-cover" />
               ) : (
                 username?.[0]?.toUpperCase() || "U"
               )}
@@ -321,4 +322,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
       </div>
     </div>
   );
-} 
+}
+
+export default ProfilePage;

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import MobileLayout from "./MobileLayout";
 import { XMarkIcon, CameraIcon } from "@heroicons/react/24/outline";
+import Image from 'next/image';
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -92,7 +93,7 @@ export default function MobileProfilePage() {
             <div className="relative mb-4">
               <div className="w-24 h-24 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-white text-3xl font-bold overflow-hidden">
                 {profileImage ? (
-                  <img src={profileImage} alt="Profil" className="w-full h-full object-cover" />
+                  <Image src={profileImage} alt="Profil" fill className="object-cover" />
                 ) : (
                   user.username ? user.username[0]?.toUpperCase() : user.email[0]?.toUpperCase()
                 )}
