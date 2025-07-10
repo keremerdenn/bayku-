@@ -166,6 +166,15 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
 
   const saveUserData = async () => {
     try {
+      // Gerçek kullanıcı email'ini al
+      const userStr = localStorage.getItem(USER_KEY);
+      if (!userStr) {
+        alert("Kullanıcı bilgisi bulunamadı!");
+        return;
+      }
+      const currentUserData = JSON.parse(userStr);
+      const userEmail = currentUserData.email;
+      
       // Sunucuya profil güncellemesi gönder
       const response = await fetch('/api/profile/update', {
         method: 'POST',
@@ -173,7 +182,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: "kullanici@example.com", // Gerçek email kullanılacak
+          email: userEmail,
           profileImage: profileImage,
           bio: aboutValue
         }),
@@ -185,16 +194,16 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         throw new Error(data.error || 'Profil güncellenemedi');
       }
       
-      const userData: UserData = {
-        email: "kullanici@example.com",
+      const updatedUserData: UserData = {
+        email: userEmail,
         username: usernameValue,
         bio: aboutValue,
         profileImage: profileImage || undefined
       };
-      localStorage.setItem(USER_KEY, JSON.stringify(userData));
+      localStorage.setItem(USER_KEY, JSON.stringify(updatedUserData));
       
       // Custom event tetikle
-      window.dispatchEvent(new CustomEvent('userDataChanged', { detail: userData }));
+      window.dispatchEvent(new CustomEvent('userDataChanged', { detail: updatedUserData }));
       
       alert("Değişiklikler kaydedildi!");
     } catch (error) {
@@ -207,24 +216,45 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         const imageData = e.target?.result as string;
         setProfileImage(imageData);
-        // Fotoğrafı hemen kaydet
+        
+        // Gerçek kullanıcı email'ini al
         const userStr = localStorage.getItem(USER_KEY);
         if (userStr) {
-          const userData = JSON.parse(userStr);
-          userData.profileImage = imageData;
-          localStorage.setItem(USER_KEY, JSON.stringify(userData));
-        } else {
-          // Eğer localStorage'da kullanıcı yoksa yeni oluştur
-          const userData: UserData = {
-            email: "kullanici@example.com",
-            username: usernameValue,
-            bio: aboutValue,
-            profileImage: imageData
-          };
-          localStorage.setItem(USER_KEY, JSON.stringify(userData));
+          const existingUserData = JSON.parse(userStr);
+          const userEmail = existingUserData.email;
+          
+          // Sunucuya fotoğrafı kaydet
+          try {
+            const response = await fetch('/api/profile/update', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: userEmail,
+                profileImage: imageData,
+                bio: existingUserData.bio || ""
+              }),
+            });
+
+            if (!response.ok) {
+              throw new Error('Fotoğraf kaydedilemedi');
+            }
+            
+            // localStorage'ı güncelle
+            existingUserData.profileImage = imageData;
+            localStorage.setItem(USER_KEY, JSON.stringify(existingUserData));
+            
+            // Custom event tetikle
+            window.dispatchEvent(new CustomEvent('userDataChanged', { detail: existingUserData }));
+            
+          } catch (error) {
+            console.error('Fotoğraf kaydetme hatası:', error);
+            alert('Fotoğraf kaydedilemedi!');
+          }
         }
       };
       reader.readAsDataURL(file);
