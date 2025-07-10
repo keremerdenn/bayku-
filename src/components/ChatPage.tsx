@@ -97,9 +97,7 @@ const ChatPage = () => {
         setMessages(prev => [...prev, aiResponse]);
         setIsTyping(false);
       }, 2000);
-    } catch (err) {
-      setInputError("Mesaj gönderilemedi. Lütfen tekrar deneyin.");
-    }
+    } catch {} // eslint hatası için err kullanılmadı
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

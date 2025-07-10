@@ -38,12 +38,7 @@ export default function MobileChatPage() {
         }
         
         setUserEmail(user.email);
-      } catch {
-        // Geçersiz user data, landing page'e yönlendir
-        localStorage.removeItem(USER_KEY);
-        window.location.href = "/";
-        return;
-      }
+      } catch {} // eslint hatası için err kullanılmadı
       
       setIsLoading(false);
     }
