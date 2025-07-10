@@ -100,7 +100,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         email: "kullanici@example.com",
         username: usernameValue,
         bio: aboutValue,
-        profileImage: profileImage
+        profileImage: profileImage || undefined
       };
       localStorage.setItem(USER_KEY, JSON.stringify(userData));
       alert("Değişiklikler kaydedildi!");
