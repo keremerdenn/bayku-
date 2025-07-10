@@ -126,7 +126,7 @@ export default function SolvePage() {
                   </div>
                 ) : lessons.map(lesson => (
                   <div key={lesson.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none" onClick={() => { setSelectedLesson(lesson); setStep('topic'); }} tabIndex={0} role="button" aria-pressed="false">
-                    <h3 className="font-bold text-2xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2 text-center pointer-events-none">
+                    <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">
                       <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       {lesson.name}
                     </h3>

@@ -27,7 +27,7 @@ export default function TestsPage({ topic, onBack }: TestsPageProps) {
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {exampleTests.map((test) => (
           <div key={test.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none">
-            <h3 className="font-bold text-2xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2 text-center pointer-events-none">
+            <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">
               {test.name}
             </h3>
             {test.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">{test.description}</span>}
