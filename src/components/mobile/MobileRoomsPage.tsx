@@ -250,31 +250,11 @@ export default function MobileRoomsPage() {
               </button>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="grid gap-4 grid-cols-2 mt-4">
               {rooms.map((room) => (
-                <div
-                  key={room.room_id}
-                  className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200 active:scale-95 cursor-pointer"
-                  onClick={() => setActiveRoom({ id: room.room_id, name: room.rooms?.name })}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center">
-                        <UserGroupIcon className="w-6 h-6 text-sky-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">
-                          {room.rooms?.name || "Oda"}
-                        </h3>
-                        <p className="text-gray-500 text-sm">Sohbet odası</p>
-                      </div>
-                    </div>
-                    <div className="text-sky-500">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
+                <div key={room.room_id} className="relative aspect-square flex flex-col items-center justify-center bg-gradient-to-br from-sky-100 via-blue-50 to-white rounded-2xl shadow-xl border-2 border-sky-100 cursor-pointer select-none" onClick={() => setActiveRoom({ id: room.room_id, name: room.rooms?.name })}>
+                  <h3 className="font-bold text-base text-sky-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">{room.rooms?.name || "Oda"}</h3>
+                  <span className="mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-xs shadow text-center pointer-events-none">Oda</span>
                 </div>
               ))}
             </div>

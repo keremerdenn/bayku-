@@ -51,6 +51,17 @@ export default function MobileDashboard() {
                 </div>
               </div>
             </div>
+            {/* Panelde premium kutu ve badge örneği */}
+            <div className="grid gap-4 grid-cols-2 mt-6">
+              <div className="aspect-square flex flex-col items-center justify-center bg-gradient-to-br from-sky-100 via-blue-50 to-white rounded-2xl shadow-xl border-2 border-sky-100">
+                <span className="text-2xl font-bold text-sky-700 mb-2">Toplam Soru</span>
+                <span className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-base shadow">1234</span>
+              </div>
+              <div className="aspect-square flex flex-col items-center justify-center bg-gradient-to-br from-sky-100 via-blue-50 to-white rounded-2xl shadow-xl border-2 border-sky-100">
+                <span className="text-2xl font-bold text-sky-700 mb-2">Çözülen Test</span>
+                <span className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-base shadow">56</span>
+              </div>
+            </div>
             {/* Dashboard'da başka örnek içerik yok */}
           </div>
         );

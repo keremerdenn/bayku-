@@ -146,8 +146,8 @@ export default function MobileLayout({ children, currentPage = "dashboard" }: Mo
       )}
 
       {/* Mobil Sidebar */}
-      <aside className={`fixed top-0 left-0 w-full h-full bg-white z-50 transition-all duration-300 ease-in-out transform ${
-        isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+      <aside className={`fixed top-0 right-0 w-4/5 max-w-xs h-full bg-white z-50 transition-all duration-300 ease-in-out transform ${
+        isMenuOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -168,26 +168,23 @@ export default function MobileLayout({ children, currentPage = "dashboard" }: Mo
         </div>
 
         {/* Mobil Menü */}
-        <nav className="flex-1 px-6 py-4 space-y-4 overflow-y-auto">
+        <nav className="flex-1 px-3 py-2 space-y-2 overflow-y-auto">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
-            
             return (
               <a
                 key={item.id}
                 href={item.href}
-                className={`mobile-nav-link flex items-center p-6 rounded-2xl transition-all duration-200 active:scale-95 ${
+                className={`mobile-nav-link flex items-center p-3 rounded-xl transition-all duration-200 active:scale-95 text-base ${
                   isActive 
-                    ? 'bg-gradient-to-r from-sky-100 to-sky-200 border-2 border-sky-300 shadow-lg' 
-                    : 'hover:bg-sky-50'
+                    ? 'bg-gradient-to-r from-sky-400 to-blue-400 border-2 border-sky-500 shadow-lg text-white' 
+                    : 'hover:bg-sky-50 text-sky-700'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <Icon className={`w-10 h-10 mr-6 ${isActive ? 'text-sky-600' : 'text-sky-500'}`} />
-                <span className={`font-semibold text-xl ${isActive ? 'text-sky-900' : 'text-gray-800'}`}>
-                  {item.label}
-                </span>
+                <Icon className={`w-7 h-7 mr-4 ${isActive ? 'text-white' : 'text-sky-500'}`} />
+                <span className={`font-semibold ${isActive ? 'text-white' : 'text-sky-800'}`}>{item.label}</span>
               </a>
             );
           })}
