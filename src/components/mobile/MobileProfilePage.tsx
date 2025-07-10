@@ -70,7 +70,6 @@ export default function MobileProfilePage() {
       // Şimdilik localStorage'dan basit veriler alıyoruz
       const userStr = localStorage.getItem(USER_KEY);
       if (userStr) {
-        const userData = JSON.parse(userStr);
         // Burada gerçek API çağrıları yapılacak
         // Şimdilik örnek veriler
         setStatsData({
