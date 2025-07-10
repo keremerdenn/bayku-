@@ -31,6 +31,7 @@ const Dashboard = () => {
   let username = "Kullanıcı";
   let email = "";
   let isAdmin = false;
+  let profileImage = null;
   if (typeof window !== "undefined") {
     const userStr = localStorage.getItem(USER_KEY);
     if (userStr) {
@@ -38,6 +39,7 @@ const Dashboard = () => {
         const user = JSON.parse(userStr);
         username = user.username || username;
         email = user.email || "";
+        profileImage = user.profileImage || null;
         isAdmin = (email === "keremerdeen@gmail.com");
       } catch {}
     }
@@ -170,8 +172,12 @@ const Dashboard = () => {
           <div className="flex items-center space-x-2">
             <ThemeToggle />
             <NotificationSystem />
-            <div className="w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm mobile-header-avatar">
-              {username?.[0]?.toUpperCase() || "U"}
+            <div className="w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm mobile-header-avatar overflow-hidden">
+              {profileImage ? (
+                <img src={profileImage} alt="Profil" className="w-full h-full object-cover" />
+              ) : (
+                username?.[0]?.toUpperCase() || "U"
+              )}
             </div>
           </div>
         </header>

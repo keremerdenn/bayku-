@@ -72,23 +72,46 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
   const loadStats = async () => {
     setLoading(true);
     try {
-      // Gerçek API çağrıları burada yapılacak
-      // Şimdilik localStorage'dan basit veriler alıyoruz
       const userStr = localStorage.getItem(USER_KEY);
       if (userStr) {
-        // Burada gerçek API çağrıları yapılacak
-        // Şimdilik örnek veriler
-        setStatsData({
-          totalQuestions: 1245,
-          successRate: 78.2,
-          dailyStreak: 12,
-          todayQuestions: 15,
-          weekQuestions: 89,
-          monthQuestions: 342
-        });
+        const userData = JSON.parse(userStr);
+        const email = userData.email || "kullanici@example.com";
+        
+        // Gerçek API çağrısı
+        const response = await fetch(`/api/stats?email=${encodeURIComponent(email)}`);
+        if (response.ok) {
+          const stats = await response.json();
+          setStatsData({
+            totalQuestions: stats.totalQuestions || 0,
+            successRate: stats.successRate || 0,
+            dailyStreak: stats.dailyStreak || 0,
+            todayQuestions: stats.todayQuestions || 0,
+            weekQuestions: stats.weekQuestions || 0,
+            monthQuestions: stats.monthQuestions || 0
+          });
+        } else {
+          // API hatası durumunda varsayılan veriler
+          setStatsData({
+            totalQuestions: 0,
+            successRate: 0,
+            dailyStreak: 0,
+            todayQuestions: 0,
+            weekQuestions: 0,
+            monthQuestions: 0
+          });
+        }
       }
     } catch (error) {
       console.error("İstatistik verileri yüklenemedi:", error);
+      // Hata durumunda varsayılan veriler
+      setStatsData({
+        totalQuestions: 0,
+        successRate: 0,
+        dailyStreak: 0,
+        todayQuestions: 0,
+        weekQuestions: 0,
+        monthQuestions: 0
+      });
     } finally {
       setLoading(false);
     }
