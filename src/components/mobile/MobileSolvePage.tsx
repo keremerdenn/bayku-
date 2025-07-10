@@ -75,14 +75,6 @@ export default function MobileSolvePage() {
     }
   }, [step, selectedLesson]);
 
-  function startTest(topic: Topic) {
-    setSelectedTopic(topic);
-    setStep("test");
-    setCurrentQ(0);
-    setUserAnswers([]);
-    setShowResult(false);
-  }
-
   function answerQuestion(idx: number) {
     setUserAnswers(prev => [...prev, idx]);
     if (currentQ + 1 < exampleQuestions.length) {
