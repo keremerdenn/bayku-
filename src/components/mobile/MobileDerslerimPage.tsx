@@ -2,16 +2,7 @@
 import React from "react";
 import MobileLayout from "./MobileLayout";
 
-interface Ders {
-  id: string;
-  name: string;
-  description: string;
-  progress: number;
-  totalQuestions: number;
-  completedQuestions: number;
-  lastStudied: string;
-  difficulty: 'Kolay' | 'Orta' | 'Zor';
-}
+// Ders tipi kaldırıldı
 
 export default function MobileDerslerimPage() {
   // dersler değişkeni kaldırıldı

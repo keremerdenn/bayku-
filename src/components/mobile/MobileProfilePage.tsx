@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import MobileLayout from "./MobileLayout";
-import { UserIcon, EnvelopeIcon, CalendarIcon, AcademicCapIcon, CogIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -13,11 +12,6 @@ interface User {
 
 export default function MobileProfilePage() {
   const [user, setUser] = useState<User | null>(null);
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    bio: ""
-  });
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -26,11 +20,6 @@ export default function MobileProfilePage() {
         if (userStr) {
           const userData: User = JSON.parse(userStr);
           setUser(userData);
-          setFormData({
-            username: userData.username || "",
-            email: userData.email || "",
-            bio: userData.bio || ""
-          });
         }
       } catch {
         console.error("Kullanıcı bilgisi alınamadı");
