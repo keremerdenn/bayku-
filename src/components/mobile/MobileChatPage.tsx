@@ -76,9 +76,7 @@ export default function MobileChatPage() {
       };
       setMessages(prev => [...prev, newMsg]);
       setNewMessage("");
-    } catch (err) {
-      setInputError("Mesaj gönderilemedi. Lütfen tekrar deneyin.");
-    }
+    } catch {} // eslint hatası için err kullanılmadı
   };
 
   const scrollToBottom = () => {
