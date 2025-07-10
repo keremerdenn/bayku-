@@ -114,14 +114,14 @@ export default function SolvePage() {
     <div className="min-h-screen w-full bg-gradient-to-br from-sky-100 via-blue-50 to-white pb-20">
       <div className="max-w-2xl mx-auto py-10 px-4">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-extrabold mb-2 text-sky-700 tracking-tight flex items-center justify-center gap-2">
+          <h1 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-sky-500 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent tracking-tight flex items-center justify-center gap-2">
             <svg width='36' height='36' fill='none' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' stroke='#0ea5e9' strokeWidth='2'/><path d='M8 12h8M12 8v8' stroke='#0ea5e9' strokeWidth='2' strokeLinecap='round'/></svg>
             Hoş geldin, {username}!
           </h1>
           <div className="text-lg text-sky-600 font-semibold mt-2 animate-fade-in">Bugün hangi konudan test çözmek istersin?</div>
         </div>
         {step !== "lesson" && (
-          <button onClick={goBack} className="mb-4 text-sky-600 hover:underline font-semibold">&larr; Geri</button>
+          <button onClick={goBack} className="mb-4 bg-gradient-to-r from-fuchsia-400 to-sky-400 text-white px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition-all duration-200">&larr; Geri</button>
         )}
         {step === "lesson" && (
           <>
@@ -174,21 +174,24 @@ export default function SolvePage() {
             <h2 className="text-xl font-bold mb-6 text-sky-700 text-center">Test ({selectedTopic.name})</h2>
             {!showResult ? (
               <div className="space-y-8">
-                <div className="bg-sky-50 rounded-2xl p-6 border shadow-lg flex flex-col items-center">
+                <div className="bg-gradient-to-br from-sky-200 via-blue-100 to-fuchsia-100 rounded-2xl p-6 border-2 border-sky-100 shadow-xl flex flex-col items-center animate-fade-in">
                   <div className="font-semibold mb-2 text-sky-700">Soru {currentQ + 1} / {exampleQuestions.length}</div>
                   <div className="text-lg mb-6 text-gray-900 text-center font-bold">{exampleQuestions[currentQ].question}</div>
                   <div className="grid gap-3 w-full max-w-md">
                     {exampleQuestions[currentQ].options.map((opt, idx) => (
-                      <button key={idx} className="w-full bg-white border-2 border-sky-200 rounded-xl p-3 font-semibold text-sky-700 hover:bg-sky-100 active:scale-95 transition-all duration-150 shadow" onClick={() => answerQuestion(idx)}>{opt}</button>
+                      <button key={idx} className="w-full bg-gradient-to-r from-white via-sky-50 to-fuchsia-50 border-2 border-sky-200 rounded-xl p-3 font-semibold text-sky-700 hover:bg-gradient-to-r hover:from-fuchsia-200 hover:to-sky-200 active:scale-105 transition-all duration-200 shadow-lg" onClick={() => answerQuestion(idx)}>{opt}</button>
                     ))}
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="bg-green-50 rounded-2xl p-8 border text-center shadow-lg flex flex-col items-center">
-                <div className="text-3xl font-extrabold text-green-700 mb-4">Test Sonucu</div>
+              <div className="bg-gradient-to-br from-green-200 via-sky-100 to-fuchsia-100 rounded-2xl p-8 border-2 border-green-300 text-center shadow-2xl flex flex-col items-center animate-fade-in">
+                <div className="text-3xl font-extrabold text-green-700 mb-4 flex items-center gap-2">
+                  <svg width="32" height="32" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#22c55e" strokeWidth="2"/><path d="M8 12l2 2 4-4" stroke="#22c55e" strokeWidth="2" strokeLinecap="round"/></svg>
+                  Test Sonucu
+                </div>
                 <div className="text-lg text-gray-700 mb-6">{exampleQuestions.length} sorudan {correctCount} doğru!</div>
-                <button className="bg-sky-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-sky-600 active:scale-95 transition-all duration-200" onClick={goBack}>Konuya Dön</button>
+                <button className="bg-gradient-to-r from-sky-500 to-fuchsia-500 text-white px-6 py-3 rounded-xl font-bold hover:from-fuchsia-500 hover:to-sky-500 active:scale-105 transition-all duration-200 shadow-lg" onClick={goBack}>Konuya Dön</button>
               </div>
             )}
           </>
