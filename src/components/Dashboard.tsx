@@ -29,22 +29,39 @@ const pageTitles: Record<string, string> = {
 // Kullanılmayan importlar silindi
 
 const Dashboard = () => {
-  let username = "Kullanıcı";
-  let email = "";
-  let isAdmin = false;
-  let profileImage = null;
-  if (typeof window !== "undefined") {
-    const userStr = localStorage.getItem(USER_KEY);
-    if (userStr) {
-      try {
-        const user = JSON.parse(userStr);
-        username = user.username || username;
-        email = user.email || "";
-        profileImage = user.profileImage || null;
-        isAdmin = (email === "keremerdeen@gmail.com");
-      } catch {}
-    }
-  }
+  const [username, setUsername] = useState("Kullanıcı");
+  const [email, setEmail] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadUserData = () => {
+      if (typeof window !== "undefined") {
+        const userStr = localStorage.getItem(USER_KEY);
+        if (userStr) {
+          try {
+            const user = JSON.parse(userStr);
+            setUsername(user.username || "Kullanıcı");
+            setEmail(user.email || "");
+            setProfileImage(user.profileImage || null);
+            setIsAdmin((user.email === "keremerdeen@gmail.com"));
+          } catch {}
+        }
+      }
+    };
+
+    loadUserData();
+
+    // localStorage değişikliklerini dinle
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === USER_KEY) {
+        loadUserData();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // Routing mantığı
   const [activePage, setActivePage] = useState("dashboard");

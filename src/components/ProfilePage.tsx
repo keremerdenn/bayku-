@@ -146,6 +146,15 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
           const userData = JSON.parse(userStr);
           userData.profileImage = imageData;
           localStorage.setItem(USER_KEY, JSON.stringify(userData));
+        } else {
+          // Eğer localStorage'da kullanıcı yoksa yeni oluştur
+          const userData: UserData = {
+            email: "kullanici@example.com",
+            username: usernameValue,
+            bio: aboutValue,
+            profileImage: imageData
+          };
+          localStorage.setItem(USER_KEY, JSON.stringify(userData));
         }
       };
       reader.readAsDataURL(file);
