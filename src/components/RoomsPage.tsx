@@ -168,22 +168,24 @@ const RoomsPage = () => {
           {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
           {formError && <div className="text-red-500 text-sm mt-2">{formError}</div>}
         </form>
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {loading ? (
             <div>Yükleniyor...</div>
           ) : rooms.length === 0 ? (
             <div>Henüz bir odan yok.</div>
           ) : (
             rooms.map((room) => (
-              <div key={room.room_id} className="relative aspect-square flex flex-col items-center justify-center bg-gradient-to-br from-sky-100 via-fuchsia-100 to-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 hover:shadow-2xl transition-all duration-300 group overflow-hidden cursor-pointer select-none" onClick={() => setActiveRoom({ id: room.room_id, name: room.rooms?.name })} tabIndex={0} role="button" aria-pressed="false">
-                <span className="absolute top-4 right-4 bg-gradient-to-r from-fuchsia-400 to-sky-400 text-white rounded-full p-2 shadow-lg">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
-                </span>
-                <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">
-                  {room.rooms?.name || "Oda"}
-                </h3>
-                {/* Badge veya istatistik alanı örneği */}
-                <span className="mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">Oda</span>
+              <div key={room.room_id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => setActiveRoom({ id: room.room_id, name: room.rooms?.name })} tabIndex={0} role="button" aria-pressed="false">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+                  </div>
+                  <h3 className="font-bold text-lg text-gray-800 tracking-tight">{room.rooms?.name || "Oda"}</h3>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-purple-600 font-medium">Sohbet Odası</span>
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                </div>
               </div>
             ))
           )}

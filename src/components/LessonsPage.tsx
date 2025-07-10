@@ -144,18 +144,22 @@ export default function LessonsPage() {
             <span className="mt-4 text-lg bg-gradient-to-r from-sky-500 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent font-bold">Henüz hiç ders yok.</span>
           </div>
         )}
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {lessons.map((lesson) => (
-            <div key={lesson.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer" onClick={() => setSelectedLesson(lesson)}>
-              <span className="absolute top-4 right-4 bg-gradient-to-r from-fuchsia-400 to-sky-400 text-white rounded-full p-2 shadow-lg">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="white" strokeWidth="2" strokeLinecap="round"/><path d="M6.5 17V6.75A2.75 2.75 0 0 1 9.25 4h7.5A2.75 2.75 0 0 1 19.5 6.75v10.25" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
-              </span>
-              <h2 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center">
-                {lesson.name}
-              </h2>
-              {lesson.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center">{lesson.description}</span>}
-              <div className="w-2/3 h-2 bg-sky-100 rounded-full mt-3 mx-auto">
-                <div className="h-2 rounded-full bg-gradient-to-r from-fuchsia-400 to-sky-400" style={{width:'40%'}}></div>
+            <div key={lesson.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer p-6" onClick={() => setSelectedLesson(lesson)}>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg flex items-center justify-center">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="white" strokeWidth="2" strokeLinecap="round"/><path d="M6.5 17V6.75A2.75 2.75 0 0 1 9.25 4h7.5A2.75 2.75 0 0 1 19.5 6.75v10.25" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+                </div>
+                <h2 className="font-bold text-lg text-gray-800 tracking-tight">{lesson.name}</h2>
+              </div>
+              {lesson.description && <p className="text-sm text-gray-600 mb-3">{lesson.description}</p>}
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs text-sky-600 font-medium">Ders</span>
+                <div className="w-2 h-2 bg-sky-500 rounded-full"></div>
+              </div>
+              <div className="w-full h-2 bg-gray-100 rounded-full">
+                <div className="h-2 rounded-full bg-gradient-to-r from-sky-400 to-blue-400" style={{width:'40%'}}></div>
               </div>
             </div>
           ))}

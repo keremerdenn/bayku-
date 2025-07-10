@@ -72,8 +72,6 @@ const Dashboard = () => {
     pageContent = <AdminPanel />;
   } else if (activePage === "sohbet") {
     pageContent = <RoomsPage />;
-  } else if (activePage === "ai-asistan") {
-    pageContent = <ChatPage />;
   } else if (activePage === "derslerim") {
     pageContent = <LessonsPage />;
   } else if (activePage === "verilerim") {

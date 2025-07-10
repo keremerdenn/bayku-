@@ -24,13 +24,20 @@ export default function TestsPage({ topic, onBack }: TestsPageProps) {
       <button onClick={onBack} className="mb-4 text-sky-600 hover:underline">&larr; Geri</button>
       <h1 className="text-2xl font-bold mb-2">{topic.name} - Testler</h1>
       <p className="text-gray-600 mb-4">{topic.description}</p>
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {exampleTests.map((test) => (
-          <div key={test.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none">
-            <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">
-              {test.name}
-            </h3>
-            {test.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">{test.description}</span>}
+          <div key={test.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </div>
+              <h3 className="font-bold text-lg text-gray-800 tracking-tight">{test.name}</h3>
+            </div>
+            {test.description && <p className="text-sm text-gray-600 mb-3">{test.description}</p>}
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-green-600 font-medium">Test</span>
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            </div>
           </div>
         ))}
       </div>

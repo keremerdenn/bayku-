@@ -125,12 +125,18 @@ export default function SolvePage() {
                     <span className="mt-4 text-lg">Henüz hiç ders yok.</span>
                   </div>
                 ) : lessons.map(lesson => (
-                  <div key={lesson.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none" onClick={() => { setSelectedLesson(lesson); setStep('topic'); }} tabIndex={0} role="button" aria-pressed="false">
-                    <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">
-                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      {lesson.name}
-                    </h3>
-                    {lesson.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">{lesson.description}</span>}
+                  <div key={lesson.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => { setSelectedLesson(lesson); setStep('topic'); }} tabIndex={0} role="button" aria-pressed="false">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg flex items-center justify-center">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </div>
+                      <h3 className="font-bold text-lg text-gray-800 tracking-tight">{lesson.name}</h3>
+                    </div>
+                    {lesson.description && <p className="text-sm text-gray-600 mb-3">{lesson.description}</p>}
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-sky-600 font-medium">Ders</span>
+                      <div className="w-2 h-2 bg-sky-500 rounded-full"></div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -148,11 +154,18 @@ export default function SolvePage() {
                     <span className="mt-4 text-lg">Henüz hiç konu yok.</span>
                   </div>
                 ) : topics.map(topic => (
-                  <div key={topic.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none" onClick={() => setSelectedTopic(topic)} tabIndex={0} role="button" aria-pressed="false">
-                    <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">
-                      {topic.name}
-                    </h3>
-                    {topic.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">{topic.description}</span>}
+                  <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => setSelectedTopic(topic)} tabIndex={0} role="button" aria-pressed="false">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-lg flex items-center justify-center">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+                      </div>
+                      <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
+                    </div>
+                    {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-fuchsia-600 font-medium">Konu</span>
+                      <div className="w-2 h-2 bg-fuchsia-500 rounded-full"></div>
+                    </div>
                   </div>
                 ))}
               </div>

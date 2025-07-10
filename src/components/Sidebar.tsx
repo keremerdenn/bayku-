@@ -111,10 +111,6 @@ export default function Sidebar() {
             <ChatBubbleLeftRightIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
             <span className="font-medium text-lg md:text-sm">Sohbet Odaları</span>
           </a>
-          <a href="#/ai-asistan" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
-            <AcademicCapIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-indigo-500" />
-            <span className="font-medium text-lg md:text-sm">Baykuş AI Asistan</span>
-          </a>
           <a href="#/derslerim" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
             <BookOpenIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
             <span className="font-medium text-lg md:text-sm">Derslerim</span>

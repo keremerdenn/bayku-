@@ -113,13 +113,20 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
       {loading && <div>Yükleniyor...</div>}
       {error && <div className="text-red-500">{error}</div>}
       {!loading && topics.length === 0 && <div>Henüz hiç konu yok.</div>}
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {topics.map((topic) => (
-          <div key={topic.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
-            <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">
-              {topic.name}
-            </h3>
-            {topic.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">{topic.description}</span>}
+          <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-lg flex items-center justify-center">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+              </div>
+              <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
+            </div>
+            {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-fuchsia-600 font-medium">Konu</span>
+              <div className="w-2 h-2 bg-fuchsia-500 rounded-full"></div>
+            </div>
           </div>
         ))}
       </div>

@@ -52,8 +52,6 @@ export default function MobileDashboard() {
         );
       case "sohbet":
         return <MobileRoomsPage />;
-      case "ai-asistan":
-        return <MobileChatPage />;
       case "derslerim":
         return <MobileDerslerimPage />;
       case "verilerim":
