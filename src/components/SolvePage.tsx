@@ -78,15 +78,6 @@ export default function SolvePage() {
   }, [step, selectedLesson]);
 
   // Test başlat
-  function startTest(topic: Topic) {
-    setSelectedTopic(topic);
-    setStep("test");
-    setCurrentQ(0);
-    setUserAnswers([]);
-    setShowResult(false);
-  }
-
-  // Cevap ver
   function answerQuestion(idx: number) {
     setUserAnswers(prev => [...prev, idx]);
     if (currentQ + 1 < exampleQuestions.length) {
