@@ -81,35 +81,55 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
       <button onClick={onBack} className="mb-4 text-sky-600 hover:underline">&larr; Geri</button>
       <h1 className="text-2xl font-bold mb-2">{lesson.name} - Konular</h1>
       <p className="text-gray-600 mb-4">{lesson.description}</p>
-      <form onSubmit={handleAddTopic} className="mb-6 space-y-2 bg-sky-50 p-4 rounded-xl border">
-        <div>
-          <input
-            type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            placeholder="Konu adı"
-            className="w-full p-2 rounded border bg-white text-gray-900"
-            required
-          />
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-lg flex items-center justify-center">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+          </div>
+          <h3 className="text-lg font-bold text-gray-800">Yeni Konu Ekle</h3>
         </div>
-        <div>
-          <input
-            type="text"
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            placeholder="Açıklama (opsiyonel)"
-            className="w-full p-2 rounded border bg-white text-gray-900"
-          />
-        </div>
-        {formError && <div className="text-red-500 text-center font-semibold mb-2">{formError}</div>}
-        <button
-          type="submit"
-          className="bg-sky-500 text-white px-4 py-2 rounded hover:bg-sky-600 disabled:opacity-50"
-          disabled={adding || !name.trim()}
-        >
-          {adding ? "Ekleniyor..." : "Konu Ekle"}
-        </button>
-      </form>
+        <form onSubmit={handleAddTopic} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Konu Adı</label>
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="Örn: Matematik Temelleri"
+              className="w-full p-3 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-fuchsia-400 focus:outline-none transition"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Açıklama (Opsiyonel)</label>
+            <input
+              type="text"
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+              placeholder="Konu hakkında kısa açıklama"
+              className="w-full p-3 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-fuchsia-400 focus:outline-none transition"
+            />
+          </div>
+          {formError && <div className="text-red-500 text-center font-semibold text-sm bg-red-50 p-3 rounded-lg border border-red-200">{formError}</div>}
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white px-6 py-3 rounded-lg font-semibold hover:from-fuchsia-600 hover:to-pink-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={adding || !name.trim()}
+          >
+            {adding ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                Ekleniyor...
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-2">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                Konu Ekle
+              </div>
+            )}
+          </button>
+        </form>
+      </div>
       {loading && <div>Yükleniyor...</div>}
       {error && <div className="text-red-500">{error}</div>}
       {!loading && topics.length === 0 && <div>Henüz hiç konu yok.</div>}

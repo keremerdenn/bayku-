@@ -172,16 +172,48 @@ export default function SolvePage() {
             )}
             {/* Eğer bir konu seçildiyse, test kutusu göster */}
             {selectedTopic && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                <div className="relative aspect-square w-80 flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-fuchsia-400 p-8">
-                  <button className="absolute top-2 right-2 text-gray-400 hover:text-fuchsia-500 text-2xl" onClick={() => setSelectedTopic(null)}>&times;</button>
-                  <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center mb-4">
-                    {selectedTopic.name} Testi
-                  </h3>
-                  <span className="inline-block mb-4 px-4 py-2 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-lg shadow text-center pointer-events-none">
-                    {exampleQuestions.length} Soru
-                  </span>
-                  <button className="w-full bg-gradient-to-r from-sky-500 to-fuchsia-500 text-white px-6 py-3 rounded-xl font-bold text-lg shadow hover:from-fuchsia-500 hover:to-sky-500 active:scale-105 transition-all duration-200 mt-4" onClick={() => setStep('test')}>Teste Başla</button>
+              <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 mt-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-xl text-gray-800">{selectedTopic.name} Testi</h3>
+                      <p className="text-sm text-gray-600">Teste başlamaya hazır mısın?</p>
+                    </div>
+                  </div>
+                  <button 
+                    className="text-gray-400 hover:text-gray-600 transition-colors" 
+                    onClick={() => setSelectedTopic(null)}
+                  >
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                  </button>
+                </div>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 px-3 py-1 rounded-full text-sm font-semibold">
+                      {exampleQuestions.length} Soru
+                    </span>
+                    <span className="text-sm text-gray-500">• Tahmini süre: {exampleQuestions.length * 2} dakika</span>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button 
+                    className="flex-1 bg-gradient-to-r from-sky-500 to-fuchsia-500 text-white px-6 py-3 rounded-xl font-bold text-lg shadow hover:from-fuchsia-500 hover:to-sky-500 active:scale-105 transition-all duration-200" 
+                    onClick={() => setStep('test')}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      Teste Başla
+                    </div>
+                  </button>
+                  <button 
+                    className="px-6 py-3 border border-gray-200 rounded-xl font-semibold text-gray-600 hover:bg-gray-50 transition-colors" 
+                    onClick={() => setSelectedTopic(null)}
+                  >
+                    İptal
+                  </button>
                 </div>
               </div>
             )}

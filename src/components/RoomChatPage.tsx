@@ -153,44 +153,83 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4 flex flex-col h-[70vh] bg-white rounded-xl shadow">
-      <h2 className="text-xl font-bold mb-2">{roomName || "Oda Sohbeti"}</h2>
-      <div className="mb-2 text-sm text-gray-600 flex flex-wrap gap-2 items-center">
-        <span className="font-semibold">Üyeler:</span>
-        {members.map((member, i) => (
-          <span key={i} className="bg-sky-100 text-sky-700 px-2 py-1 rounded-lg">{member.user_email}</span>
-        ))}
+    <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-sky-500 to-blue-600 p-6 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold">{roomName || "Oda Sohbeti"}</h2>
+            <p className="text-sky-100 text-sm mt-1">{members.length} üye</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+            </div>
+          </div>
+        </div>
       </div>
-      {isAdmin && (
-        <form onSubmit={handleInvite} className="mb-2 flex gap-2 items-center">
-          <input
-            type="email"
-            placeholder="Davet edilecek e-posta"
-            value={inviteEmail}
-            onChange={e => setInviteEmail(e.target.value)}
-            className="border rounded-lg px-2 py-1 text-sm"
-            required
-          />
-          <button type="submit" className="bg-sky-600 text-white rounded-lg px-3 py-1 text-sm font-semibold hover:bg-sky-700 transition">Davet Et</button>
-          {inviteError && <span className="text-red-500 text-xs ml-2">{inviteError}</span>}
-        </form>
-      )}
-      <div className="flex-1 overflow-y-auto mb-4 bg-gray-50 rounded-lg p-3">
+
+      {/* Üyeler Listesi */}
+      <div className="p-4 border-b border-gray-100">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-sm font-semibold text-gray-700">Üyeler:</span>
+          <div className="flex flex-wrap gap-2">
+            {members.map((member, i) => (
+              <span key={i} className="bg-sky-50 text-sky-700 px-3 py-1 rounded-full text-sm font-medium border border-sky-200">
+                {member.user_email.split("@")[0]}
+              </span>
+            ))}
+          </div>
+        </div>
+        
+        {/* Admin Davet Formu */}
+        {isAdmin && (
+          <form onSubmit={handleInvite} className="flex gap-3 items-center">
+            <input
+              type="email"
+              placeholder="Davet edilecek e-posta"
+              value={inviteEmail}
+              onChange={e => setInviteEmail(e.target.value)}
+              className="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-sky-400 focus:outline-none"
+              required
+            />
+            <button type="submit" className="bg-sky-500 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-sky-600 transition-colors">
+              Davet Et
+            </button>
+            {inviteError && <span className="text-red-500 text-xs">{inviteError}</span>}
+          </form>
+        )}
+      </div>
+
+      {/* Mesajlar Alanı */}
+      <div className="flex-1 overflow-y-auto p-4 bg-gray-50 min-h-[400px] max-h-[500px]">
         {loading ? (
-          <div>Yükleniyor...</div>
+          <div className="flex items-center justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500"></div>
+            <span className="ml-3 text-gray-600">Yükleniyor...</span>
+          </div>
         ) : messages.length === 0 ? (
-          <div>Henüz mesaj yok.</div>
+          <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+            <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/></svg>
+            <span className="mt-4 text-lg">Henüz mesaj yok.</span>
+            <p className="text-sm mt-2">İlk mesajı göndererek sohbeti başlatın!</p>
+          </div>
         ) : (
           <div className="flex flex-col gap-4">
             {messages.map((msg, i) => (
-              <div key={i} className={`flex flex-col items-${msg.sender_email === userEmail ? "end" : "start"}`}>
-                <span className="mb-1 ml-1 text-xs text-gray-400 font-medium select-none" style={{ marginBottom: '2px', marginLeft: msg.sender_email === userEmail ? 0 : '4px', marginRight: msg.sender_email === userEmail ? '4px' : 0 }}>
-                  {msg.sender_email === userEmail ? "Siz" : msg.sender_email.split("@")[0]}
-                </span>
-                <div className={`px-3 py-2 rounded-2xl max-w-xs min-w-[60px] break-words shadow-sm text-sm
-                  ${msg.sender_email === userEmail ? "bg-sky-500 text-white" : "bg-white text-gray-800 border"}
-                `}>
-                  <span className="block whitespace-pre-line">{msg.content}</span>
+              <div key={i} className={`flex ${msg.sender_email === userEmail ? "justify-end" : "justify-start"}`}>
+                <div className={`max-w-xs lg:max-w-md ${msg.sender_email === userEmail ? "order-2" : "order-1"}`}>
+                  <div className={`px-4 py-3 rounded-2xl shadow-sm text-sm
+                    ${msg.sender_email === userEmail 
+                      ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white" 
+                      : "bg-white text-gray-800 border border-gray-200"
+                    }
+                  `}>
+                    <span className="block whitespace-pre-line">{msg.content}</span>
+                  </div>
+                  <div className={`text-xs text-gray-400 mt-1 ${msg.sender_email === userEmail ? "text-right" : "text-left"}`}>
+                    {msg.sender_email === userEmail ? "Siz" : msg.sender_email.split("@")[0]}
+                  </div>
                 </div>
               </div>
             ))}
@@ -198,20 +237,30 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
         )}
         <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={handleSendMessage} className="flex gap-2">
-        <input
-          type="text"
-          value={newMessage}
-          onChange={e => setNewMessage(e.target.value)}
-          className="flex-1 border rounded-lg px-3 py-2"
-          placeholder="Mesajınızı yazın..."
-          maxLength={300}
-        />
-        <button type="submit" className="bg-sky-600 text-white rounded-lg px-4 py-2 font-semibold hover:bg-sky-700 transition" disabled={loading || !newMessage.trim()}>
-          Gönder
-        </button>
-      </form>
-      {inputError && <div className="text-red-500 text-center font-semibold mt-2">{inputError}</div>}
+
+      {/* Mesaj Gönderme Formu */}
+      <div className="p-4 border-t border-gray-100 bg-white">
+        <form onSubmit={handleSendMessage} className="flex gap-3">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={e => setNewMessage(e.target.value)}
+            className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-sky-400 focus:outline-none"
+            placeholder="Mesajınızı yazın..."
+            maxLength={300}
+          />
+          <button 
+            type="submit" 
+            className="bg-gradient-to-r from-sky-500 to-blue-500 text-white rounded-xl px-6 py-3 font-semibold hover:from-sky-600 hover:to-blue-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed" 
+            disabled={loading || !newMessage.trim()}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </form>
+        {inputError && <div className="text-red-500 text-center font-semibold mt-2 text-sm">{inputError}</div>}
+      </div>
     </div>
   );
 };
