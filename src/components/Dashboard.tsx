@@ -10,6 +10,7 @@ import ProfilePage from "./ProfilePage";
 import AdminPanel from "./AdminPanel";
 import RoomsPage from "./RoomsPage";
 import LessonsPage from "./LessonsPage";
+import SolvePage from "./SolvePage";
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -79,6 +80,8 @@ const Dashboard = () => {
     pageContent = <VerilerimPage />;
   } else if (activePage === "profil") {
     pageContent = <ProfilePage username={username} />;
+  } else if (activePage === "sorucozme") {
+    pageContent = <SolvePage />;
   } else {
     pageContent = (
       <div className="w-full p-6 md:p-8 text-center text-gray-500">
