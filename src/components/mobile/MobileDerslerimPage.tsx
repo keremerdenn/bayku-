@@ -56,6 +56,44 @@ export default function MobileDerslerimPage() {
     }
   ];
 
+  const staticLessons: Record<string, { id: string; name: string }[]> = {
+    lgs: [
+      { id: 'lgs-mat', name: 'Matematik' },
+      { id: 'lgs-turkce', name: 'Türkçe' },
+      { id: 'lgs-fen', name: 'Fen Bilimleri' },
+      { id: 'lgs-sosyal', name: 'Sosyal Bilgiler' },
+      { id: 'lgs-ing', name: 'İngilizce' },
+    ],
+    tyt: [
+      { id: 'tyt-mat', name: 'Matematik' },
+      { id: 'tyt-turkce', name: 'Türkçe' },
+      { id: 'tyt-fen', name: 'Fen Bilimleri' },
+      { id: 'tyt-sosyal', name: 'Sosyal Bilimler' },
+    ],
+    ayt: [
+      { id: 'ayt-mat', name: 'Matematik' },
+      { id: 'ayt-fizik', name: 'Fizik' },
+      { id: 'ayt-kimya', name: 'Kimya' },
+      { id: 'ayt-biyoloji', name: 'Biyoloji' },
+      { id: 'ayt-edebiyat', name: 'Türk Dili ve Edebiyatı' },
+      { id: 'ayt-tarih', name: 'Tarih' },
+      { id: 'ayt-cografya', name: 'Coğrafya' },
+      { id: 'ayt-felsefe', name: 'Felsefe' },
+    ],
+    kpss: [
+      { id: 'kpss-gy', name: 'Genel Yetenek' },
+      { id: 'kpss-gk', name: 'Genel Kültür' },
+      { id: 'kpss-egitim', name: 'Eğitim Bilimleri' },
+      { id: 'kpss-oabt', name: 'ÖABT' },
+    ],
+  };
+  const lessonColors: Record<string, string> = {
+    lgs: 'from-green-500 to-emerald-500',
+    tyt: 'from-blue-500 to-cyan-500',
+    ayt: 'from-purple-500 to-pink-500',
+    kpss: 'from-orange-500 to-red-500',
+  };
+
   useEffect(() => {
     fetchLessons();
   }, []);
@@ -111,9 +149,7 @@ export default function MobileDerslerimPage() {
     setLessonToDelete(null);
   }
 
-  const filteredLessons = lessons.filter(lesson => 
-    !selectedExamType || lesson.examType === selectedExamType
-  );
+  const filteredLessons: { id: string; name: string }[] = staticLessons[selectedExamType] || [];
 
   if (selectedLesson) {
     return <MobileTopicsPage lesson={selectedLesson} onBack={() => setSelectedLesson(null)} />;
@@ -185,20 +221,15 @@ export default function MobileDerslerimPage() {
         )}
         <div className="grid grid-cols-2 gap-3 mt-2">
           {filteredLessons.map((lesson) => (
-            <div key={lesson.id} className="bg-white border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm relative" onClick={() => setSelectedLesson(lesson)}>
-              {email === "keremerdeen@gmail.com" && (
-                <button
-                  className="absolute top-1 right-1 p-1 rounded-full bg-red-100 hover:bg-red-200 transition-colors"
-                  title="Dersi Sil"
-                  onClick={(e) => { e.stopPropagation(); handleDeleteLesson(lesson.id); }}
-                >
-                  <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
-                    <path d="M6 18L18 6M6 6l12 12" stroke="#ef4444" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </button>
-              )}
-              <h3 className="font-medium text-gray-800 text-sm mb-1">{lesson.name}</h3>
-              {lesson.description && <span className="inline-block px-2 py-0.5 rounded bg-gray-100 text-gray-500 text-xs">{lesson.description}</span>}
+            <div
+              key={lesson.id}
+              className={`bg-white border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm relative group`}
+              onClick={() => setSelectedLesson({ id: lesson.id, name: lesson.name })}
+            >
+              <div className={`w-10 h-10 bg-gradient-to-r ${lessonColors[selectedExamType] || 'from-gray-300 to-gray-400'} rounded-lg flex items-center justify-center mb-1`}>
+                <span className="text-white font-bold text-base">{lesson.name[0]}</span>
+              </div>
+              <h3 className="font-bold text-gray-800 text-sm mb-1 group-hover:text-sky-600 transition-colors">{lesson.name}</h3>
             </div>
           ))}
         </div>

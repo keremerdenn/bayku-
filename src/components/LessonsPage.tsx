@@ -94,6 +94,13 @@ export default function LessonsPage() {
     ],
   };
 
+  const lessonColors: Record<string, string> = {
+    lgs: 'from-green-500 to-emerald-500',
+    tyt: 'from-blue-500 to-cyan-500',
+    ayt: 'from-purple-500 to-pink-500',
+    kpss: 'from-orange-500 to-red-500',
+  };
+
   useEffect(() => {
     fetchLessons();
     if (typeof window !== "undefined") {
@@ -226,8 +233,15 @@ export default function LessonsPage() {
         )}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {filteredLessons.map((lesson) => (
-            <div key={lesson.id} className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm relative" onClick={() => setSelectedLesson({ id: lesson.id, name: lesson.name })}>
-              <h3 className="font-medium text-gray-800 text-lg mb-1">{lesson.name}</h3>
+            <div
+              key={lesson.id}
+              className={`relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer p-6 flex flex-col items-center group`}
+              onClick={() => setSelectedLesson({ id: lesson.id, name: lesson.name })}
+            >
+              <div className={`w-12 h-12 bg-gradient-to-r ${lessonColors[selectedExamType] || 'from-gray-300 to-gray-400'} rounded-lg flex items-center justify-center mb-2`}>
+                <span className="text-white font-bold text-lg">{lesson.name[0]}</span>
+              </div>
+              <h3 className="font-bold text-gray-800 text-lg mb-1 group-hover:text-sky-600 transition-colors">{lesson.name}</h3>
             </div>
           ))}
         </div>
