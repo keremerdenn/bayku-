@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import MobileLayout from "./MobileLayout";
-import { BookOpenIcon, AcademicCapIcon, ClockIcon, StarIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 interface Ders {
   id: string;
@@ -77,24 +76,6 @@ export default function MobileDerslerimPage() {
       difficulty: "Orta"
     }
   ];
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Kolay': return 'bg-green-100 text-green-700';
-      case 'Orta': return 'bg-yellow-100 text-yellow-700';
-      case 'Zor': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
-    }
-  };
-
-  const getDifficultyIcon = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Kolay': return '😊';
-      case 'Orta': return '😐';
-      case 'Zor': return '😰';
-      default: return '📚';
-    }
-  };
 
   return (
     <MobileLayout currentPage="derslerim">

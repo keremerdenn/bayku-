@@ -2,13 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
-import StatCard from "./StatCard";
 import ChatPage from "./ChatPage";
 import DerslerimPage from "./DerslerimPage";
 import VerilerimPage from "./VerilerimPage";
 import dynamic from "next/dynamic";
-import OptimizedImage from "./OptimizedImage";
-import SSRExample from "./SSRExample";
 import NotificationSystem from "./NotificationSystem";
 import ThemeToggle from "./ThemeToggle";
 import ProfilePage from "./ProfilePage";
@@ -28,9 +25,7 @@ const pageTitles: Record<string, string> = {
   verilerim: "Verilerim",
 };
 
-// LineChart ve DoughnutChart'u lazy load ile ekle
-const LazyLineChart = dynamic(() => import("./LineChart"), { ssr: false, loading: () => <div>Grafik yükleniyor...</div> });
-const LazyDoughnutChart = dynamic(() => import("./DoughnutChart"), { ssr: false, loading: () => <div>Grafik yükleniyor...</div> });
+// Kullanılmayan importlar silindi
 
 const Dashboard = () => {
   let username = "Kullanıcı";

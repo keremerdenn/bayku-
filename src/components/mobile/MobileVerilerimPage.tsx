@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import MobileLayout from "./MobileLayout";
-import { ChartBarIcon, ArrowTrendingUpIcon, ClockIcon, StarIcon, ChartPieIcon } from "@heroicons/react/24/outline";
 
 export default function MobileVerilerimPage() {
   return (

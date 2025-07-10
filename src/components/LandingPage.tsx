@@ -1,25 +1,13 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import AuthModal from "./AuthModal";
 
 const USER_KEY = "sinavPusulasiUser";
 
 const LandingPage = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [userFeedback, setUserFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
   const mobileMenuRef = useRef<HTMLDivElement>(null);
-
-  const openModal = (register: boolean) => {
-    setShowRegister(register);
-    setModalOpen(true);
-    setMobileMenuOpen(false); // Menü açıksa kapat
-  };
-  const closeModal = () => setModalOpen(false);
-  const switchForm = (register: boolean) => setShowRegister(register);
 
   // Dışarı tıklanınca mobil menüyü kapat
   useEffect(() => {
@@ -46,114 +34,7 @@ const LandingPage = () => {
     }
   }, [userFeedback]);
 
-  // Giriş ve kayıt işlemleri
-  const handleLogin = async (email: string, password: string) => {
-    setIsLoading(true);
-    setUserFeedback({ type: null, message: '' });
-    
-    try {
-      // Validation
-      if (!email || !password) {
-        throw new Error('Email ve şifre gereklidir');
-      }
-      
-      if (password.length < 6) {
-        throw new Error('Şifre en az 6 karakter olmalıdır');
-      }
-      
-      // API çağrısı
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Giriş yapılırken bir hata oluştu');
-      }
-      
-      // Giriş başarılı
-      try {
-        localStorage.setItem(USER_KEY, JSON.stringify(data.user));
-      } catch (error) {
-        console.error('localStorage yazma hatası:', error);
-        throw new Error('Giriş bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
-      }
-      
-      setUserFeedback({ type: 'success', message: 'Başarıyla giriş yapıldı!' });
-      
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    } catch (error) {
-      setUserFeedback({ type: 'error', message: error instanceof Error ? error.message : 'Giriş yapılırken bir hata oluştu. Lütfen tekrar deneyin.' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleRegister = async (username: string, email: string, password: string) => {
-    setIsLoading(true);
-    setUserFeedback({ type: null, message: '' });
-    
-    try {
-      // Validation
-      if (!username || !email || !password) {
-        throw new Error('Tüm alanlar gereklidir');
-      }
-      
-      if (username.length < 3) {
-        throw new Error('Kullanıcı adı en az 3 karakter olmalıdır');
-      }
-      
-      if (password.length < 6) {
-        throw new Error('Şifre en az 6 karakter olmalıdır');
-      }
-      
-      // Email format kontrolü
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        throw new Error('Geçerli bir email adresi giriniz');
-      }
-      
-      // API çağrısı
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, email, password }),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Kayıt olurken bir hata oluştu');
-      }
-      
-      // Kayıt başarılı - otomatik giriş yap
-      try {
-        localStorage.setItem(USER_KEY, JSON.stringify(data.user));
-      } catch (error) {
-        console.error('localStorage yazma hatası:', error);
-        throw new Error('Kullanıcı bilgileri kaydedilemiyor. Lütfen tekrar deneyin.');
-      }
-      
-      setUserFeedback({ type: 'success', message: 'Hesabınız başarıyla oluşturuldu!' });
-      
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    } catch (error) {
-      setUserFeedback({ type: 'error', message: error instanceof Error ? error.message : 'Kayıt olurken bir hata oluştu. Lütfen tekrar deneyin.' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // Kullanılmayan importlar, state'ler ve fonksiyonlar silindi
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 flex flex-col justify-center items-center">

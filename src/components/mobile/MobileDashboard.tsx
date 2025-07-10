@@ -7,15 +7,6 @@ import MobileDerslerimPage from "./MobileDerslerimPage";
 import MobileVerilerimPage from "./MobileVerilerimPage";
 import MobileProfilePage from "./MobileProfilePage";
 import MobileAdminPanel from "./MobileAdminPanel";
-import { 
-  ChartBarIcon, 
-  BookOpenIcon, 
-  ChatBubbleLeftRightIcon, 
-  AcademicCapIcon,
-  UserIcon,
-  ClockIcon,
-  StarIcon
-} from "@heroicons/react/24/outline";
 
 const USER_KEY = "sinavPusulasiUser";
 
