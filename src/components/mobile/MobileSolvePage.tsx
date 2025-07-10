@@ -153,14 +153,29 @@ export default function MobileSolvePage() {
                       <span className="mt-4 text-lg">Henüz hiç konu yok.</span>
                     </div>
                   ) : topics.map(topic => (
-                    <div key={topic.id} className="bg-gradient-to-r from-white to-sky-50 rounded-2xl shadow-lg p-4 border border-sky-100 text-left cursor-pointer hover:scale-[1.02] hover:shadow-xl transition-all duration-200 group" onClick={() => startTest(topic)}>
-                      <h3 className="font-bold text-lg text-sky-700 group-hover:underline tracking-tight flex items-center gap-2">
-                        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#0ea5e9" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round"/></svg>
+                    <div key={topic.id} className="bg-gradient-to-r from-white to-sky-50 rounded-2xl shadow-lg p-4 border border-sky-100 text-left cursor-pointer hover:scale-[1.02] hover:shadow-xl transition-all duration-200 group" onClick={() => setSelectedTopic(topic)}>
+                      <h3 className="font-bold text-lg text-sky-700 tracking-tight flex items-center gap-2">
+                        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round"/></svg>
                         {topic.name}
                       </h3>
                       {topic.description && <p className="text-gray-600 mt-2 text-base">{topic.description}</p>}
                     </div>
                   ))}
+                </div>
+              )}
+              {/* Eğer bir konu seçildiyse, test kutusu göster */}
+              {selectedTopic && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+                  <div className="relative aspect-square w-72 flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-fuchsia-400 p-8">
+                    <button className="absolute top-2 right-2 text-gray-400 hover:text-fuchsia-500 text-2xl" onClick={() => setSelectedTopic(null)}>&times;</button>
+                    <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center mb-4">
+                      {selectedTopic.name} Testi
+                    </h3>
+                    <span className="inline-block mb-4 px-4 py-2 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-lg shadow text-center pointer-events-none">
+                      {exampleQuestions.length} Soru
+                    </span>
+                    <button className="w-full bg-gradient-to-r from-sky-500 to-fuchsia-500 text-white px-6 py-3 rounded-xl font-bold text-lg shadow hover:from-fuchsia-500 hover:to-sky-500 active:scale-105 transition-all duration-200 mt-4" onClick={() => setStep('test')}>Teste Başla</button>
+                  </div>
                 </div>
               )}
             </>

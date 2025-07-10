@@ -111,11 +111,11 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
           {loading && <div>Yükleniyor...</div>}
           {error && <div className="text-red-500">{error}</div>}
           {!loading && topics.length === 0 && <div>Henüz hiç konu yok.</div>}
-          <div className="space-y-4 mt-4">
+          <div className="space-y-4 mt-4 grid gap-6 grid-cols-1 sm:grid-cols-2">
             {topics.map((topic) => (
-              <div key={topic.id} className="bg-sky-50 rounded-xl p-4 border text-left">
-                <h3 className="font-semibold text-lg text-sky-700">{topic.name}</h3>
-                {topic.description && <p className="text-gray-600 mt-1">{topic.description}</p>}
+              <div key={topic.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none">
+                <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">{topic.name}</h3>
+                {topic.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">{topic.description}</span>}
               </div>
             ))}
           </div>
