@@ -30,7 +30,6 @@ const pageTitles: Record<string, string> = {
 
 const Dashboard = () => {
   const [username, setUsername] = useState("Kullanıcı");
-  const [email, setEmail] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
@@ -42,7 +41,6 @@ const Dashboard = () => {
           try {
             const user = JSON.parse(userStr);
             setUsername(user.username || "Kullanıcı");
-            setEmail(user.email || "");
             setProfileImage(user.profileImage || null);
             setIsAdmin((user.email === "keremerdeen@gmail.com"));
           } catch {}
