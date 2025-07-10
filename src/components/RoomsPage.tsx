@@ -175,12 +175,15 @@ const RoomsPage = () => {
             <div>Henüz bir odan yok.</div>
           ) : (
             rooms.map((room) => (
-              <div key={room.room_id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none" onClick={() => setActiveRoom({ id: room.room_id, name: room.rooms?.name })} tabIndex={0} role="button" aria-pressed="false">
-                <h3 className="font-bold text-2xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2 text-center pointer-events-none">
+              <div key={room.room_id} className="relative aspect-square flex flex-col items-center justify-center bg-gradient-to-br from-sky-100 via-fuchsia-100 to-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 hover:shadow-2xl transition-all duration-300 group overflow-hidden cursor-pointer select-none" onClick={() => setActiveRoom({ id: room.room_id, name: room.rooms?.name })} tabIndex={0} role="button" aria-pressed="false">
+                <span className="absolute top-4 right-4 bg-gradient-to-r from-fuchsia-400 to-sky-400 text-white rounded-full p-2 shadow-lg">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+                </span>
+                <h3 className="font-bold text-2xl text-sky-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">
                   {room.rooms?.name || "Oda"}
                 </h3>
-                {/* Assuming room object has a description property, otherwise this will be undefined */}
-                {/* {room.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">{room.description}</span>} */}
+                {/* Badge veya istatistik alanı örneği */}
+                <span className="mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">Oda</span>
               </div>
             ))
           )}
