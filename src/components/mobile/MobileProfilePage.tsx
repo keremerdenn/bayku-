@@ -49,16 +49,19 @@ export default function MobileProfilePage() {
     if (typeof window !== "undefined") {
       try {
         const userStr = localStorage.getItem(USER_KEY);
+        console.log("MobileProfilePage - localStorage data:", userStr);
         if (userStr) {
           const userData: User = JSON.parse(userStr);
+          console.log("MobileProfilePage - parsed user data:", userData);
           setUser(userData);
           setEditUsername(userData.username || "");
           setEditBio(userData.bio || "");
           setProfileImage(userData.profileImage || null);
+          console.log("MobileProfilePage - set profileImage:", userData.profileImage);
           loadStats();
         }
-      } catch {
-        console.error("Kullanıcı bilgisi alınamadı");
+      } catch (error) {
+        console.error("Kullanıcı bilgisi alınamadı:", error);
       }
     }
   }, []);
@@ -114,15 +117,19 @@ export default function MobileProfilePage() {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      console.log("MobileProfilePage - uploading image:", file.name);
       const reader = new FileReader();
       reader.onload = (e) => {
         const imageData = e.target?.result as string;
+        console.log("MobileProfilePage - image loaded, length:", imageData.length);
         setProfileImage(imageData);
         // Fotoğrafı hemen kaydet
         if (user) {
           const updatedUser = { ...user, profileImage: imageData };
+          console.log("MobileProfilePage - saving updated user:", updatedUser);
           setUser(updatedUser);
           localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+          console.log("MobileProfilePage - saved to localStorage");
         }
       };
       reader.readAsDataURL(file);

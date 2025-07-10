@@ -50,14 +50,17 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
     if (typeof window !== "undefined") {
       try {
         const userStr = localStorage.getItem(USER_KEY);
+        console.log("ProfilePage - localStorage data:", userStr);
         if (userStr) {
           const userData: UserData = JSON.parse(userStr);
+          console.log("ProfilePage - parsed user data:", userData);
           setUsernameValue(userData.username || username);
           setAboutValue(userData.bio || "");
           setProfileImage(userData.profileImage || null);
+          console.log("ProfilePage - set profileImage:", userData.profileImage);
         }
-      } catch {
-        console.error("Kullanıcı bilgisi alınamadı");
+      } catch (error) {
+        console.error("Kullanıcı bilgisi alınamadı:", error);
       }
     }
   }, [username]);

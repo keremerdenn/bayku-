@@ -37,13 +37,18 @@ const Dashboard = () => {
     const loadUserData = () => {
       if (typeof window !== "undefined") {
         const userStr = localStorage.getItem(USER_KEY);
+        console.log("Dashboard - localStorage data:", userStr);
         if (userStr) {
           try {
             const user = JSON.parse(userStr);
+            console.log("Dashboard - parsed user data:", user);
             setUsername(user.username || "Kullanıcı");
             setProfileImage(user.profileImage || null);
+            console.log("Dashboard - set profileImage:", user.profileImage);
             setIsAdmin((user.email === "keremerdeen@gmail.com"));
-          } catch {}
+          } catch (error) {
+            console.error("Dashboard - user data parse error:", error);
+          }
         }
       }
     };
