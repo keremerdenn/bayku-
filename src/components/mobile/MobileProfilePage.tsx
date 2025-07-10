@@ -47,6 +47,9 @@ export default function MobileProfilePage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      console.log("MobileProfilePage - checking localStorage...");
+      console.log("MobileProfilePage - all localStorage keys:", Object.keys(localStorage));
+      
       try {
         const userStr = localStorage.getItem(USER_KEY);
         console.log("MobileProfilePage - localStorage data:", userStr);
@@ -59,6 +62,8 @@ export default function MobileProfilePage() {
           setProfileImage(userData.profileImage || null);
           console.log("MobileProfilePage - set profileImage:", userData.profileImage);
           loadStats();
+        } else {
+          console.log("MobileProfilePage - no user data found in localStorage");
         }
       } catch (error) {
         console.error("Kullanıcı bilgisi alınamadı:", error);
