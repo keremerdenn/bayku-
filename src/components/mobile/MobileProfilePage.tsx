@@ -13,7 +13,6 @@ interface User {
 
 export default function MobileProfilePage() {
   const [user, setUser] = useState<User | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -38,25 +37,6 @@ export default function MobileProfilePage() {
       }
     }
   }, []);
-
-  const handleSave = () => {
-    // Burada gerçek API çağrısı yapılacak
-    const updatedUser = { ...user, ...formData };
-    localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
-    setUser(updatedUser);
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    if (user) {
-      setFormData({
-        username: user.username || "",
-        email: user.email || "",
-        bio: user.bio || ""
-      });
-    }
-    setIsEditing(false);
-  };
 
   if (!user) {
     return (

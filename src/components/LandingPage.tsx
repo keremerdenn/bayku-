@@ -2,8 +2,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
 
-const USER_KEY = "sinavPusulasiUser";
-
 const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userFeedback, setUserFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });

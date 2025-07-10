@@ -5,7 +5,6 @@ import Sidebar from "./Sidebar";
 import ChatPage from "./ChatPage";
 import DerslerimPage from "./DerslerimPage";
 import VerilerimPage from "./VerilerimPage";
-import dynamic from "next/dynamic";
 import NotificationSystem from "./NotificationSystem";
 import ThemeToggle from "./ThemeToggle";
 import ProfilePage from "./ProfilePage";
