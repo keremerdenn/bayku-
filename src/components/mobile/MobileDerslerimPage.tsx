@@ -68,7 +68,7 @@ export default function MobileDerslerimPage() {
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="Ders adı"
-              className="w-full p-2 rounded border mb-2"
+              className="w-full p-2 rounded border mb-2 bg-white text-gray-900"
               required
             />
             <input
@@ -76,7 +76,7 @@ export default function MobileDerslerimPage() {
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="Açıklama (opsiyonel)"
-              className="w-full p-2 rounded border mb-2"
+              className="w-full p-2 rounded border mb-2 bg-white text-gray-900"
             />
             <button
               type="submit"
