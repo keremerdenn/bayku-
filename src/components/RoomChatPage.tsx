@@ -153,29 +153,29 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+    <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-sky-500 to-blue-600 p-6 text-white">
+      <div className="bg-gradient-to-r from-sky-500 to-blue-600 p-4 text-white">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold">{roomName || "Oda Sohbeti"}</h2>
-            <p className="text-sky-100 text-sm mt-1">{members.length} üye</p>
+            <h2 className="text-lg font-bold">{roomName || "Oda Sohbeti"}</h2>
+            <p className="text-sky-100 text-xs mt-1">{members.length} üye</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
             </div>
           </div>
         </div>
       </div>
 
       {/* Üyeler Listesi */}
-      <div className="p-4 border-b border-gray-100">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-sm font-semibold text-gray-700">Üyeler:</span>
-          <div className="flex flex-wrap gap-2">
+      <div className="p-3 border-b border-gray-100">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs font-semibold text-gray-700">Üyeler:</span>
+          <div className="flex flex-wrap gap-1">
             {members.map((member, i) => (
-              <span key={i} className="bg-sky-50 text-sky-700 px-3 py-1 rounded-full text-sm font-medium border border-sky-200">
+              <span key={i} className="bg-sky-50 text-sky-700 px-2 py-1 rounded-full text-xs font-medium border border-sky-200">
                 {member.user_email.split("@")[0]}
               </span>
             ))}
@@ -184,16 +184,16 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
         
         {/* Admin Davet Formu */}
         {isAdmin && (
-          <form onSubmit={handleInvite} className="flex gap-3 items-center">
+          <form onSubmit={handleInvite} className="flex gap-2 items-center">
             <input
               type="email"
               placeholder="Davet edilecek e-posta"
               value={inviteEmail}
               onChange={e => setInviteEmail(e.target.value)}
-              className="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-sky-400 focus:outline-none"
+              className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-sky-400 focus:outline-none"
               required
             />
-            <button type="submit" className="bg-sky-500 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-sky-600 transition-colors">
+            <button type="submit" className="bg-sky-500 text-white rounded-lg px-3 py-1.5 text-xs font-semibold hover:bg-sky-600 transition-colors">
               Davet Et
             </button>
             {inviteError && <span className="text-red-500 text-xs">{inviteError}</span>}
@@ -202,24 +202,24 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
       </div>
 
       {/* Mesajlar Alanı */}
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-50 min-h-[400px] max-h-[500px]">
+      <div className="flex-1 overflow-y-auto p-3 bg-gray-50 min-h-[300px] max-h-[400px]">
         {loading ? (
-          <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500"></div>
-            <span className="ml-3 text-gray-600">Yükleniyor...</span>
+          <div className="flex items-center justify-center py-6">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-sky-500"></div>
+            <span className="ml-2 text-gray-600 text-sm">Yükleniyor...</span>
           </div>
         ) : messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-            <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/></svg>
-            <span className="mt-4 text-lg">Henüz mesaj yok.</span>
-            <p className="text-sm mt-2">İlk mesajı göndererek sohbeti başlatın!</p>
+          <div className="flex flex-col items-center justify-center py-8 text-gray-400">
+            <svg width="32" height="32" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/></svg>
+            <span className="mt-2 text-sm">Henüz mesaj yok.</span>
+            <p className="text-xs mt-1">İlk mesajı göndererek sohbeti başlatın!</p>
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.sender_email === userEmail ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-xs lg:max-w-md ${msg.sender_email === userEmail ? "order-2" : "order-1"}`}>
-                  <div className={`px-4 py-3 rounded-2xl shadow-sm text-sm
+                <div className={`max-w-xs ${msg.sender_email === userEmail ? "order-2" : "order-1"}`}>
+                  <div className={`px-3 py-2 rounded-xl shadow-sm text-sm
                     ${msg.sender_email === userEmail 
                       ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white" 
                       : "bg-white text-gray-800 border border-gray-200"
@@ -239,27 +239,27 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
       </div>
 
       {/* Mesaj Gönderme Formu */}
-      <div className="p-4 border-t border-gray-100 bg-white">
-        <form onSubmit={handleSendMessage} className="flex gap-3">
+      <div className="p-3 border-t border-gray-100 bg-white">
+        <form onSubmit={handleSendMessage} className="flex gap-2">
           <input
             type="text"
             value={newMessage}
             onChange={e => setNewMessage(e.target.value)}
-            className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-sky-400 focus:outline-none"
+            className="flex-1 border border-gray-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sky-400 focus:outline-none text-sm"
             placeholder="Mesajınızı yazın..."
             maxLength={300}
           />
           <button 
             type="submit" 
-            className="bg-gradient-to-r from-sky-500 to-blue-500 text-white rounded-xl px-6 py-3 font-semibold hover:from-sky-600 hover:to-blue-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed" 
+            className="bg-gradient-to-r from-sky-500 to-blue-500 text-white rounded-lg px-4 py-2 font-semibold hover:from-sky-600 hover:to-blue-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed" 
             disabled={loading || !newMessage.trim()}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
           </button>
         </form>
-        {inputError && <div className="text-red-500 text-center font-semibold mt-2 text-sm">{inputError}</div>}
+        {inputError && <div className="text-red-500 text-center font-semibold mt-2 text-xs">{inputError}</div>}
       </div>
     </div>
   );
