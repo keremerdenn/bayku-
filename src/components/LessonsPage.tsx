@@ -28,13 +28,9 @@ export default function LessonsPage() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [selectedExamType, setSelectedExamType] = useState("");
-  const [adding, setAdding] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [username, setUsername] = useState("");
-  const [formError, setFormError] = useState("");
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [email, setEmail] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -97,48 +93,7 @@ export default function LessonsPage() {
     }
   }
 
-  async function handleAddLesson(e: React.FormEvent) {
-    e.preventDefault();
-    setFormError("");
-    if (!name.trim()) {
-      setFormError("Ders adı boş olamaz.");
-      return;
-    }
-    if (!selectedExamType) {
-      setFormError("Sınav türü seçmelisin.");
-      return;
-    }
-    if (name.length > 40) {
-      setFormError("Ders adı 40 karakterden uzun olamaz.");
-      return;
-    }
-    if (!/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ\s]+$/.test(name)) {
-      setFormError("Ders adı sadece harf, rakam ve boşluk içerebilir.");
-      return;
-    }
-    setAdding(true);
-    setError("");
-    try {
-      const res = await fetch("/api/lessons", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          name, 
-          description,
-          examType: selectedExamType 
-        }),
-      });
-      if (!res.ok) throw new Error("Ders eklenemedi");
-      setName("");
-      setDescription("");
-      setSelectedExamType("");
-      await fetchLessons();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Ders eklenemedi");
-    } finally {
-      setAdding(false);
-    }
-  }
+
 
   async function handleDeleteLesson(id: string) {
     setLessonToDelete(id);
@@ -237,33 +192,7 @@ export default function LessonsPage() {
           </h1>
           <div className="text-lg text-sky-600 font-semibold mt-2 animate-fade-in">Hangi dersi çalışmak istersin?</div>
         </div>
-        <form onSubmit={handleAddLesson} className="mb-8 space-y-3 bg-gradient-to-r from-sky-50 to-fuchsia-50 p-6 rounded-2xl border-2 border-transparent bg-clip-padding shadow-xl hover:shadow-2xl transition-all duration-300">
-          <div className="flex flex-col gap-2 md:flex-row md:gap-4">
-            <input
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder="Ders adı"
-              className="flex-1 p-3 rounded-xl border border-sky-200 bg-white text-gray-900 focus:ring-2 focus:ring-sky-400 focus:outline-none transition"
-              required
-            />
-            <input
-              type="text"
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              placeholder="Açıklama (opsiyonel)"
-              className="flex-1 p-3 rounded-xl border border-sky-200 bg-white text-gray-900 focus:ring-2 focus:ring-sky-400 focus:outline-none transition"
-            />
-          </div>
-          {formError && <div className="text-red-500 text-center font-semibold mb-2">{formError}</div>}
-          <button
-            type="submit"
-            className="w-full md:w-auto bg-sky-500 text-white px-6 py-3 rounded-xl font-bold text-lg shadow hover:bg-sky-600 active:scale-95 transition-all duration-200 disabled:opacity-50"
-            disabled={adding || !name.trim()}
-          >
-            {adding ? "Ekleniyor..." : "Ders Ekle"}
-          </button>
-        </form>
+
         {loading && <div className="flex flex-col items-center justify-center py-8"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500 mb-2"></div><span className="text-sky-700">Yükleniyor...</span></div>}
         {error && <div className="text-red-500 text-center mb-4">{error}</div>}
         {!loading && filteredLessons.length === 0 && (

@@ -7,21 +7,54 @@ interface Lesson {
   id: string;
   name: string;
   description?: string;
+  examType?: string;
+}
+
+interface ExamType {
+  id: string;
+  name: string;
+  color: string;
+  description: string;
 }
 
 export default function MobileDerslerimPage() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [adding, setAdding] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [username, setUsername] = useState("");
-  const [formError, setFormError] = useState("");
   const [email, setEmail] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [lessonToDelete, setLessonToDelete] = useState<string | null>(null);
+  const [selectedExamType, setSelectedExamType] = useState("");
+  const [currentView, setCurrentView] = useState<'examTypes' | 'lessons'>('examTypes');
+
+  const examTypes: ExamType[] = [
+    {
+      id: 'lgs',
+      name: 'LGS',
+      color: 'from-green-500 to-emerald-500',
+      description: 'Liselere Geçiş Sınavı'
+    },
+    {
+      id: 'tyt',
+      name: 'TYT',
+      color: 'from-blue-500 to-cyan-500',
+      description: 'Temel Yeterlilik Testi'
+    },
+    {
+      id: 'ayt',
+      name: 'AYT',
+      color: 'from-purple-500 to-pink-500',
+      description: 'Alan Yeterlilik Testi'
+    },
+    {
+      id: 'kpss',
+      name: 'KPSS',
+      color: 'from-orange-500 to-red-500',
+      description: 'Kamu Personel Seçme Sınavı'
+    }
+  ];
 
   useEffect(() => {
     fetchLessons();
@@ -55,40 +88,6 @@ export default function MobileDerslerimPage() {
     }
   }
 
-  async function handleAddLesson(e: React.FormEvent) {
-    e.preventDefault();
-    setFormError("");
-    if (!name.trim()) {
-      setFormError("Ders adı boş olamaz.");
-      return;
-    }
-    if (name.length > 40) {
-      setFormError("Ders adı 40 karakterden uzun olamaz.");
-      return;
-    }
-    if (!/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ\s]+$/.test(name)) {
-      setFormError("Ders adı sadece harf, rakam ve boşluk içerebilir.");
-      return;
-    }
-    setAdding(true);
-    setError("");
-    try {
-      const res = await fetch("/api/lessons", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description }),
-      });
-      if (!res.ok) throw new Error("Ders eklenemedi");
-      setName("");
-      setDescription("");
-      await fetchLessons();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Ders eklenemedi");
-    } finally {
-      setAdding(false);
-    }
-  }
-
   async function handleDeleteLesson(id: string) {
     setLessonToDelete(id);
     setShowDeleteModal(true);
@@ -112,52 +111,80 @@ export default function MobileDerslerimPage() {
     setLessonToDelete(null);
   }
 
+  const filteredLessons = lessons.filter(lesson => 
+    !selectedExamType || lesson.examType === selectedExamType
+  );
+
   if (selectedLesson) {
     return <MobileTopicsPage lesson={selectedLesson} onBack={() => setSelectedLesson(null)} />;
+  }
+
+  if (currentView === 'examTypes') {
+    return (
+      <MobileLayout currentPage="derslerim">
+        <div className="max-w-md mx-auto px-4 py-4">
+          <div className="mb-6 text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-1">Hoş geldin, {username}!</h2>
+            <p className="text-sm text-gray-500">Hangi sınav için çalışmak istiyorsun?</p>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3">
+            {examTypes.map((examType) => (
+              <div 
+                key={examType.id}
+                onClick={() => {
+                  setSelectedExamType(examType.id);
+                  setCurrentView('lessons');
+                }}
+                className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm"
+              >
+                <div className={`w-12 h-12 bg-gradient-to-r ${examType.color} rounded-lg flex items-center justify-center mb-2`}>
+                  <span className="text-white font-bold text-sm">{examType.name}</span>
+                </div>
+                <h3 className="font-medium text-gray-800 text-sm mb-1">{examType.name}</h3>
+                <p className="text-xs text-gray-500">{examType.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </MobileLayout>
+    );
   }
 
   return (
     <MobileLayout currentPage="derslerim">
       <div className="max-w-md mx-auto px-4 py-4">
-        <div className="mb-4 text-center">
-          <h2 className="text-xl font-semibold text-gray-800 mb-1">Derslerim</h2>
-          <p className="text-sm text-gray-500">Hoş geldin, {username}!</p>
-        </div>
-        <form onSubmit={handleAddLesson} className="mb-4 space-y-2 bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-          <input
-            type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            placeholder="Ders adı"
-            className="w-full p-2 rounded border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-sm"
-            required
-          />
-          {formError && <div className="text-red-500 text-center font-medium text-xs mb-1">{formError}</div>}
-          <input
-            type="text"
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            placeholder="Açıklama (opsiyonel)"
-            className="w-full p-2 rounded border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-sm"
-          />
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded font-medium text-sm hover:bg-blue-600 active:scale-95 transition disabled:opacity-50"
-            disabled={adding || !name.trim()}
+        <div className="mb-4">
+          <button 
+            onClick={() => {
+              setCurrentView('examTypes');
+              setSelectedExamType("");
+            }}
+            className="text-blue-600 hover:underline flex items-center gap-1 text-sm mb-2"
           >
-            {adding ? "Ekleniyor..." : "Ders Ekle"}
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
+              <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Geri
           </button>
-        </form>
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-1">
+              {examTypes.find(et => et.id === selectedExamType)?.name} Dersleri
+            </h2>
+            <p className="text-sm text-gray-500">Hangi dersi çalışmak istersin?</p>
+          </div>
+        </div>
+        
         {loading && <div className="flex flex-col items-center justify-center py-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mb-2"></div><span className="text-gray-500">Yükleniyor...</span></div>}
         {error && <div className="text-red-500 text-center mb-2 text-xs">{error}</div>}
-        {!loading && lessons.length === 0 && (
+        {!loading && filteredLessons.length === 0 && (
           <div className="flex flex-col items-center justify-center py-12 text-gray-400">
             <svg width="40" height="40" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#cbd5e1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
             <span className="mt-2 text-sm">Henüz hiç ders yok.</span>
           </div>
         )}
         <div className="grid grid-cols-2 gap-3 mt-2">
-          {lessons.map((lesson) => (
+          {filteredLessons.map((lesson) => (
             <div key={lesson.id} className="bg-white border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm relative" onClick={() => setSelectedLesson(lesson)}>
               {email === "keremerdeen@gmail.com" && (
                 <button
@@ -201,7 +228,7 @@ export default function MobileDerslerimPage() {
                     onClick={confirmDeleteLesson}
                     className="flex-1 px-4 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-colors"
                   >
-                    Evet, Sil
+                    Sil
                   </button>
                 </div>
               </div>
