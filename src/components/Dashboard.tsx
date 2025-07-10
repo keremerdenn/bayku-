@@ -65,66 +65,13 @@ const Dashboard = () => {
   let pageContent = null;
   if (activePage === "dashboard") {
     pageContent = (
-      <>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Hoş Geldin, {username}!</h1>
-        <p className="text-base md:text-lg text-gray-600 mb-6 md:mb-8">Bugün hedeflerine bir adım daha yaklaşma zamanı.</p>
-        {/* Görsel Optimizasyonu Örneği - Sadece admin */}
-        {isAdmin && (
-        <div className="mb-6 md:mb-8">
-          <h3 className="text-base md:text-lg font-semibold mb-4 text-gray-900">Optimize Edilmiş Görsel Örneği</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <OptimizedImage 
-              src="/globe.svg" 
-              alt="Optimize edilmiş görsel örneği" 
-              width={400} 
-              height={200}
-              className="w-full"
-            />
-            <div className="bg-white p-4 rounded-xl shadow">
-              <h4 className="font-semibold mb-2">Next.js Image Avantajları:</h4>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Otomatik boyutlandırma</li>
-                <li>• Lazy loading</li>
-                <li>• WebP formatı desteği</li>
-                <li>• Blur placeholder</li>
-                <li>• Responsive görseller</li>
-              </ul>
-            </div>
-          </div>
+      <div className="space-y-6">
+        <div className="bg-gradient-to-r from-sky-500 to-blue-600 rounded-3xl p-6 text-white shadow-xl">
+          <h1 className="text-2xl font-bold mb-2">Hoş Geldin!</h1>
+          <p className="text-sky-100 text-lg">Başlamak için üstteki menüyü kullanabilirsin.</p>
         </div>
-        )}
-        {/* SSR/SSG Optimizasyonu Örneği */}
-        {isAdmin && (
-          <div className="mb-6 md:mb-8">
-            <SSRExample 
-              serverTime={new Date().toLocaleString('tr-TR')}
-              staticData="Bu veri build zamanında oluşturulur"
-            />
-          </div>
-        )}
-        {/* İstatistik Kartları - Mobil için optimize */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
-          <StatCard title="Toplam Çözülen Soru" value="1,245" icon={<svg className="w-5 h-5 md:w-6 md:h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h3m-3-10h.01M9 10h.01M12 10h.01M15 10h.01M9 13h.01M12 13h.01M15 13h.01M4 7h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z" /></svg>} />
-          <StatCard title="Genel Başarı Oranı" value="%78.2" icon={<svg className="w-5 h-5 md:w-6 md:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6-4a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} colorClass="bg-green-100" />
-          <StatCard title="Haftalık Puan" value="850" icon={<svg className="w-5 h-5 md:w-6 md:h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-12v4m-2-2h4m6 4v4m-2-2h4M12 3v10m0 0l-3-3m3 3l3-3" /></svg>} colorClass="bg-yellow-100" />
-          <StatCard title="Günlük Seri" value="12 Gün" icon={<svg className="w-5 h-5 md:w-6 md:h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>} colorClass="bg-indigo-100" />
-        </div>
-        {/* Grafikler Alanı - Mobil için optimize */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
-          <div className="lg:col-span-2 bg-white p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-base md:text-lg font-semibold mb-4 text-gray-900">Haftalık Net Değişimi</h3>
-            <div className="relative h-48 md:h-64 lg:h-80 flex items-center justify-center">
-              <LazyLineChart />
-            </div>
-          </div>
-          <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-base md:text-lg font-semibold mb-4 text-gray-900">Soru Dağılımı</h3>
-            <div className="relative h-48 md:h-64 lg:h-80 flex items-center justify-center">
-              <LazyDoughnutChart />
-            </div>
-          </div>
-        </div>
-      </>
+        {/* Dashboard'da başka örnek içerik yok */}
+      </div>
     );
   } else if (activePage === "admin" && isAdmin) {
     pageContent = <AdminPanel />;

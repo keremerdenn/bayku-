@@ -170,7 +170,6 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold text-gray-900">{roomName || "Sohbet Odası"}</h1>
-            <p className="text-sm text-gray-500">Aktif sohbet</p>
           </div>
         </div>
       </div>
@@ -182,30 +181,16 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500"></div>
           </div>
         ) : messages.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz Mesaj Yok</h3>
-            <p className="text-gray-500">İlk mesajı sen gönder!</p>
-          </div>
+          <div className="text-center py-12 text-gray-400 text-sm">Henüz mesaj yok.</div>
         ) : (
           messages.map((message) => {
             const isOwnMessage = message.sender_email === userEmail;
-            
             return (
               <div
                 key={message.id}
                 className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
               >
                 <div className={`max-w-xs lg:max-w-md ${isOwnMessage ? 'order-2' : 'order-1'}`}>
-                  {!isOwnMessage && (
-                    <p className="text-xs text-gray-500 mb-1 ml-2">
-                      {message.sender_email === userEmail ? 'Sen' : message.sender_email.split('@')[0]}
-                    </p>
-                  )}
                   <div
                     className={`rounded-2xl px-4 py-3 ${
                       isOwnMessage
@@ -235,8 +220,8 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Mesajını yaz..."
-            className="flex-1 p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-transparent text-gray-900"
+            placeholder="Mesajınızı yazın..."
+            className="flex-1 p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-transparent"
             disabled={!userEmail}
           />
           <button
