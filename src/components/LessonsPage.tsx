@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import TopicsPage from "./TopicsPage";
 import TestsPage from "./TestsPage";
+import ColoredOwlIcon from "./ColoredOwlIcon";
 
 interface Lesson {
   id: string;
@@ -148,9 +149,7 @@ export default function LessonsPage() {
           {lessons.map((lesson) => (
             <div key={lesson.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer p-6" onClick={() => setSelectedLesson(lesson)}>
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg flex items-center justify-center">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="white" strokeWidth="2" strokeLinecap="round"/><path d="M6.5 17V6.75A2.75 2.75 0 0 1 9.25 4h7.5A2.75 2.75 0 0 1 19.5 6.75v10.25" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
-                </div>
+                <ColoredOwlIcon size={32} gradientId="owlDerslerim" gradient={{from: '#34d399', to: '#38bdf8'}} />
                 <h2 className="font-bold text-lg text-gray-800 tracking-tight">{lesson.name}</h2>
               </div>
               {lesson.description && <p className="text-sm text-gray-600 mb-3">{lesson.description}</p>}

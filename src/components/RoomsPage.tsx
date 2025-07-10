@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { createClient } from "@supabase/supabase-js";
 import RoomChatPage from "./RoomChatPage";
+import ColoredOwlIcon from "./ColoredOwlIcon";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -177,9 +178,7 @@ const RoomsPage = () => {
             rooms.map((room) => (
               <div key={room.room_id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => setActiveRoom({ id: room.room_id, name: room.rooms?.name })} tabIndex={0} role="button" aria-pressed="false">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
-                  </div>
+                  <ColoredOwlIcon size={32} gradientId="owlChat" gradient={{from: '#a78bfa', to: '#2563eb'}} />
                   <h3 className="font-bold text-lg text-gray-800 tracking-tight">{room.rooms?.name || "Oda"}</h3>
                 </div>
                 <div className="flex items-center justify-between">
