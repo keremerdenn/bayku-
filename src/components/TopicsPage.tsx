@@ -10,9 +10,10 @@ interface Topic {
 interface TopicsPageProps {
   lesson: { id: string; name: string; description?: string };
   onBack: () => void;
+  onTopicSelect: (topic: Topic) => void;
 }
 
-export default function TopicsPage({ lesson, onBack }: TopicsPageProps) {
+export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPageProps) {
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -76,7 +77,7 @@ export default function TopicsPage({ lesson, onBack }: TopicsPageProps) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto py-8 px-4">
+    <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
       <button onClick={onBack} className="mb-4 text-sky-600 hover:underline">&larr; Geri</button>
       <h1 className="text-2xl font-bold mb-2">{lesson.name} - Konular</h1>
       <p className="text-gray-600 mb-4">{lesson.description}</p>
@@ -112,11 +113,13 @@ export default function TopicsPage({ lesson, onBack }: TopicsPageProps) {
       {loading && <div>Yükleniyor...</div>}
       {error && <div className="text-red-500">{error}</div>}
       {!loading && topics.length === 0 && <div>Henüz hiç konu yok.</div>}
-      <div className="grid gap-4">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {topics.map((topic) => (
-          <div key={topic.id} className="bg-white rounded-xl shadow p-4 border">
-            <h2 className="font-semibold text-lg">{topic.name}</h2>
-            {topic.description && <p className="text-gray-600 mt-1">{topic.description}</p>}
+          <div key={topic.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
+            <h3 className="font-bold text-2xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2 text-center pointer-events-none">
+              {topic.name}
+            </h3>
+            {topic.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">{topic.description}</span>}
           </div>
         ))}
       </div>

@@ -143,46 +143,48 @@ const RoomsPage = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Sohbet Odalarım</h2>
-      <form onSubmit={handleCreateRoom} className="mb-6 flex flex-col gap-3 bg-white p-4 rounded-xl shadow">
-        <input
-          type="text"
-          placeholder="Oda adı"
-          value={roomName}
-          onChange={e => setRoomName(e.target.value)}
-          className="border rounded-lg px-3 py-2"
-          required
-        />
-        <input
-          type="email"
-          placeholder="Davet etmek istediğin kişinin maili (opsiyonel)"
-          value={inviteEmail}
-          onChange={e => setInviteEmail(e.target.value)}
-          className="border rounded-lg px-3 py-2"
-        />
-        <button type="submit" className="bg-sky-600 text-white rounded-lg px-4 py-2 font-semibold hover:bg-sky-700 transition" disabled={loading}>
-          {loading ? "Oluşturuluyor..." : "Oda Oluştur"}
-        </button>
-        {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
-        {formError && <div className="text-red-500 text-sm mt-2">{formError}</div>}
-      </form>
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Odalar</h3>
-        {loading ? (
-          <div>Yükleniyor...</div>
-        ) : rooms.length === 0 ? (
-          <div>Henüz bir odan yok.</div>
-        ) : (
-          <ul className="space-y-2">
-            {rooms.map((r) => (
-              <li key={r.room_id} className="bg-gray-100 rounded-lg px-4 py-3 flex items-center justify-between">
-                <span>{r.rooms?.name || "Oda"}</span>
-                <button className="text-sky-600 font-bold hover:underline" onClick={() => setActiveRoom({ id: r.room_id, name: r.rooms?.name })}>Giriş Yap</button>
-              </li>
-            ))}
-          </ul>
-        )}
+    <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
+      <div className="max-w-xl mx-auto p-4">
+        <h2 className="text-2xl font-bold mb-4">Sohbet Odalarım</h2>
+        <form onSubmit={handleCreateRoom} className="mb-6 flex flex-col gap-3 bg-white p-4 rounded-xl shadow">
+          <input
+            type="text"
+            placeholder="Oda adı"
+            value={roomName}
+            onChange={e => setRoomName(e.target.value)}
+            className="border rounded-lg px-3 py-2"
+            required
+          />
+          <input
+            type="email"
+            placeholder="Davet etmek istediğin kişinin maili (opsiyonel)"
+            value={inviteEmail}
+            onChange={e => setInviteEmail(e.target.value)}
+            className="border rounded-lg px-3 py-2"
+          />
+          <button type="submit" className="bg-sky-600 text-white rounded-lg px-4 py-2 font-semibold hover:bg-sky-700 transition" disabled={loading}>
+            {loading ? "Oluşturuluyor..." : "Oda Oluştur"}
+          </button>
+          {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+          {formError && <div className="text-red-500 text-sm mt-2">{formError}</div>}
+        </form>
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          {loading ? (
+            <div>Yükleniyor...</div>
+          ) : rooms.length === 0 ? (
+            <div>Henüz bir odan yok.</div>
+          ) : (
+            rooms.map((room) => (
+              <div key={room.room_id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none" onClick={() => setActiveRoom({ id: room.room_id, name: room.rooms?.name })} tabIndex={0} role="button" aria-pressed="false">
+                <h3 className="font-bold text-2xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2 text-center pointer-events-none">
+                  {room.rooms?.name || "Oda"}
+                </h3>
+                {/* Assuming room object has a description property, otherwise this will be undefined */}
+                {/* {room.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center pointer-events-none">{room.description}</span>} */}
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

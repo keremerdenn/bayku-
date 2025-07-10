@@ -1,8 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import TopicsPage from "./TopicsPage";
+import TestsPage from "./TestsPage";
 
 interface Lesson {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+interface Topic {
   id: string;
   name: string;
   description?: string;
@@ -18,6 +25,7 @@ export default function LessonsPage() {
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [username, setUsername] = useState("");
   const [formError, setFormError] = useState("");
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
   useEffect(() => {
     fetchLessons();
@@ -84,8 +92,11 @@ export default function LessonsPage() {
     }
   }
 
+  if (selectedTopic) {
+    return <TestsPage topic={selectedTopic} onBack={() => setSelectedTopic(null)} />;
+  }
   if (selectedLesson) {
-    return <TopicsPage lesson={selectedLesson} onBack={() => setSelectedLesson(null)} />;
+    return <TopicsPage lesson={selectedLesson} onBack={() => setSelectedLesson(null)} onTopicSelect={setSelectedTopic} />;
   }
 
   return (
