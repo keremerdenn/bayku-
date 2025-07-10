@@ -48,6 +48,19 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
   useEffect(() => {
     // localStorage'dan kullanıcı verilerini yükle
     if (typeof window !== "undefined") {
+      console.log("ProfilePage - checking localStorage...");
+      console.log("ProfilePage - all localStorage keys:", Object.keys(localStorage));
+      
+      // Test için manuel veri ekle
+      const testUser = {
+        email: "test@example.com",
+        username: "TestUser",
+        bio: "Test bio",
+        profileImage: null
+      };
+      localStorage.setItem(USER_KEY, JSON.stringify(testUser));
+      console.log("ProfilePage - added test user to localStorage");
+      
       try {
         const userStr = localStorage.getItem(USER_KEY);
         console.log("ProfilePage - localStorage data:", userStr);

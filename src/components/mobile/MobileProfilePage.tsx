@@ -50,6 +50,16 @@ export default function MobileProfilePage() {
       console.log("MobileProfilePage - checking localStorage...");
       console.log("MobileProfilePage - all localStorage keys:", Object.keys(localStorage));
       
+      // Test için manuel veri ekle
+      const testUser = {
+        email: "test@example.com",
+        username: "TestUser",
+        bio: "Test bio",
+        profileImage: null
+      };
+      localStorage.setItem(USER_KEY, JSON.stringify(testUser));
+      console.log("MobileProfilePage - added test user to localStorage");
+      
       try {
         const userStr = localStorage.getItem(USER_KEY);
         console.log("MobileProfilePage - localStorage data:", userStr);
