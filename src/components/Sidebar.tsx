@@ -101,7 +101,7 @@ export default function Sidebar() {
         <nav className="flex-1 px-4 pb-2 space-y-3">
           <a href="#/dashboard" className="nav-link flex items-center p-4 md:p-3 rounded-xl sidebar-link-active shadow-md bg-gradient-to-r from-sky-100 to-sky-200 border border-sky-300">
             <HomeIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-600" />
-            <span className="font-semibold text-lg md:text-sm">Panelim</span>
+            <span className="font-semibold text-lg md:text-sm">Ana Sayfa</span>
           </a>
           <a href="#/sorucozme" className="nav-link flex items-center p-4 md:p-3 rounded-xl hover:bg-sky-50 transition">
             <PencilIcon className="w-7 h-7 md:w-5 md:h-5 mr-4 md:mr-2 text-sky-500" />
