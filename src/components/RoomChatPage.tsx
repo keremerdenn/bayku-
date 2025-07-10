@@ -171,7 +171,7 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
         const data = await response.json();
         alert(data.error || "Oda kapatılamadı.");
       }
-    } catch (_error) {
+    } catch {
       alert("Oda kapatılırken bir hata oluştu.");
     }
   };
