@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 interface ProfilePageProps {
   username: string;
@@ -10,24 +10,85 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
   const [usernameError, setUsernameError] = useState("");
   const [aboutValue, setAboutValue] = useState("");
   const [aboutError, setAboutError] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const tabs = [
     { id: 'profile', name: 'Profil', icon: '👤' },
+    { id: 'password', name: 'Şifre', icon: '🔒' },
     { id: 'stats', name: 'İstatistikler', icon: '📊' },
     { id: 'settings', name: 'Ayarlar', icon: '⚙️' }
   ];
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePasswordChange = () => {
+    setPasswordError("");
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordError("Tüm alanları doldurun.");
+      return;
+    }
+    if (newPassword.length < 6) {
+      setPasswordError("Yeni şifre en az 6 karakter olmalıdır.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError("Yeni şifreler eşleşmiyor.");
+      return;
+    }
+    // Şifre değiştirme işlemi burada yapılacak
+    alert("Şifre başarıyla değiştirildi!");
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <div className="flex items-center space-x-4">
-          <div className="w-16 h-16 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-            {username?.[0]?.toUpperCase() || "U"}
+        <div className="flex items-center space-x-6">
+          <div className="relative">
+            <div className="w-20 h-20 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold overflow-hidden">
+              {profileImage ? (
+                <img src={profileImage} alt="Profil" className="w-full h-full object-cover" />
+              ) : (
+                username?.[0]?.toUpperCase() || "U"
+              )}
+            </div>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute -bottom-1 -right-1 w-8 h-8 bg-sky-500 text-white rounded-full flex items-center justify-center text-sm hover:bg-sky-600 transition-colors"
+            >
+              📷
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">{username}</h1>
             <p className="text-gray-600">Aktif Kullanıcı</p>
+            {aboutValue && (
+              <p className="text-sm text-gray-500 mt-1">{aboutValue}</p>
+            )}
           </div>
         </div>
       </div>
@@ -87,6 +148,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
                       type="email"
                       defaultValue="kullanici@example.com"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                      disabled
                     />
                   </div>
                 </div>
@@ -113,6 +175,65 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
                   maxLength={200}
                 />
                 {aboutError && <div className="text-red-500 text-xs mt-1">{aboutError}</div>}
+                <div className="text-xs text-gray-500 mt-1">{aboutValue.length}/200</div>
+              </div>
+
+              <div className="flex justify-end">
+                <button className="bg-sky-500 text-white px-6 py-2 rounded-md hover:bg-sky-600 transition-colors">
+                  Değişiklikleri Kaydet
+                </button>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'password' && (
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Şifre Değiştir</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Mevcut Şifre</label>
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={e => setCurrentPassword(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    placeholder="Mevcut şifrenizi girin"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Yeni Şifre</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={e => setNewPassword(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    placeholder="Yeni şifrenizi girin"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Yeni Şifre (Tekrar)</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    placeholder="Yeni şifrenizi tekrar girin"
+                  />
+                </div>
+                
+                {passwordError && <div className="text-red-500 text-sm">{passwordError}</div>}
+                
+                <div className="flex justify-end">
+                  <button
+                    onClick={handlePasswordChange}
+                    className="bg-sky-500 text-white px-6 py-2 rounded-md hover:bg-sky-600 transition-colors"
+                  >
+                    Şifreyi Değiştir
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -200,6 +321,4 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
       </div>
     </div>
   );
-};
-
-export default ProfilePage; 
+} 

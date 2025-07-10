@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import MobileLayout from "./MobileLayout";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, CameraIcon } from "@heroicons/react/24/outline";
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -14,9 +14,16 @@ interface User {
 export default function MobileProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [editUsername, setEditUsername] = useState("");
   const [editBio, setEditBio] = useState("");
   const [editError, setEditError] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -34,6 +41,38 @@ export default function MobileProfilePage() {
     }
   }, []);
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePasswordChange = () => {
+    setPasswordError("");
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordError("Tüm alanları doldurun.");
+      return;
+    }
+    if (newPassword.length < 6) {
+      setPasswordError("Yeni şifre en az 6 karakter olmalıdır.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError("Yeni şifreler eşleşmiyor.");
+      return;
+    }
+    alert("Şifre başarıyla değiştirildi!");
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setShowPasswordModal(false);
+  };
+
   if (!user) {
     return (
       <MobileLayout currentPage="profil">
@@ -46,83 +85,206 @@ export default function MobileProfilePage() {
 
   return (
     <MobileLayout currentPage="profil">
-      <div className="max-w-md mx-auto px-4 py-4 flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm w-full max-w-md flex flex-col items-center">
-          <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-3">
-            <span className="text-3xl font-bold text-blue-600">{user.username ? user.username[0]?.toUpperCase() : user.email[0]?.toUpperCase()}</span>
-          </div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-1">{user.username || "Kullanıcı"}</h2>
-          <span className="inline-block mb-2 px-3 py-1 rounded bg-gray-100 text-gray-500 font-medium text-xs">{user.email}</span>
-          {user.bio && <p className="text-gray-700 mt-2 text-center text-sm">{user.bio}</p>}
-          <button
-            className="mt-6 bg-blue-500 text-white px-5 py-2 rounded font-medium text-sm hover:bg-blue-600 active:scale-95 transition"
-            onClick={() => {
-              setEditUsername(user.username || "");
-              setEditBio(user.bio || "");
-              setEditError("");
-              setShowEditModal(true);
-            }}
-          >
-            Profili Düzenle
-          </button>
-        </div>
-      </div>
-      {/* Düzenleme Modalı */}
-      {showEditModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-          <div className="bg-white rounded-2xl shadow-xl w-[90vw] max-w-sm p-6 relative flex flex-col">
-            <button
-              className="absolute top-3 right-3 p-1 rounded hover:bg-gray-100"
-              onClick={() => setShowEditModal(false)}
-              aria-label="Kapat"
-            >
-              <XMarkIcon className="w-6 h-6 text-gray-400" />
-            </button>
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">Profili Düzenle</h3>
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                setEditError("");
-                if (!editUsername.trim()) {
-                  setEditError("Kullanıcı adı boş olamaz.");
-                  return;
-                }
-                if (editUsername.length > 30) {
-                  setEditError("Kullanıcı adı 30 karakterden uzun olamaz.");
-                  return;
-                }
-                const updatedUser = { ...user, username: editUsername.trim(), bio: editBio.trim() };
-                setUser(updatedUser);
-                localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
-                setShowEditModal(false);
-              }}
-              className="flex flex-col gap-3"
-            >
-              <input
-                type="text"
-                value={editUsername}
-                onChange={e => setEditUsername(e.target.value)}
-                placeholder="Kullanıcı adı"
-                className="w-full p-2 rounded border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-sm"
-                maxLength={30}
-                required
-              />
-              <textarea
-                value={editBio}
-                onChange={e => setEditBio(e.target.value)}
-                placeholder="Biyografi (opsiyonel)"
-                className="w-full p-2 rounded border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-sm min-h-[60px]"
-                maxLength={160}
-              />
-              {editError && <div className="text-red-500 text-xs text-center">{editError}</div>}
+      <div className="max-w-md mx-auto px-4 py-4">
+        {/* Profil Kartı */}
+        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-4">
+          <div className="flex flex-col items-center">
+            <div className="relative mb-4">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-white text-3xl font-bold overflow-hidden">
+                {profileImage ? (
+                  <img src={profileImage} alt="Profil" className="w-full h-full object-cover" />
+                ) : (
+                  user.username ? user.username[0]?.toUpperCase() : user.email[0]?.toUpperCase()
+                )}
+              </div>
               <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-2 rounded font-medium text-sm hover:bg-blue-600 active:scale-95 transition mt-2"
-              >Kaydet</button>
-            </form>
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute -bottom-1 -right-1 w-8 h-8 bg-sky-500 text-white rounded-full flex items-center justify-center hover:bg-sky-600 transition-colors"
+              >
+                <CameraIcon className="w-4 h-4" />
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+            </div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-1">{user.username || "Kullanıcı"}</h2>
+            <span className="inline-block mb-3 px-3 py-1 rounded-full bg-gray-100 text-gray-600 font-medium text-sm">{user.email}</span>
+            {user.bio && <p className="text-gray-700 text-center text-sm mb-4">{user.bio}</p>}
+            
+            <div className="flex gap-2 w-full">
+              <button
+                className="flex-1 bg-sky-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-sky-600 active:scale-95 transition"
+                onClick={() => {
+                  setEditUsername(user.username || "");
+                  setEditBio(user.bio || "");
+                  setEditError("");
+                  setShowEditModal(true);
+                }}
+              >
+                Profili Düzenle
+              </button>
+              <button
+                className="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-gray-600 active:scale-95 transition"
+                onClick={() => setShowPasswordModal(true)}
+              >
+                Şifre Değiştir
+              </button>
+            </div>
           </div>
         </div>
-      )}
+
+        {/* İstatistikler */}
+        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm mb-4">
+          <h3 className="text-lg font-semibold text-gray-800 mb-3">İstatistikler</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-3 rounded-lg text-center">
+              <div className="text-xl font-bold">1,245</div>
+              <div className="text-xs opacity-90">Çözülen Soru</div>
+            </div>
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-3 rounded-lg text-center">
+              <div className="text-xl font-bold">78.2%</div>
+              <div className="text-xs opacity-90">Başarı Oranı</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Ayarlar */}
+        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-3">Ayarlar</h3>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div>
+                <h4 className="font-medium text-gray-900 text-sm">E-posta Bildirimleri</h4>
+                <p className="text-xs text-gray-600">Önemli güncellemeler için e-posta al</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer" defaultChecked />
+                <div className="w-10 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-sky-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-600"></div>
+              </label>
+            </div>
+
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div>
+                <h4 className="font-medium text-gray-900 text-sm">Push Bildirimleri</h4>
+                <p className="text-xs text-gray-600">Tarayıcı bildirimlerini etkinleştir</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer" />
+                <div className="w-10 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-sky-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-600"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Profil Düzenleme Modalı */}
+        {showEditModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+            <div className="bg-white rounded-2xl shadow-xl w-[90vw] max-w-sm p-6 relative flex flex-col">
+              <button
+                className="absolute top-3 right-3 p-1 rounded hover:bg-gray-100"
+                onClick={() => setShowEditModal(false)}
+                aria-label="Kapat"
+              >
+                <XMarkIcon className="w-6 h-6 text-gray-400" />
+              </button>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">Profili Düzenle</h3>
+              <form
+                onSubmit={e => {
+                  e.preventDefault();
+                  setEditError("");
+                  if (!editUsername.trim()) {
+                    setEditError("Kullanıcı adı boş olamaz.");
+                    return;
+                  }
+                  if (editUsername.length > 30) {
+                    setEditError("Kullanıcı adı 30 karakterden uzun olamaz.");
+                    return;
+                  }
+                  const updatedUser = { ...user, username: editUsername.trim(), bio: editBio.trim() };
+                  setUser(updatedUser);
+                  localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+                  setShowEditModal(false);
+                }}
+                className="flex flex-col gap-3"
+              >
+                <input
+                  type="text"
+                  value={editUsername}
+                  onChange={e => setEditUsername(e.target.value)}
+                  placeholder="Kullanıcı adı"
+                  className="w-full p-3 rounded-lg border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-sky-200 focus:outline-none text-sm"
+                  maxLength={30}
+                  required
+                />
+                <textarea
+                  value={editBio}
+                  onChange={e => setEditBio(e.target.value)}
+                  placeholder="Biyografi (opsiyonel)"
+                  className="w-full p-3 rounded-lg border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-sky-200 focus:outline-none text-sm min-h-[80px]"
+                  maxLength={160}
+                />
+                {editError && <div className="text-red-500 text-xs text-center">{editError}</div>}
+                <button
+                  type="submit"
+                  className="w-full bg-sky-500 text-white py-3 rounded-lg font-medium text-sm hover:bg-sky-600 active:scale-95 transition mt-2"
+                >
+                  Kaydet
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Şifre Değiştirme Modalı */}
+        {showPasswordModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+            <div className="bg-white rounded-2xl shadow-xl w-[90vw] max-w-sm p-6 relative flex flex-col">
+              <button
+                className="absolute top-3 right-3 p-1 rounded hover:bg-gray-100"
+                onClick={() => setShowPasswordModal(false)}
+                aria-label="Kapat"
+              >
+                <XMarkIcon className="w-6 h-6 text-gray-400" />
+              </button>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">Şifre Değiştir</h3>
+              <div className="flex flex-col gap-3">
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={e => setCurrentPassword(e.target.value)}
+                  placeholder="Mevcut şifre"
+                  className="w-full p-3 rounded-lg border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-sky-200 focus:outline-none text-sm"
+                />
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={e => setNewPassword(e.target.value)}
+                  placeholder="Yeni şifre"
+                  className="w-full p-3 rounded-lg border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-sky-200 focus:outline-none text-sm"
+                />
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  placeholder="Yeni şifre (tekrar)"
+                  className="w-full p-3 rounded-lg border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-sky-200 focus:outline-none text-sm"
+                />
+                {passwordError && <div className="text-red-500 text-xs text-center">{passwordError}</div>}
+                <button
+                  onClick={handlePasswordChange}
+                  className="w-full bg-sky-500 text-white py-3 rounded-lg font-medium text-sm hover:bg-sky-600 active:scale-95 transition mt-2"
+                >
+                  Şifreyi Değiştir
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </MobileLayout>
   );
 } 
