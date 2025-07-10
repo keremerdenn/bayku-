@@ -5,7 +5,9 @@ import {
   PencilIcon,
   ChatBubbleLeftRightIcon,
   BookOpenIcon,
-  UserIcon
+  UserIcon,
+  Bars3Icon,
+  XMarkIcon
 } from "@heroicons/react/24/outline";
 
 const USER_KEY = "sinavPusulasiUser";
@@ -26,6 +28,7 @@ const tabItems = [
 export default function MobileLayout({ children, currentPage = "dashboard" }: MobileLayoutProps) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -63,10 +66,68 @@ export default function MobileLayout({ children, currentPage = "dashboard" }: Mo
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Sade Üst Header */}
-      <header className="fixed top-0 left-0 right-0 z-30 bg-white border-b border-gray-100 h-12 flex items-center justify-center">
-        <span className="font-semibold text-base text-gray-800 tracking-tight">Baykuş</span>
+      {/* iOS tarzı Üst Header */}
+      <header className="fixed top-0 left-0 right-0 z-30 bg-white border-b border-gray-100 h-12 flex items-center justify-between px-4">
+        <div className="flex items-center gap-2">
+          {/* Baykuş Logo */}
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="16" cy="22" rx="10" ry="7" fill="#2563eb"/>
+            <ellipse cx="11.5" cy="14" rx="3.5" ry="4" fill="#fff"/>
+            <ellipse cx="20.5" cy="14" rx="3.5" ry="4" fill="#fff"/>
+            <circle cx="11.5" cy="14" r="1.2" fill="#2563eb"/>
+            <circle cx="20.5" cy="14" r="1.2" fill="#2563eb"/>
+            <ellipse cx="16" cy="18.5" rx="2.5" ry="1.2" fill="#e5e7eb"/>
+            <path d="M8 10 Q16 2 24 10" stroke="#2563eb" strokeWidth="2" fill="none"/>
+          </svg>
+          <span className="font-semibold text-base text-gray-800 tracking-tight">Baykuş</span>
+        </div>
+        {/* Menü Butonu */}
+        <button onClick={() => setIsMenuOpen(true)} className="p-2 rounded hover:bg-gray-100 transition">
+          <Bars3Icon className="w-6 h-6 text-gray-700" />
+        </button>
       </header>
+      {/* Menü Modalı */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-40 flex">
+          <div className="bg-black/30 flex-1" onClick={() => setIsMenuOpen(false)} />
+          <aside className="w-64 max-w-[80vw] bg-white h-full shadow-lg border-l border-gray-100 flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="16" cy="22" rx="10" ry="7" fill="#2563eb"/>
+                  <ellipse cx="11.5" cy="14" rx="3.5" ry="4" fill="#fff"/>
+                  <ellipse cx="20.5" cy="14" rx="3.5" ry="4" fill="#fff"/>
+                  <circle cx="11.5" cy="14" r="1.2" fill="#2563eb"/>
+                  <circle cx="20.5" cy="14" r="1.2" fill="#2563eb"/>
+                  <ellipse cx="16" cy="18.5" rx="2.5" ry="1.2" fill="#e5e7eb"/>
+                  <path d="M8 10 Q16 2 24 10" stroke="#2563eb" strokeWidth="2" fill="none"/>
+                </svg>
+                <span className="font-semibold text-base text-gray-800 tracking-tight">Baykuş</span>
+              </div>
+              <button onClick={() => setIsMenuOpen(false)} className="p-2 rounded hover:bg-gray-100 transition">
+                <XMarkIcon className="w-6 h-6 text-gray-700" />
+              </button>
+            </div>
+            <nav className="flex-1 flex flex-col py-2">
+              {tabItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = currentPage === item.id;
+                return (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    className={`flex items-center gap-3 px-5 py-3 text-base rounded transition-colors duration-150 ${isActive ? "bg-blue-50 text-blue-600" : "text-gray-700 hover:bg-gray-50"}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span>{item.label}</span>
+                  </a>
+                );
+              })}
+            </nav>
+          </aside>
+        </div>
+      )}
       {/* İçerik */}
       <main className="flex-1 pt-12 pb-16 bg-white min-h-[calc(100vh-56px)]">{children}</main>
       {/* Alt Tab Bar */}
