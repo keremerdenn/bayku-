@@ -28,6 +28,8 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
   const [loading, setLoading] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [inputError, setInputError] = useState("");
 
@@ -50,6 +52,22 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
         }
         
         setUserEmail(user.email);
+        
+        // Admin kontrolü
+        const checkAdminStatus = async () => {
+          const { data, error } = await supabase
+            .from("room_members")
+            .select("is_admin")
+            .eq("room_id", roomId)
+            .eq("user_email", user.email)
+            .single();
+          
+          if (!error && data) {
+            setIsAdmin(!!data.is_admin);
+          }
+        };
+        
+        checkAdminStatus();
       } catch {
         // Geçersiz user data, landing page'e yönlendir
         localStorage.removeItem(USER_KEY);
@@ -59,7 +77,7 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
       
       setIsLoading(false);
     }
-  }, []);
+  }, [roomId]);
 
   const fetchMessages = useCallback(async () => {
     setLoading(true);
@@ -153,6 +171,31 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
     });
   };
 
+  const handleDeleteRoom = () => {
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteRoom = async () => {
+    try {
+      const response = await fetch('/api/rooms', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: roomId, email: userEmail }),
+      });
+      
+      if (response.ok) {
+        // Oda silindikten sonra ana sayfaya yönlendir
+        window.location.href = '/#/dashboard';
+      } else {
+        const data = await response.json();
+        alert(data.error || "Oda kapatılamadı.");
+      }
+    } catch {
+      alert("Oda kapatılırken bir hata oluştu.");
+    }
+    setShowDeleteModal(false);
+  };
+
   // Loading durumunda loading göster
   if (isLoading) {
     return (
@@ -184,6 +227,17 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
           <div className="flex-1">
             <h1 className="text-lg font-bold text-gray-900">{roomName || "Sohbet Odası"}</h1>
           </div>
+          {isAdmin && (
+            <button
+              onClick={handleDeleteRoom}
+              className="p-2 rounded-xl bg-red-100 hover:bg-red-200 transition-colors"
+              title="Odayı Kapat"
+            >
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                <path d="M6 18L18 6M6 6l12 12" stroke="#ef4444" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          )}
         </div>
       </div>
 
@@ -248,6 +302,39 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
           </button>
         </form>
       </div>
+
+      {/* Oda Kapatma Onay Modal'ı */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
+                  <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Odayı Kapat</h3>
+              <p className="text-gray-600 mb-6 text-sm">
+                Bu odayı kapatmak istediğinize emin misiniz? Bu işlem geri alınamaz ve tüm mesajlar silinecektir.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+                >
+                  İptal
+                </button>
+                <button
+                  onClick={confirmDeleteRoom}
+                  className="flex-1 px-4 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-colors"
+                >
+                  Evet, Kapat
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
