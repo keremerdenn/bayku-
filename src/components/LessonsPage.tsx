@@ -89,7 +89,7 @@ export default function LessonsPage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-sky-100 via-blue-50 to-white pb-20">
+    <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
       <div className="max-w-2xl mx-auto py-10 px-4">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-sky-500 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent tracking-tight flex items-center justify-center gap-2">
@@ -133,18 +133,17 @@ export default function LessonsPage() {
             <span className="mt-4 text-lg bg-gradient-to-r from-sky-500 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent font-bold">Henüz hiç ders yok.</span>
           </div>
         )}
-        <div className="grid gap-6">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {lessons.map((lesson) => (
-            <div key={lesson.id} className="relative bg-white rounded-2xl shadow-2xl p-6 border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group flex flex-col gap-2 overflow-hidden" onClick={() => setSelectedLesson(lesson)}>
+            <div key={lesson.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer" onClick={() => setSelectedLesson(lesson)}>
               <span className="absolute top-4 right-4 bg-gradient-to-r from-fuchsia-400 to-sky-400 text-white rounded-full p-2 shadow-lg">
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="white" strokeWidth="2" strokeLinecap="round"/><path d="M6.5 17V6.75A2.75 2.75 0 0 1 9.25 4h7.5A2.75 2.75 0 0 1 19.5 6.75v10.25" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
               </span>
-              <h2 className="font-bold text-xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2">
+              <h2 className="font-bold text-2xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2 text-center">
                 {lesson.name}
               </h2>
-              {lesson.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow">{lesson.description}</span>}
-              {/* Örnek progress bar */}
-              <div className="w-full h-2 bg-sky-100 rounded-full mt-3">
+              {lesson.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center">{lesson.description}</span>}
+              <div className="w-2/3 h-2 bg-sky-100 rounded-full mt-3 mx-auto">
                 <div className="h-2 rounded-full bg-gradient-to-r from-fuchsia-400 to-sky-400" style={{width:'40%'}}></div>
               </div>
             </div>

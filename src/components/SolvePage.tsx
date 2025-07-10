@@ -111,7 +111,7 @@ export default function SolvePage() {
   const correctCount = userAnswers.filter((ans, i) => ans === exampleQuestions[i].answer).length;
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-sky-100 via-blue-50 to-white pb-20">
+    <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
       <div className="max-w-2xl mx-auto py-10 px-4">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-sky-500 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent tracking-tight flex items-center justify-center gap-2">
@@ -127,19 +127,19 @@ export default function SolvePage() {
           <>
             <h2 className="text-xl font-bold mb-6 text-sky-700 text-center">Ders Seç</h2>
             {loading ? <div className="flex flex-col items-center justify-center py-8"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500 mb-2"></div><span className="text-sky-700">Yükleniyor...</span></div> : (
-              <div className="grid gap-6">
+              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                 {lessons.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-12 text-gray-400">
                     <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     <span className="mt-4 text-lg">Henüz hiç ders yok.</span>
                   </div>
                 ) : lessons.map(lesson => (
-                  <div key={lesson.id} className="bg-gradient-to-r from-white to-sky-50 rounded-2xl shadow-lg p-6 border border-sky-100 cursor-pointer hover:scale-[1.02] hover:shadow-xl transition-all duration-200 group" onClick={() => { setSelectedLesson(lesson); setStep("topic"); }}>
-                    <h3 className="font-bold text-xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2">
+                  <div key={lesson.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer">
+                    <h3 className="font-bold text-2xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2 text-center">
                       <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       {lesson.name}
                     </h3>
-                    {lesson.description && <p className="text-gray-600 mt-2 text-base">{lesson.description}</p>}
+                    {lesson.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow text-center">{lesson.description}</span>}
                   </div>
                 ))}
               </div>
@@ -150,7 +150,7 @@ export default function SolvePage() {
           <>
             <h2 className="text-xl font-bold mb-6 text-sky-700 text-center">Konu Seç ({selectedLesson.name})</h2>
             {loading ? <div className="flex flex-col items-center justify-center py-8"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500 mb-2"></div><span className="text-sky-700">Yükleniyor...</span></div> : (
-              <div className="grid gap-6">
+              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                 {topics.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-12 text-gray-400">
                     <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#94a3b8" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/></svg>
