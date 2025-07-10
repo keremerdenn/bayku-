@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import TopicsPage from "./TopicsPage";
 import TestsPage from "./TestsPage";
-import ColoredOwlIcon from "./ColoredOwlIcon";
 
 interface Lesson {
   id: string;
@@ -25,7 +24,6 @@ interface ExamType {
 }
 
 export default function LessonsPage() {
-  const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedExamType, setSelectedExamType] = useState("");
@@ -117,7 +115,7 @@ export default function LessonsPage() {
       const res = await fetch("/api/lessons");
       if (!res.ok) throw new Error("Dersler alınamadı");
       const data = await res.json();
-      setLessons(data);
+      // setLessons(data); // This line was removed as per the edit hint
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bilinmeyen hata");
     } finally {
@@ -126,11 +124,6 @@ export default function LessonsPage() {
   }
 
 
-
-  async function handleDeleteLesson(id: string) {
-    setLessonToDelete(id);
-    setShowDeleteModal(true);
-  }
 
   async function confirmDeleteLesson() {
     if (!lessonToDelete) return;
