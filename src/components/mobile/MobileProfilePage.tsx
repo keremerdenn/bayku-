@@ -333,7 +333,7 @@ export default function MobileProfilePage() {
               </button>
               <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">Profili Düzenle</h3>
               <form
-                onSubmit={e => {
+                onSubmit={async e => {
                   e.preventDefault();
                   setEditError("");
                   if (!editUsername.trim()) {
@@ -344,10 +344,40 @@ export default function MobileProfilePage() {
                     setEditError("Kullanıcı adı 30 karakterden uzun olamaz.");
                     return;
                   }
-                  const updatedUser = { ...user, username: editUsername.trim(), bio: editBio.trim() };
-                  setUser(updatedUser);
-                  localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
-                  setShowEditModal(false);
+                  // Sunucuya profil güncellemesi gönder
+                  try {
+                    const response = await fetch('/api/profile/update', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        email: user.email,
+                        profileImage: profileImage,
+                        bio: editBio.trim()
+                      }),
+                    });
+
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                      throw new Error(data.error || 'Profil güncellenemedi');
+                    }
+
+                    const updatedUser = { ...user, username: editUsername.trim(), bio: editBio.trim() };
+                    setUser(updatedUser);
+                    localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+                    
+                    // Custom event ile diğer tabları bilgilendir
+                    window.dispatchEvent(new CustomEvent('profileUpdated', {
+                      detail: { user: updatedUser }
+                    }));
+                    
+                    setShowEditModal(false);
+                  } catch (error) {
+                    console.error('Profil güncelleme hatası:', error);
+                    alert('Profil güncellenirken hata oluştu: ' + (error instanceof Error ? error.message : 'Bilinmeyen hata'));
+                  }
                 }}
                 className="flex flex-col gap-3"
               >

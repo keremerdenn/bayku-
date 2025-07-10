@@ -104,7 +104,12 @@ export async function POST(request: NextRequest) {
     console.log('Kayıt başarılı:', data.username);
     return NextResponse.json({ 
       success: true, 
-      user: { username: data.username, email: data.email } 
+      user: { 
+        username: data.username, 
+        email: data.email,
+        profileImage: data.profile_image || null,
+        bio: data.bio || null
+      } 
     });
   } catch (error) {
     console.error('Register API error:', error);

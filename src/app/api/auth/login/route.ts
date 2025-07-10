@@ -48,7 +48,12 @@ export async function POST(request: NextRequest) {
     console.log('Login başarılı:', user.username);
     return NextResponse.json({
       success: true,
-      user: { username: user.username, email: user.email }
+      user: { 
+        username: user.username, 
+        email: user.email,
+        profileImage: user.profile_image || null,
+        bio: user.bio || null
+      }
     });
 
   } catch (error) {

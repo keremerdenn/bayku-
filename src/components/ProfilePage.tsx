@@ -164,8 +164,27 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
     }
   };
 
-  const saveUserData = () => {
+  const saveUserData = async () => {
     try {
+      // Sunucuya profil güncellemesi gönder
+      const response = await fetch('/api/profile/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: "kullanici@example.com", // Gerçek email kullanılacak
+          profileImage: profileImage,
+          bio: aboutValue
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Profil güncellenemedi');
+      }
+      
       const userData: UserData = {
         email: "kullanici@example.com",
         username: usernameValue,
