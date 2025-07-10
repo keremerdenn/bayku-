@@ -152,6 +152,30 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
     setMembers((data as Member[]) || []);
   };
 
+  const handleDeleteRoom = async () => {
+    if (!window.confirm("Bu odayı kapatmak istediğinize emin misiniz? Bu işlem geri alınamaz.")) {
+      return;
+    }
+    
+    try {
+      const response = await fetch('/api/rooms', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: roomId, email: userEmail }),
+      });
+      
+      if (response.ok) {
+        // Oda silindikten sonra ana sayfaya yönlendir
+        window.location.href = '/#/sohbet';
+      } else {
+        const data = await response.json();
+        alert(data.error || "Oda kapatılamadı.");
+      }
+    } catch (error) {
+      alert("Oda kapatılırken bir hata oluştu.");
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
       {/* Header */}
@@ -162,6 +186,18 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
             <p className="text-sky-100 text-xs mt-1">{members.length} üye</p>
           </div>
           <div className="flex items-center gap-2">
+            {isAdmin && (
+              <button
+                onClick={handleDeleteRoom}
+                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1"
+                title="Odayı Kapat"
+              >
+                <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
+                  <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Odayı Kapat
+              </button>
+            )}
             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
               <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12A6 6 0 0 0 12 6z" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
             </div>
