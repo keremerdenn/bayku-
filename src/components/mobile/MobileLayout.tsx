@@ -24,7 +24,6 @@ const tabItems = [
 ];
 
 export default function MobileLayout({ children, currentPage = "dashboard" }: MobileLayoutProps) {
-  const [username, setUsername] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +36,6 @@ export default function MobileLayout({ children, currentPage = "dashboard" }: Mo
       }
       try {
         const user = JSON.parse(userStr);
-        setUsername(user.username || "Kullanıcı");
         setIsLoggedIn(true);
       } catch {
         localStorage.removeItem(USER_KEY);
