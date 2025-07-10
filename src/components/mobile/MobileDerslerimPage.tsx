@@ -65,16 +65,16 @@ export default function MobileDerslerimPage() {
 
   return (
     <MobileLayout currentPage="derslerim">
-      <div className="space-y-6">
+      <div className="space-y-6 p-4 pt-8">
         <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Derslerim</h2>
-          <form onSubmit={handleAddLesson} className="mb-6 space-y-2 bg-sky-50 p-4 rounded-xl border text-left">
+          <h2 className="text-3xl font-extrabold text-sky-700 mb-4 tracking-tight">Derslerim</h2>
+          <form onSubmit={handleAddLesson} className="mb-6 space-y-3 bg-gradient-to-r from-sky-50 to-blue-50 p-4 rounded-2xl border border-sky-100 shadow-md text-left">
             <input
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="Ders adı"
-              className="w-full p-2 rounded border mb-2 bg-white text-gray-900"
+              className="w-full p-3 rounded-xl border border-sky-200 bg-white text-gray-900 focus:ring-2 focus:ring-sky-400 focus:outline-none transition mb-2"
               required
             />
             <input
@@ -82,24 +82,32 @@ export default function MobileDerslerimPage() {
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="Açıklama (opsiyonel)"
-              className="w-full p-2 rounded border mb-2 bg-white text-gray-900"
+              className="w-full p-3 rounded-xl border border-sky-200 bg-white text-gray-900 focus:ring-2 focus:ring-sky-400 focus:outline-none transition mb-2"
             />
             <button
               type="submit"
-              className="bg-sky-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-sky-600 transition-all duration-200 w-full disabled:opacity-50"
+              className="bg-sky-500 text-white px-6 py-3 rounded-xl font-bold text-lg shadow hover:bg-sky-600 active:scale-95 transition-all duration-200 w-full disabled:opacity-50"
               disabled={adding || !name.trim()}
             >
               {adding ? "Ekleniyor..." : "Ders Ekle"}
             </button>
           </form>
-          {loading && <div>Yükleniyor...</div>}
-          {error && <div className="text-red-500">{error}</div>}
-          {!loading && lessons.length === 0 && <div>Henüz hiç ders yok.</div>}
+          {loading && <div className="flex flex-col items-center justify-center py-8"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500 mb-2"></div><span className="text-sky-700">Yükleniyor...</span></div>}
+          {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+          {!loading && lessons.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+              <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <span className="mt-4 text-lg">Henüz hiç ders yok.</span>
+            </div>
+          )}
           <div className="space-y-4 mt-4">
             {lessons.map((lesson) => (
-              <div key={lesson.id} className="bg-sky-50 rounded-xl p-4 border text-left cursor-pointer hover:bg-sky-100 transition" onClick={() => setSelectedLesson(lesson)}>
-                <h3 className="font-semibold text-lg text-sky-700">{lesson.name}</h3>
-                {lesson.description && <p className="text-gray-600 mt-1">{lesson.description}</p>}
+              <div key={lesson.id} className="bg-gradient-to-r from-white to-sky-50 rounded-2xl shadow-lg p-4 border border-sky-100 text-left cursor-pointer hover:scale-[1.02] hover:shadow-xl transition-all duration-200 group" onClick={() => setSelectedLesson(lesson)}>
+                <h3 className="font-bold text-lg text-sky-700 group-hover:underline tracking-tight flex items-center gap-2">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  {lesson.name}
+                </h3>
+                {lesson.description && <p className="text-gray-600 mt-2 text-base">{lesson.description}</p>}
               </div>
             ))}
           </div>

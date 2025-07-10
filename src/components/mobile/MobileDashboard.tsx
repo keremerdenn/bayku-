@@ -7,6 +7,7 @@ import MobileDerslerimPage from "./MobileDerslerimPage";
 import MobileVerilerimPage from "./MobileVerilerimPage";
 import MobileProfilePage from "./MobileProfilePage";
 import MobileAdminPanel from "./MobileAdminPanel";
+import MobileSolvePage from "./MobileSolvePage";
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -70,6 +71,8 @@ export default function MobileDashboard() {
             <p className="text-gray-600">Bu sayfaya erişim yetkiniz bulunmuyor.</p>
           </div>
         );
+      case "sorucozme":
+        return <MobileSolvePage />;
       default:
         return (
           <div className="text-center py-12">

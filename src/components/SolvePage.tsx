@@ -98,20 +98,28 @@ export default function SolvePage() {
   const correctCount = userAnswers.filter((ans, i) => ans === exampleQuestions[i].answer).length;
 
   return (
-    <div className="max-w-2xl mx-auto py-8 px-4">
-      <h1 className="text-2xl font-bold mb-6">Soru Çöz</h1>
+    <div className="max-w-2xl mx-auto py-10 px-4">
+      <h1 className="text-3xl font-extrabold mb-8 text-sky-700 text-center tracking-tight">Soru Çöz</h1>
       {step !== "lesson" && (
-        <button onClick={goBack} className="mb-4 text-sky-600 hover:underline">&larr; Geri</button>
+        <button onClick={goBack} className="mb-4 text-sky-600 hover:underline font-semibold">&larr; Geri</button>
       )}
       {step === "lesson" && (
         <>
-          <h2 className="text-lg font-semibold mb-4">Ders Seç</h2>
-          {loading ? <div>Yükleniyor...</div> : (
-            <div className="grid gap-4">
-              {lessons.map(lesson => (
-                <div key={lesson.id} className="bg-white rounded-xl shadow p-4 border cursor-pointer hover:bg-sky-50 transition" onClick={() => { setSelectedLesson(lesson); setStep("topic"); }}>
-                  <h3 className="font-semibold text-lg">{lesson.name}</h3>
-                  {lesson.description && <p className="text-gray-600 mt-1">{lesson.description}</p>}
+          <h2 className="text-xl font-bold mb-6 text-sky-700 text-center">Ders Seç</h2>
+          {loading ? <div className="flex flex-col items-center justify-center py-8"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500 mb-2"></div><span className="text-sky-700">Yükleniyor...</span></div> : (
+            <div className="grid gap-6">
+              {lessons.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+                  <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <span className="mt-4 text-lg">Henüz hiç ders yok.</span>
+                </div>
+              ) : lessons.map(lesson => (
+                <div key={lesson.id} className="bg-gradient-to-r from-white to-sky-50 rounded-2xl shadow-lg p-6 border border-sky-100 cursor-pointer hover:scale-[1.02] hover:shadow-xl transition-all duration-200 group" onClick={() => { setSelectedLesson(lesson); setStep("topic"); }}>
+                  <h3 className="font-bold text-xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2">
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    {lesson.name}
+                  </h3>
+                  {lesson.description && <p className="text-gray-600 mt-2 text-base">{lesson.description}</p>}
                 </div>
               ))}
             </div>
@@ -120,13 +128,21 @@ export default function SolvePage() {
       )}
       {step === "topic" && selectedLesson && (
         <>
-          <h2 className="text-lg font-semibold mb-4">Konu Seç ({selectedLesson.name})</h2>
-          {loading ? <div>Yükleniyor...</div> : (
-            <div className="grid gap-4">
-              {topics.map(topic => (
-                <div key={topic.id} className="bg-white rounded-xl shadow p-4 border cursor-pointer hover:bg-sky-50 transition" onClick={() => startTest(topic)}>
-                  <h3 className="font-semibold text-lg">{topic.name}</h3>
-                  {topic.description && <p className="text-gray-600 mt-1">{topic.description}</p>}
+          <h2 className="text-xl font-bold mb-6 text-sky-700 text-center">Konu Seç ({selectedLesson.name})</h2>
+          {loading ? <div className="flex flex-col items-center justify-center py-8"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500 mb-2"></div><span className="text-sky-700">Yükleniyor...</span></div> : (
+            <div className="grid gap-6">
+              {topics.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+                  <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#94a3b8" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/></svg>
+                  <span className="mt-4 text-lg">Henüz hiç konu yok.</span>
+                </div>
+              ) : topics.map(topic => (
+                <div key={topic.id} className="bg-gradient-to-r from-white to-sky-50 rounded-2xl shadow-lg p-6 border border-sky-100 cursor-pointer hover:scale-[1.02] hover:shadow-xl transition-all duration-200 group" onClick={() => startTest(topic)}>
+                  <h3 className="font-bold text-xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2">
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#0ea5e9" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round"/></svg>
+                    {topic.name}
+                  </h3>
+                  {topic.description && <p className="text-gray-600 mt-2 text-base">{topic.description}</p>}
                 </div>
               ))}
             </div>
@@ -135,29 +151,29 @@ export default function SolvePage() {
       )}
       {step === "test" && selectedTopic && (
         <>
-          <h2 className="text-lg font-semibold mb-4">Test ({selectedTopic.name})</h2>
+          <h2 className="text-xl font-bold mb-6 text-sky-700 text-center">Test ({selectedTopic.name})</h2>
           {!showResult ? (
-            <div className="space-y-6">
-              <div className="bg-sky-50 rounded-xl p-4 border">
-                <div className="font-semibold mb-2">Soru {currentQ + 1} / {exampleQuestions.length}</div>
-                <div className="text-lg mb-4">{exampleQuestions[currentQ].question}</div>
-                <div className="grid gap-2">
+            <div className="space-y-8">
+              <div className="bg-sky-50 rounded-2xl p-6 border shadow-lg flex flex-col items-center">
+                <div className="font-semibold mb-2 text-sky-700">Soru {currentQ + 1} / {exampleQuestions.length}</div>
+                <div className="text-lg mb-6 text-gray-900 text-center font-bold">{exampleQuestions[currentQ].question}</div>
+                <div className="grid gap-3 w-full max-w-md">
                   {exampleQuestions[currentQ].options.map((opt, idx) => (
-                    <button key={idx} className="w-full bg-white border rounded p-2 hover:bg-sky-100" onClick={() => answerQuestion(idx)}>{opt}</button>
+                    <button key={idx} className="w-full bg-white border-2 border-sky-200 rounded-xl p-3 font-semibold text-sky-700 hover:bg-sky-100 active:scale-95 transition-all duration-150 shadow" onClick={() => answerQuestion(idx)}>{opt}</button>
                   ))}
                 </div>
               </div>
             </div>
           ) : (
-            <div className="bg-green-50 rounded-xl p-6 border text-center">
-              <div className="text-2xl font-bold text-green-700 mb-2">Test Sonucu</div>
-              <div className="text-lg text-gray-700 mb-4">{exampleQuestions.length} sorudan {correctCount} doğru!</div>
-              <button className="bg-sky-500 text-white px-4 py-2 rounded hover:bg-sky-600" onClick={goBack}>Konuya Dön</button>
+            <div className="bg-green-50 rounded-2xl p-8 border text-center shadow-lg flex flex-col items-center">
+              <div className="text-3xl font-extrabold text-green-700 mb-4">Test Sonucu</div>
+              <div className="text-lg text-gray-700 mb-6">{exampleQuestions.length} sorudan {correctCount} doğru!</div>
+              <button className="bg-sky-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-sky-600 active:scale-95 transition-all duration-200" onClick={goBack}>Konuya Dön</button>
             </div>
           )}
         </>
       )}
-      {error && <div className="text-red-500 mt-4">{error}</div>}
+      {error && <div className="text-red-500 mt-4 text-center">{error}</div>}
     </div>
   );
 } 
