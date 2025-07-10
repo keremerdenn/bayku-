@@ -28,6 +28,8 @@ export default function LessonsPage() {
   const [formError, setFormError] = useState("");
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [email, setEmail] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [lessonToDelete, setLessonToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchLessons();
@@ -93,11 +95,17 @@ export default function LessonsPage() {
   }
 
   async function handleDeleteLesson(id: string) {
-    if (!window.confirm("Dersi silmek istediğinize emin misiniz?")) return;
+    setLessonToDelete(id);
+    setShowDeleteModal(true);
+  }
+
+  async function confirmDeleteLesson() {
+    if (!lessonToDelete) return;
+    
     const res = await fetch("/api/lessons", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, email }),
+      body: JSON.stringify({ id: lessonToDelete, email }),
     });
     if (res.ok) {
       await fetchLessons();
@@ -105,6 +113,8 @@ export default function LessonsPage() {
       const data = await res.json();
       alert(data.error || "Silme işlemi başarısız oldu.");
     }
+    setShowDeleteModal(false);
+    setLessonToDelete(null);
   }
 
   if (selectedTopic) {
@@ -187,6 +197,39 @@ export default function LessonsPage() {
           ))}
         </div>
       </div>
+
+      {/* Ders Silme Onay Modal'ı */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
+                  <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Dersi Sil</h3>
+              <p className="text-gray-600 mb-6">
+                Bu dersi silmek istediğinize emin misiniz? Bu işlem geri alınamaz ve tüm konular ve testler silinecektir.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setShowDeleteModal(false); setLessonToDelete(null); }}
+                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+                >
+                  İptal
+                </button>
+                <button
+                  onClick={confirmDeleteLesson}
+                  className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors"
+                >
+                  Evet, Sil
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
