@@ -135,15 +135,18 @@ export default function LessonsPage() {
         )}
         <div className="grid gap-6">
           {lessons.map((lesson) => (
-            <div key={lesson.id} className="relative bg-gradient-to-br from-sky-200 via-blue-100 to-fuchsia-100 rounded-2xl shadow-lg p-6 border border-sky-100 cursor-pointer hover:scale-105 hover:shadow-2xl transition-all duration-300 group" onClick={() => setSelectedLesson(lesson)}>
+            <div key={lesson.id} className="relative bg-white rounded-2xl shadow-2xl p-6 border-4 border-transparent bg-clip-padding hover:border-fuchsia-400 hover:scale-105 transition-all duration-300 group flex flex-col gap-2 overflow-hidden" onClick={() => setSelectedLesson(lesson)}>
               <span className="absolute top-4 right-4 bg-gradient-to-r from-fuchsia-400 to-sky-400 text-white rounded-full p-2 shadow-lg">
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="white" strokeWidth="2" strokeLinecap="round"/><path d="M6.5 17V6.75A2.75 2.75 0 0 1 9.25 4h7.5A2.75 2.75 0 0 1 19.5 6.75v10.25" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
               </span>
               <h2 className="font-bold text-xl text-sky-700 group-hover:underline tracking-tight flex items-center gap-2">
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 {lesson.name}
               </h2>
               {lesson.description && <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-200 to-sky-200 text-sky-800 font-semibold text-sm shadow">{lesson.description}</span>}
+              {/* Örnek progress bar */}
+              <div className="w-full h-2 bg-sky-100 rounded-full mt-3">
+                <div className="h-2 rounded-full bg-gradient-to-r from-fuchsia-400 to-sky-400" style={{width:'40%'}}></div>
+              </div>
             </div>
           ))}
         </div>

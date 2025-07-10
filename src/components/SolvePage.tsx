@@ -174,24 +174,27 @@ export default function SolvePage() {
             <h2 className="text-xl font-bold mb-6 text-sky-700 text-center">Test ({selectedTopic.name})</h2>
             {!showResult ? (
               <div className="space-y-8">
-                <div className="bg-gradient-to-br from-sky-200 via-blue-100 to-fuchsia-100 rounded-2xl p-6 border-2 border-sky-100 shadow-xl flex flex-col items-center animate-fade-in">
+                <div className="bg-white rounded-3xl p-8 border-4 border-fuchsia-200 shadow-2xl flex flex-col items-center animate-fade-in">
                   <div className="font-semibold mb-2 text-sky-700">Soru {currentQ + 1} / {exampleQuestions.length}</div>
                   <div className="text-lg mb-6 text-gray-900 text-center font-bold">{exampleQuestions[currentQ].question}</div>
                   <div className="grid gap-3 w-full max-w-md">
                     {exampleQuestions[currentQ].options.map((opt, idx) => (
-                      <button key={idx} className="w-full bg-gradient-to-r from-white via-sky-50 to-fuchsia-50 border-2 border-sky-200 rounded-xl p-3 font-semibold text-sky-700 hover:bg-gradient-to-r hover:from-fuchsia-200 hover:to-sky-200 active:scale-105 transition-all duration-200 shadow-lg" onClick={() => answerQuestion(idx)}>{opt}</button>
+                      <button key={idx} className={`w-full text-lg font-bold rounded-xl p-4 border-2 shadow-lg transition-all duration-200 mb-2
+  bg-gradient-to-r from-sky-100 to-fuchsia-100 border-sky-200 text-sky-700 hover:from-fuchsia-200 hover:to-sky-200 hover:scale-105
+  ${userAnswers[currentQ] === idx ? 'ring-4 ring-fuchsia-400 scale-105 bg-gradient-to-r from-fuchsia-300 to-sky-200 text-white' : ''}`}
+onClick={() => answerQuestion(idx)}>{opt}</button>
                     ))}
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="bg-gradient-to-br from-green-200 via-sky-100 to-fuchsia-100 rounded-2xl p-8 border-2 border-green-300 text-center shadow-2xl flex flex-col items-center animate-fade-in">
-                <div className="text-3xl font-extrabold text-green-700 mb-4 flex items-center gap-2">
-                  <svg width="32" height="32" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#22c55e" strokeWidth="2"/><path d="M8 12l2 2 4-4" stroke="#22c55e" strokeWidth="2" strokeLinecap="round"/></svg>
-                  Test Sonucu
+              <div className="bg-gradient-to-br from-green-200 via-sky-100 to-fuchsia-100 rounded-3xl p-10 border-4 border-green-300 text-center shadow-2xl flex flex-col items-center animate-fade-in">
+                <div className="text-5xl font-extrabold text-green-700 mb-4 flex items-center gap-3">
+                  <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#22c55e" strokeWidth="3"/><path d="M8 12l2 2 4-4" stroke="#22c55e" strokeWidth="3" strokeLinecap="round"/></svg>
+                  Tebrikler!
                 </div>
-                <div className="text-lg text-gray-700 mb-6">{exampleQuestions.length} sorudan {correctCount} doğru!</div>
-                <button className="bg-gradient-to-r from-sky-500 to-fuchsia-500 text-white px-6 py-3 rounded-xl font-bold hover:from-fuchsia-500 hover:to-sky-500 active:scale-105 transition-all duration-200 shadow-lg" onClick={goBack}>Konuya Dön</button>
+                <div className="text-2xl text-gray-700 mb-6 font-bold">{exampleQuestions.length} sorudan {correctCount} doğru!</div>
+                <button className="bg-gradient-to-r from-sky-500 to-fuchsia-500 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-fuchsia-500 hover:to-sky-500 active:scale-105 transition-all duration-200 shadow-xl" onClick={goBack}>Konuya Dön</button>
               </div>
             )}
           </>
