@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { createClient } from "@supabase/supabase-js";
 import RoomChatPage from "./RoomChatPage";
 import ColoredOwlIcon from "./ColoredOwlIcon";
+import { useSession } from '@supabase/auth-helpers-react';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -29,6 +30,7 @@ const RoomsPage = () => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [activeRoom, setActiveRoom] = useState<{ id: string, name?: string } | null>(null);
   const [formError, setFormError] = useState("");
+  const session = useSession();
 
   // Email'i localStorage'dan güvenli şekilde oku
   useEffect(() => {
@@ -134,6 +136,17 @@ const RoomsPage = () => {
     setLoading(false);
   };
 
+  const handleDelete = async (id: string) => {
+    if (!session?.user?.email) return;
+    await fetch('/api/rooms', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, email: session.user.email }),
+    });
+    // Oda silindikten sonra odaları tekrar çek veya sayfayı yenile
+    window.location.reload();
+  };
+
   if (activeRoom) {
     return (
       <div>
@@ -185,6 +198,9 @@ const RoomsPage = () => {
                   <span className="text-xs text-purple-600 font-medium">Sohbet Odası</span>
                   <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                 </div>
+                {session?.user?.email === 'keremerdeen@gmail.com' && (
+                  <button onClick={() => handleDelete(room.room_id)} className="ml-2 text-red-500 hover:underline">Sil</button>
+                )}
               </div>
             ))
           )}

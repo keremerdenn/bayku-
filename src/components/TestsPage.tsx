@@ -1,4 +1,5 @@
 import React from "react";
+import { useSession } from '@supabase/auth-helpers-react';
 
 interface Topic {
   id: string;
@@ -19,6 +20,18 @@ const exampleTests = [
 ];
 
 export default function TestsPage({ topic, onBack }: TestsPageProps) {
+  const session = useSession();
+
+  const handleDelete = async (id: string) => {
+    if (!session?.user?.email) return;
+    await fetch('/api/tests', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, email: session.user.email }),
+    });
+    window.location.reload();
+  };
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
       <button onClick={onBack} className="mb-4 text-sky-600 hover:underline">&larr; Geri</button>
@@ -38,6 +51,9 @@ export default function TestsPage({ topic, onBack }: TestsPageProps) {
               <span className="text-xs text-green-600 font-medium">Test</span>
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
             </div>
+            {session?.user?.email === 'keremerdeen@gmail.com' && (
+              <button onClick={() => handleDelete(String(test.id))} className="ml-2 text-red-500 hover:underline">Sil</button>
+            )}
           </div>
         ))}
       </div>

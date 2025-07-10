@@ -27,18 +27,17 @@ export default function LessonsPage() {
   const [username, setUsername] = useState("");
   const [formError, setFormError] = useState("");
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     fetchLessons();
-  }, []);
-
-  useEffect(() => {
     if (typeof window !== "undefined") {
       const userStr = localStorage.getItem("sinavPusulasiUser");
       if (userStr) {
         try {
           const user = JSON.parse(userStr);
           setUsername(user.username || "Kullanıcı");
+          setEmail(user.email || "");
         } catch {}
       }
     }
@@ -90,6 +89,21 @@ export default function LessonsPage() {
       setError(err instanceof Error ? err.message : "Ders eklenemedi");
     } finally {
       setAdding(false);
+    }
+  }
+
+  async function handleDeleteLesson(id: string) {
+    if (!window.confirm("Dersi silmek istediğinize emin misiniz?")) return;
+    const res = await fetch("/api/lessons", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, email }),
+    });
+    if (res.ok) {
+      await fetchLessons();
+    } else {
+      const data = await res.json();
+      alert(data.error || "Silme işlemi başarısız oldu.");
     }
   }
 
@@ -151,6 +165,15 @@ export default function LessonsPage() {
               <div className="flex items-center gap-3 mb-3">
                 <ColoredOwlIcon size={32} gradientId="owlDerslerim" gradient={{from: '#34d399', to: '#38bdf8'}} />
                 <h2 className="font-bold text-lg text-gray-800 tracking-tight">{lesson.name}</h2>
+                {email === "keremerdeen@gmail.com" && (
+                  <button
+                    className="ml-2 p-1 rounded hover:bg-red-50 text-red-500 border border-transparent hover:border-red-200 transition"
+                    title="Dersi Sil"
+                    onClick={e => { e.stopPropagation(); handleDeleteLesson(lesson.id); }}
+                  >
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                  </button>
+                )}
               </div>
               {lesson.description && <p className="text-sm text-gray-600 mb-3">{lesson.description}</p>}
               <div className="flex items-center justify-between mb-3">

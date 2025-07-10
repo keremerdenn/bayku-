@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useSession } from '@supabase/auth-helpers-react';
 
 interface Topic {
   id: string;
@@ -21,6 +22,7 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
   const [description, setDescription] = useState("");
   const [adding, setAdding] = useState(false);
   const [formError, setFormError] = useState("");
+  const session = useSession();
 
   useEffect(() => {
     fetchTopics();
@@ -75,6 +77,16 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
       setAdding(false);
     }
   }
+
+  const handleDelete = async (id: string) => {
+    if (!session?.user?.email) return;
+    await fetch('/api/topics', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, email: session.user.email }),
+    });
+    window.location.reload();
+  };
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
@@ -147,6 +159,9 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
               <span className="text-xs text-fuchsia-600 font-medium">Konu</span>
               <div className="w-2 h-2 bg-fuchsia-500 rounded-full"></div>
             </div>
+            {session?.user?.email === 'keremerdeen@gmail.com' && (
+              <button onClick={() => handleDelete(topic.id)} className="ml-2 text-red-500 hover:underline">Sil</button>
+            )}
           </div>
         ))}
       </div>
