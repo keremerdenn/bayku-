@@ -71,7 +71,12 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function calculateDailyStreak(solvedQuestions: any[]): number {
+interface UserAnswer {
+  created_at: string;
+  is_correct: boolean;
+}
+
+function calculateDailyStreak(solvedQuestions: UserAnswer[]): number {
   if (!solvedQuestions || solvedQuestions.length === 0) return 0;
 
   // Soruları tarihe göre sırala
@@ -80,7 +85,7 @@ function calculateDailyStreak(solvedQuestions: any[]): number {
   );
 
   let streak = 0;
-  let currentDate = new Date();
+  const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
 
   // Son 30 günü kontrol et

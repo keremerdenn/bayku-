@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
+import Image from 'next/image';
 
 import VerilerimPage from "./VerilerimPage";
 import NotificationSystem from "./NotificationSystem";
@@ -172,9 +173,9 @@ const Dashboard = () => {
           <div className="flex items-center space-x-2">
             <ThemeToggle />
             <NotificationSystem />
-            <div className="w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm mobile-header-avatar overflow-hidden">
+            <div className="w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm mobile-header-avatar overflow-hidden relative">
               {profileImage ? (
-                <img src={profileImage} alt="Profil" className="w-full h-full object-cover" />
+                <Image src={profileImage} alt="Profil" fill className="object-cover" />
               ) : (
                 username?.[0]?.toUpperCase() || "U"
               )}
