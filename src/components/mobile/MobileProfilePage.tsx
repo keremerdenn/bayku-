@@ -71,6 +71,43 @@ export default function MobileProfilePage() {
     }
   }, []);
 
+  // localStorage değişikliklerini dinle
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === USER_KEY && e.newValue) {
+        console.log("MobileProfilePage - localStorage changed:", e.newValue);
+        try {
+          const userData: User = JSON.parse(e.newValue);
+          setUser(userData);
+          setEditUsername(userData.username || "");
+          setEditBio(userData.bio || "");
+          setProfileImage(userData.profileImage || null);
+          console.log("MobileProfilePage - updated from storage event");
+        } catch (error) {
+          console.error("MobileProfilePage - storage event parse error:", error);
+        }
+      }
+    };
+
+    const handleUserDataChange = (e: CustomEvent) => {
+      console.log("MobileProfilePage - custom event received:", e.detail);
+      const userData = e.detail;
+      setUser(userData);
+      setEditUsername(userData.username || "");
+      setEditBio(userData.bio || "");
+      setProfileImage(userData.profileImage || null);
+      console.log("MobileProfilePage - updated from custom event");
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('userDataChanged', handleUserDataChange as EventListener);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('userDataChanged', handleUserDataChange as EventListener);
+    };
+  }, []);
+
   const loadStats = async () => {
     setLoading(true);
     try {
@@ -134,6 +171,10 @@ export default function MobileProfilePage() {
           console.log("MobileProfilePage - saving updated user:", updatedUser);
           setUser(updatedUser);
           localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+          
+          // Custom event tetikle
+          window.dispatchEvent(new CustomEvent('userDataChanged', { detail: updatedUser }));
+          
           console.log("MobileProfilePage - saved to localStorage");
         }
       };

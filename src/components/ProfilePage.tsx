@@ -65,6 +65,41 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
     }
   }, [username]);
 
+  // localStorage değişikliklerini dinle
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === USER_KEY && e.newValue) {
+        console.log("ProfilePage - localStorage changed:", e.newValue);
+        try {
+          const userData: UserData = JSON.parse(e.newValue);
+          setUsernameValue(userData.username || username);
+          setAboutValue(userData.bio || "");
+          setProfileImage(userData.profileImage || null);
+          console.log("ProfilePage - updated from storage event");
+        } catch (error) {
+          console.error("ProfilePage - storage event parse error:", error);
+        }
+      }
+    };
+
+    const handleUserDataChange = (e: CustomEvent) => {
+      console.log("ProfilePage - custom event received:", e.detail);
+      const userData = e.detail;
+      setUsernameValue(userData.username || username);
+      setAboutValue(userData.bio || "");
+      setProfileImage(userData.profileImage || null);
+      console.log("ProfilePage - updated from custom event");
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('userDataChanged', handleUserDataChange as EventListener);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('userDataChanged', handleUserDataChange as EventListener);
+    };
+  }, [username]);
+
   useEffect(() => {
     // İstatistik verilerini yükle
     if (activeTab === 'stats') {
@@ -129,6 +164,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         profileImage: profileImage || undefined
       };
       localStorage.setItem(USER_KEY, JSON.stringify(userData));
+      
+      // Custom event tetikle
+      window.dispatchEvent(new CustomEvent('userDataChanged', { detail: userData }));
+      
       alert("Değişiklikler kaydedildi!");
     } catch (error) {
       console.error("Veriler kaydedilemedi:", error);
