@@ -165,21 +165,45 @@ export default function MobileProfilePage() {
     if (file) {
       console.log("MobileProfilePage - uploading image:", file.name);
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         const imageData = e.target?.result as string;
         console.log("MobileProfilePage - image loaded, length:", imageData.length);
         setProfileImage(imageData);
-        // Fotoğrafı hemen kaydet
+        
+        // Fotoğrafı hem localStorage'a hem sunucuya kaydet
         if (user) {
-          const updatedUser = { ...user, profileImage: imageData };
-          console.log("MobileProfilePage - saving updated user:", updatedUser);
-          setUser(updatedUser);
-          localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
-          
-          // Custom event tetikle
-          window.dispatchEvent(new CustomEvent('userDataChanged', { detail: updatedUser }));
-          
-          console.log("MobileProfilePage - saved to localStorage");
+          try {
+            // Sunucuya kaydet
+            const response = await fetch('/api/profile/update', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: user.email,
+                profileImage: imageData,
+                bio: user.bio || ""
+              }),
+            });
+
+            if (!response.ok) {
+              throw new Error('Fotoğraf sunucuya kaydedilemedi');
+            }
+            
+            // localStorage'a kaydet
+            const updatedUser = { ...user, profileImage: imageData };
+            console.log("MobileProfilePage - saving updated user:", updatedUser);
+            setUser(updatedUser);
+            localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+            
+            // Custom event tetikle
+            window.dispatchEvent(new CustomEvent('userDataChanged', { detail: updatedUser }));
+            
+            console.log("MobileProfilePage - saved to localStorage and server");
+          } catch (error) {
+            console.error('Fotoğraf kaydetme hatası:', error);
+            alert('Fotoğraf kaydedilemedi!');
+          }
         }
       };
       reader.readAsDataURL(file);
