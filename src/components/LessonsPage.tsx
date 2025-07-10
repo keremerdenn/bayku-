@@ -64,6 +64,38 @@ export default function LessonsPage() {
     }
   ];
 
+  const staticLessons: Record<string, { id: string; name: string }[]> = {
+    lgs: [
+      { id: 'lgs-mat', name: 'Matematik' },
+      { id: 'lgs-turkce', name: 'Türkçe' },
+      { id: 'lgs-fen', name: 'Fen Bilimleri' },
+      { id: 'lgs-sosyal', name: 'Sosyal Bilgiler' },
+      { id: 'lgs-ing', name: 'İngilizce' },
+    ],
+    tyt: [
+      { id: 'tyt-mat', name: 'Matematik' },
+      { id: 'tyt-turkce', name: 'Türkçe' },
+      { id: 'tyt-fen', name: 'Fen Bilimleri' },
+      { id: 'tyt-sosyal', name: 'Sosyal Bilimler' },
+    ],
+    ayt: [
+      { id: 'ayt-mat', name: 'Matematik' },
+      { id: 'ayt-fizik', name: 'Fizik' },
+      { id: 'ayt-kimya', name: 'Kimya' },
+      { id: 'ayt-biyoloji', name: 'Biyoloji' },
+      { id: 'ayt-edebiyat', name: 'Türk Dili ve Edebiyatı' },
+      { id: 'ayt-tarih', name: 'Tarih' },
+      { id: 'ayt-cografya', name: 'Coğrafya' },
+      { id: 'ayt-felsefe', name: 'Felsefe' },
+    ],
+    kpss: [
+      { id: 'kpss-gy', name: 'Genel Yetenek' },
+      { id: 'kpss-gk', name: 'Genel Kültür' },
+      { id: 'kpss-egitim', name: 'Eğitim Bilimleri' },
+      { id: 'kpss-oabt', name: 'ÖABT' },
+    ],
+  };
+
   useEffect(() => {
     fetchLessons();
     if (typeof window !== "undefined") {
@@ -118,9 +150,7 @@ export default function LessonsPage() {
     setLessonToDelete(null);
   }
 
-  const filteredLessons = lessons.filter(lesson => 
-    !selectedExamType || lesson.examType === selectedExamType
-  );
+  const filteredLessons: { id: string; name: string }[] = staticLessons[selectedExamType] || [];
 
   if (selectedTopic) {
     return <TestsPage topic={selectedTopic} onBack={() => setSelectedTopic(null)} />;
@@ -203,28 +233,8 @@ export default function LessonsPage() {
         )}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {filteredLessons.map((lesson) => (
-            <div key={lesson.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer p-6" onClick={() => setSelectedLesson(lesson)}>
-              <div className="flex items-center gap-3 mb-3">
-                <ColoredOwlIcon size={32} gradientId="owlDerslerim" gradient={{from: '#34d399', to: '#38bdf8'}} />
-                <h2 className="font-bold text-lg text-gray-800 tracking-tight">{lesson.name}</h2>
-                {email === "keremerdeen@gmail.com" && (
-                  <button
-                    className="ml-2 p-1 rounded hover:bg-red-50 text-red-500 border border-transparent hover:border-red-200 transition"
-                    title="Dersi Sil"
-                    onClick={e => { e.stopPropagation(); handleDeleteLesson(lesson.id); }}
-                  >
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-                  </button>
-                )}
-              </div>
-              {lesson.description && <p className="text-sm text-gray-600 mb-3">{lesson.description}</p>}
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs text-sky-600 font-medium">Ders</span>
-                <div className="w-2 h-2 bg-sky-500 rounded-full"></div>
-              </div>
-              <div className="w-full h-2 bg-gray-100 rounded-full">
-                <div className="h-2 rounded-full bg-gradient-to-r from-sky-400 to-blue-400" style={{width:'40%'}}></div>
-              </div>
+            <div key={lesson.id} className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm relative" onClick={() => setSelectedLesson({ id: lesson.id, name: lesson.name })}>
+              <h3 className="font-medium text-gray-800 text-lg mb-1">{lesson.name}</h3>
             </div>
           ))}
         </div>
