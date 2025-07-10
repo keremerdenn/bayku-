@@ -102,7 +102,7 @@ export default function MobileDerslerimPage() {
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="Ders adı"
-            className="w-full p-2 rounded border border-gray-200 text-gray-900 focus:ring-2 focus:ring-blue-200 focus:outline-none text-sm"
+            className="w-full p-2 rounded border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-sm"
             required
           />
           {formError && <div className="text-red-500 text-center font-medium text-xs mb-1">{formError}</div>}
@@ -111,7 +111,7 @@ export default function MobileDerslerimPage() {
             value={description}
             onChange={e => setDescription(e.target.value)}
             placeholder="Açıklama (opsiyonel)"
-            className="w-full p-2 rounded border border-gray-200 text-gray-900 focus:ring-2 focus:ring-blue-200 focus:outline-none text-sm"
+            className="w-full p-2 rounded border border-gray-200 !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-sm"
           />
           <button
             type="submit"

@@ -235,7 +235,7 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Mesajınızı yazın..."
-            className="flex-1 p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+            className="flex-1 p-4 border border-gray-300 rounded-2xl !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-sky-500 focus:border-transparent"
             disabled={!userEmail}
             maxLength={300}
           />

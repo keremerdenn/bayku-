@@ -130,7 +130,7 @@ export default function MobileChatPage() {
       <div className="border-t border-gray-100 px-4 py-3 bg-white">
         <form onSubmit={sendMessage} className="flex items-center gap-2">
           {inputError && <div className="text-red-500 text-center font-medium text-xs mb-1 w-full">{inputError}</div>}
-          <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder="Mesajınızı yazın..." className="flex-1 p-2 rounded border border-gray-200 text-sm focus:ring-2 focus:ring-blue-200 focus:outline-none" />
+          <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder="Mesajınızı yazın..." className="flex-1 p-2 rounded border border-gray-200 !text-gray-900 placeholder-gray-500 text-sm focus:ring-2 focus:ring-blue-200 focus:outline-none" />
           <button type="submit" className="bg-blue-500 text-white px-3 py-2 rounded font-medium text-sm hover:bg-blue-600 active:scale-95 transition flex items-center gap-1">
             <PaperAirplaneIcon className="w-5 h-5" />
           </button>
