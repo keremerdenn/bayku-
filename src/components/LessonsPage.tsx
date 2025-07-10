@@ -8,6 +8,7 @@ interface Lesson {
   id: string;
   name: string;
   description?: string;
+  examType?: string; // LGS, TYT, AYT, KPSS
 }
 
 interface Topic {
@@ -16,12 +17,20 @@ interface Topic {
   description?: string;
 }
 
+interface ExamType {
+  id: string;
+  name: string;
+  color: string;
+  description: string;
+}
+
 export default function LessonsPage() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [selectedExamType, setSelectedExamType] = useState("");
   const [adding, setAdding] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [username, setUsername] = useState("");
@@ -30,6 +39,34 @@ export default function LessonsPage() {
   const [email, setEmail] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [lessonToDelete, setLessonToDelete] = useState<string | null>(null);
+  const [currentView, setCurrentView] = useState<'examTypes' | 'lessons'>('examTypes');
+
+  const examTypes: ExamType[] = [
+    {
+      id: 'lgs',
+      name: 'LGS',
+      color: 'from-green-500 to-emerald-500',
+      description: 'Liselere Geçiş Sınavı'
+    },
+    {
+      id: 'tyt',
+      name: 'TYT',
+      color: 'from-blue-500 to-cyan-500',
+      description: 'Temel Yeterlilik Testi'
+    },
+    {
+      id: 'ayt',
+      name: 'AYT',
+      color: 'from-purple-500 to-pink-500',
+      description: 'Alan Yeterlilik Testi'
+    },
+    {
+      id: 'kpss',
+      name: 'KPSS',
+      color: 'from-orange-500 to-red-500',
+      description: 'Kamu Personel Seçme Sınavı'
+    }
+  ];
 
   useEffect(() => {
     fetchLessons();
@@ -67,6 +104,10 @@ export default function LessonsPage() {
       setFormError("Ders adı boş olamaz.");
       return;
     }
+    if (!selectedExamType) {
+      setFormError("Sınav türü seçmelisin.");
+      return;
+    }
     if (name.length > 40) {
       setFormError("Ders adı 40 karakterden uzun olamaz.");
       return;
@@ -81,11 +122,16 @@ export default function LessonsPage() {
       const res = await fetch("/api/lessons", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description }),
+        body: JSON.stringify({ 
+          name, 
+          description,
+          examType: selectedExamType 
+        }),
       });
       if (!res.ok) throw new Error("Ders eklenemedi");
       setName("");
       setDescription("");
+      setSelectedExamType("");
       await fetchLessons();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Ders eklenemedi");
@@ -117,6 +163,10 @@ export default function LessonsPage() {
     setLessonToDelete(null);
   }
 
+  const filteredLessons = lessons.filter(lesson => 
+    !selectedExamType || lesson.examType === selectedExamType
+  );
+
   if (selectedTopic) {
     return <TestsPage topic={selectedTopic} onBack={() => setSelectedTopic(null)} />;
   }
@@ -124,15 +174,68 @@ export default function LessonsPage() {
     return <TopicsPage lesson={selectedLesson} onBack={() => setSelectedLesson(null)} onTopicSelect={setSelectedTopic} />;
   }
 
+  if (currentView === 'examTypes') {
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
+        <div className="max-w-4xl mx-auto py-10 px-4">
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-sky-500 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent tracking-tight flex items-center justify-center gap-2">
+              <svg width='36' height='36' fill='none' viewBox='0 0 24 24'><path d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' stroke='#0ea5e9' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'/></svg>
+              Hoş geldin, {username}!
+            </h1>
+            <div className="text-lg text-sky-600 font-semibold mt-2 animate-fade-in">Hangi sınav için çalışmak istiyorsun?</div>
+          </div>
+          
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+            {examTypes.map((examType) => (
+              <div 
+                key={examType.id}
+                onClick={() => {
+                  setSelectedExamType(examType.id);
+                  setCurrentView('lessons');
+                }}
+                className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer p-6 group"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`w-12 h-12 bg-gradient-to-r ${examType.color} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                    <span className="text-white font-bold text-lg">{examType.name}</span>
+                  </div>
+                  <h2 className="font-bold text-lg text-gray-800 tracking-tight">{examType.name}</h2>
+                </div>
+                <p className="text-sm text-gray-600 mb-3">{examType.description}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-sky-600 font-medium">Sınav Türü</span>
+                  <div className="w-2 h-2 bg-sky-500 rounded-full"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
       <div className="max-w-2xl mx-auto py-10 px-4">
         <div className="mb-8 text-center">
+          <button 
+            onClick={() => {
+              setCurrentView('examTypes');
+              setSelectedExamType("");
+            }}
+            className="mb-4 text-sky-600 hover:underline flex items-center gap-2"
+          >
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+              <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Geri
+          </button>
           <h1 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-sky-500 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent tracking-tight flex items-center justify-center gap-2">
             <svg width='36' height='36' fill='none' viewBox='0 0 24 24'><path d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' stroke='#0ea5e9' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'/></svg>
-            Hoş geldin, {username}!
+            {examTypes.find(et => et.id === selectedExamType)?.name} Dersleri
           </h1>
-          <div className="text-lg text-sky-600 font-semibold mt-2 animate-fade-in">Bugün hangi dersi çalışmak istersin?</div>
+          <div className="text-lg text-sky-600 font-semibold mt-2 animate-fade-in">Hangi dersi çalışmak istersin?</div>
         </div>
         <form onSubmit={handleAddLesson} className="mb-8 space-y-3 bg-gradient-to-r from-sky-50 to-fuchsia-50 p-6 rounded-2xl border-2 border-transparent bg-clip-padding shadow-xl hover:shadow-2xl transition-all duration-300">
           <div className="flex flex-col gap-2 md:flex-row md:gap-4">
@@ -163,14 +266,14 @@ export default function LessonsPage() {
         </form>
         {loading && <div className="flex flex-col items-center justify-center py-8"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500 mb-2"></div><span className="text-sky-700">Yükleniyor...</span></div>}
         {error && <div className="text-red-500 text-center mb-4">{error}</div>}
-        {!loading && lessons.length === 0 && (
+        {!loading && filteredLessons.length === 0 && (
           <div className="flex flex-col items-center justify-center py-12">
             <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="#a21caf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
             <span className="mt-4 text-lg bg-gradient-to-r from-sky-500 via-blue-400 to-fuchsia-500 bg-clip-text text-transparent font-bold">Henüz hiç ders yok.</span>
           </div>
         )}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          {lessons.map((lesson) => (
+          {filteredLessons.map((lesson) => (
             <div key={lesson.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer p-6" onClick={() => setSelectedLesson(lesson)}>
               <div className="flex items-center gap-3 mb-3">
                 <ColoredOwlIcon size={32} gradientId="owlDerslerim" gradient={{from: '#34d399', to: '#38bdf8'}} />
