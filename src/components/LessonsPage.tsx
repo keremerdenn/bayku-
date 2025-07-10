@@ -17,6 +17,7 @@ export default function LessonsPage() {
   const [adding, setAdding] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [username, setUsername] = useState("");
+  const [formError, setFormError] = useState("");
 
   useEffect(() => {
     fetchLessons();
@@ -51,7 +52,19 @@ export default function LessonsPage() {
 
   async function handleAddLesson(e: React.FormEvent) {
     e.preventDefault();
-    if (!name.trim()) return;
+    setFormError("");
+    if (!name.trim()) {
+      setFormError("Ders adı boş olamaz.");
+      return;
+    }
+    if (name.length > 40) {
+      setFormError("Ders adı 40 karakterden uzun olamaz.");
+      return;
+    }
+    if (!/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ\s]+$/.test(name)) {
+      setFormError("Ders adı sadece harf, rakam ve boşluk içerebilir.");
+      return;
+    }
     setAdding(true);
     setError("");
     try {
@@ -103,6 +116,7 @@ export default function LessonsPage() {
               className="flex-1 p-3 rounded-xl border border-sky-200 bg-white text-gray-900 focus:ring-2 focus:ring-sky-400 focus:outline-none transition"
             />
           </div>
+          {formError && <div className="text-red-500 text-center font-semibold mb-2">{formError}</div>}
           <button
             type="submit"
             className="w-full md:w-auto bg-sky-500 text-white px-6 py-3 rounded-xl font-bold text-lg shadow hover:bg-sky-600 active:scale-95 transition-all duration-200 disabled:opacity-50"

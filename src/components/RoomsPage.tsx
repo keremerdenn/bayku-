@@ -27,6 +27,7 @@ const RoomsPage = () => {
   const [error, setError] = useState("");
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [activeRoom, setActiveRoom] = useState<{ id: string, name?: string } | null>(null);
+  const [formError, setFormError] = useState("");
 
   // Email'i localStorage'dan güvenli şekilde oku
   useEffect(() => {
@@ -85,6 +86,23 @@ const RoomsPage = () => {
 
   const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError("");
+    if (!roomName.trim()) {
+      setFormError("Oda adı boş olamaz.");
+      return;
+    }
+    if (roomName.length > 40) {
+      setFormError("Oda adı 40 karakterden uzun olamaz.");
+      return;
+    }
+    if (!/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ\s]+$/.test(roomName)) {
+      setFormError("Oda adı sadece harf, rakam ve boşluk içerebilir.");
+      return;
+    }
+    if (inviteEmail && inviteEmail.length > 0 && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(inviteEmail)) {
+      setFormError("Davet edilen e-posta adresi geçersiz.");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
@@ -147,6 +165,7 @@ const RoomsPage = () => {
           {loading ? "Oluşturuluyor..." : "Oda Oluştur"}
         </button>
         {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+        {formError && <div className="text-red-500 text-sm mt-2">{formError}</div>}
       </form>
       <div>
         <h3 className="text-lg font-semibold mb-2">Odalar</h3>

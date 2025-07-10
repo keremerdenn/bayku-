@@ -59,33 +59,47 @@ const ChatPage = () => {
 
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [inputError, setInputError] = useState("");
 
   const handleSendMessage = () => {
-    if (!newMessage.trim()) return;
-
-    const userMessage: Message = {
-      id: Date.now(),
-      text: newMessage,
-      type: "sent",
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setNewMessage("");
-    setIsTyping(true);
-
-    // Simüle edilmiş AI yanıtı
-    setTimeout(() => {
-      const aiResponse: Message = {
-        id: Date.now() + 1,
-        text: "Anlıyorum! Size bu konuda yardımcı olabilirim. Hangi spesifik soru veya konu hakkında yardım istiyorsunuz?",
-        type: "received",
-        sender: { name: "Baykuş AI", avatar: "🦉" },
+    setInputError("");
+    if (!newMessage.trim()) {
+      setInputError("Mesaj boş olamaz.");
+      return;
+    }
+    if (newMessage.length > 300) {
+      setInputError("Mesaj 300 karakterden uzun olamaz.");
+      return;
+    }
+    if (/[^\wğüşöçıİĞÜŞÖÇ.,!?\s]/.test(newMessage)) {
+      setInputError("Mesajda geçersiz karakter var.");
+      return;
+    }
+    try {
+      const userMessage: Message = {
+        id: Date.now(),
+        text: newMessage,
+        type: "sent",
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, aiResponse]);
-      setIsTyping(false);
-    }, 2000);
+      setMessages(prev => [...prev, userMessage]);
+      setNewMessage("");
+      setIsTyping(true);
+      // Simüle edilmiş AI yanıtı
+      setTimeout(() => {
+        const aiResponse: Message = {
+          id: Date.now() + 1,
+          text: "Anlıyorum! Size bu konuda yardımcı olabilirim. Hangi spesifik soru veya konu hakkında yardım istiyorsunuz?",
+          type: "received",
+          sender: { name: "Baykuş AI", avatar: "🦉" },
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, aiResponse]);
+        setIsTyping(false);
+      }, 2000);
+    } catch (err) {
+      setInputError("Mesaj gönderilemedi. Lütfen tekrar deneyin.");
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -168,6 +182,7 @@ const ChatPage = () => {
             className="flex-1 px-4 py-3 md:px-5 md:py-4 border-2 border-sky-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-sky-400 bg-sky-50 text-gray-900 text-base font-medium shadow-md"
             disabled={isTyping}
           />
+          {inputError && <div className="text-red-500 text-center font-semibold mb-2 w-full">{inputError}</div>}
           <button
             onClick={handleSendMessage}
             disabled={!newMessage.trim() || isTyping}

@@ -17,6 +17,7 @@ export default function MobileChatPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [inputError, setInputError] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -54,17 +55,35 @@ export default function MobileChatPage() {
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !userEmail) return;
-
-    const newMsg: Message = {
-      id: Date.now().toString(),
-      user_email: userEmail,
-      message: newMessage.trim(),
-      created_at: new Date().toISOString()
-    };
-
-    setMessages(prev => [...prev, newMsg]);
-    setNewMessage("");
+    setInputError("");
+    if (!newMessage.trim()) {
+      setInputError("Mesaj boş olamaz.");
+      return;
+    }
+    if (newMessage.length > 300) {
+      setInputError("Mesaj 300 karakterden uzun olamaz.");
+      return;
+    }
+    if (/[^\wğüşöçıİĞÜŞÖÇ.,!?\s]/.test(newMessage)) {
+      setInputError("Mesajda geçersiz karakter var.");
+      return;
+    }
+    if (!userEmail) {
+      setInputError("Kullanıcı doğrulanamadı. Lütfen tekrar giriş yapın.");
+      return;
+    }
+    try {
+      const newMsg: Message = {
+        id: Date.now().toString(),
+        user_email: userEmail,
+        message: newMessage.trim(),
+        created_at: new Date().toISOString()
+      };
+      setMessages(prev => [...prev, newMsg]);
+      setNewMessage("");
+    } catch (err) {
+      setInputError("Mesaj gönderilemedi. Lütfen tekrar deneyin.");
+    }
   };
 
   const scrollToBottom = () => {
@@ -149,6 +168,7 @@ export default function MobileChatPage() {
       {/* Message Input */}
       <div className="bg-white border-t border-gray-200 px-4 py-4">
         <form onSubmit={sendMessage} className="flex space-x-3">
+          {inputError && <div className="text-red-500 text-center font-semibold mb-2 w-full">{inputError}</div>}
           <input
             type="text"
             value={newMessage}

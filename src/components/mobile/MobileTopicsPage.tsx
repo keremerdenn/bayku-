@@ -20,6 +20,7 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [adding, setAdding] = useState(false);
+  const [formError, setFormError] = useState("");
 
   useEffect(() => {
     fetchTopics();
@@ -43,7 +44,19 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
 
   async function handleAddTopic(e: React.FormEvent) {
     e.preventDefault();
-    if (!name.trim()) return;
+    setFormError("");
+    if (!name.trim()) {
+      setFormError("Konu adı boş olamaz.");
+      return;
+    }
+    if (name.length > 60) {
+      setFormError("Konu adı 60 karakterden uzun olamaz.");
+      return;
+    }
+    if (!/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ\s]+$/.test(name)) {
+      setFormError("Konu adı sadece harf, rakam ve boşluk içerebilir.");
+      return;
+    }
     setAdding(true);
     setError("");
     try {
@@ -79,6 +92,7 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
               className="w-full p-2 rounded border mb-2 bg-white text-gray-900"
               required
             />
+            {formError && <div className="text-red-500 text-center font-semibold mb-2">{formError}</div>}
             <input
               type="text"
               value={description}

@@ -29,6 +29,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
   const registerEmailRef = useRef<HTMLInputElement>(null);
   const registerPasswordRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const [registerUsernameError, setRegisterUsernameError] = React.useState("");
 
   // Mobilde klavye açıldığında modal'ın yukarı kaymasını engelle
   useEffect(() => {
@@ -151,7 +152,12 @@ const AuthModal: React.FC<AuthModalProps> = ({
             <form onSubmit={async e => {
               e.preventDefault();
               if (registerUsernameRef.current && registerEmailRef.current && !isLoading) {
-                await onRegister(registerUsernameRef.current.value, registerEmailRef.current.value, registerPasswordRef.current?.value || '');
+                const val = registerUsernameRef.current.value;
+                if (val.length > 20 || !/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ_]+$/.test(val)) {
+                  setRegisterUsernameError("Kullanıcı adı geçersiz.");
+                  return;
+                }
+                await onRegister(val, registerEmailRef.current.value, registerPasswordRef.current?.value || '');
               }
             }} className="auth-form">
               <div className="mb-3 sm:mb-4">
@@ -161,10 +167,22 @@ const AuthModal: React.FC<AuthModalProps> = ({
                   type="text" 
                   required 
                   minLength={3} 
+                  maxLength={20}
                   disabled={isLoading}
                   className="w-full px-3 sm:px-4 py-2.5 sm:py-3 md:py-3 rounded-lg bg-white text-slate-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-sky-400 transition disabled:opacity-50 disabled:cursor-not-allowed form-input auth-input text-sm sm:text-base" 
                   placeholder="Kullanıcı adınız"
+                  onChange={e => {
+                    const val = e.target.value;
+                    if (val.length > 20) {
+                      setRegisterUsernameError("Kullanıcı adı 20 karakterden uzun olamaz.");
+                    } else if (!/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ_]+$/.test(val)) {
+                      setRegisterUsernameError("Kullanıcı adı sadece harf, rakam ve alt çizgi içerebilir.");
+                    } else {
+                      setRegisterUsernameError("");
+                    }
+                  }}
                 />
+                {registerUsernameError && <div className="text-red-500 text-xs mt-1">{registerUsernameError}</div>}
               </div>
               <div className="mb-3 sm:mb-4">
                 <label className="block text-slate-700 text-sm font-semibold mb-1.5 sm:mb-2 form-label">E-posta Adresi</label>

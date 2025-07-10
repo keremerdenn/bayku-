@@ -34,6 +34,7 @@ export default function MobileRoomsPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [activeRoom, setActiveRoom] = useState<{ id: string, name?: string } | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [formError, setFormError] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -90,6 +91,23 @@ export default function MobileRoomsPage() {
 
   const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError("");
+    if (!roomName.trim()) {
+      setFormError("Oda adı boş olamaz.");
+      return;
+    }
+    if (roomName.length > 40) {
+      setFormError("Oda adı 40 karakterden uzun olamaz.");
+      return;
+    }
+    if (!/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ\s]+$/.test(roomName)) {
+      setFormError("Oda adı sadece harf, rakam ve boşluk içerebilir.");
+      return;
+    }
+    if (inviteEmail && inviteEmail.length > 0 && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(inviteEmail)) {
+      setFormError("Davet edilen e-posta adresi geçersiz.");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
@@ -200,6 +218,11 @@ export default function MobileRoomsPage() {
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
                   <p className="text-red-600 text-sm">{error}</p>
+                </div>
+              )}
+              {formError && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
+                  <p className="text-yellow-600 text-sm">{formError}</p>
                 </div>
               )}
             </form>

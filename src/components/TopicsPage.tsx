@@ -19,6 +19,7 @@ export default function TopicsPage({ lesson, onBack }: TopicsPageProps) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [adding, setAdding] = useState(false);
+  const [formError, setFormError] = useState("");
 
   useEffect(() => {
     fetchTopics();
@@ -42,7 +43,19 @@ export default function TopicsPage({ lesson, onBack }: TopicsPageProps) {
 
   async function handleAddTopic(e: React.FormEvent) {
     e.preventDefault();
-    if (!name.trim()) return;
+    setFormError("");
+    if (!name.trim()) {
+      setFormError("Konu adı boş olamaz.");
+      return;
+    }
+    if (name.length > 60) {
+      setFormError("Konu adı 60 karakterden uzun olamaz.");
+      return;
+    }
+    if (!/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ\s]+$/.test(name)) {
+      setFormError("Konu adı sadece harf, rakam ve boşluk içerebilir.");
+      return;
+    }
     setAdding(true);
     setError("");
     try {
@@ -87,6 +100,7 @@ export default function TopicsPage({ lesson, onBack }: TopicsPageProps) {
             className="w-full p-2 rounded border bg-white text-gray-900"
           />
         </div>
+        {formError && <div className="text-red-500 text-center font-semibold mb-2">{formError}</div>}
         <button
           type="submit"
           className="bg-sky-500 text-white px-4 py-2 rounded hover:bg-sky-600 disabled:opacity-50"

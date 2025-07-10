@@ -30,6 +30,7 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteError, setInviteError] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [inputError, setInputError] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -100,12 +101,28 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    setInputError("");
+    if (!userEmail) {
+      setInputError("Kullanıcı doğrulanamadı. Lütfen tekrar giriş yapın.");
+      return;
+    }
+    if (!newMessage.trim()) {
+      setInputError("Mesaj boş olamaz.");
+      return;
+    }
+    if (newMessage.length > 300) {
+      setInputError("Mesaj 300 karakterden uzun olamaz.");
+      return;
+    }
+    if (/[^\wğüşöçıİĞÜŞÖÇ.,!?\s]/.test(newMessage)) {
+      setInputError("Mesajda geçersiz karakter var.");
+      return;
+    }
     setLoading(true);
     await supabase.from("messages").insert({
       room_id: roomId,
       sender_email: userEmail,
-      content: newMessage,
+      content: newMessage.trim(),
     });
     setNewMessage("");
     fetchMessages();
@@ -188,11 +205,13 @@ const RoomChatPage = ({ roomId, roomName }: { roomId: string, roomName?: string 
           onChange={e => setNewMessage(e.target.value)}
           className="flex-1 border rounded-lg px-3 py-2"
           placeholder="Mesajınızı yazın..."
+          maxLength={300}
         />
         <button type="submit" className="bg-sky-600 text-white rounded-lg px-4 py-2 font-semibold hover:bg-sky-700 transition" disabled={loading || !newMessage.trim()}>
           Gönder
         </button>
       </form>
+      {inputError && <div className="text-red-500 text-center font-semibold mt-2">{inputError}</div>}
     </div>
   );
 };

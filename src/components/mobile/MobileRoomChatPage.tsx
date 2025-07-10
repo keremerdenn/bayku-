@@ -29,6 +29,7 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [inputError, setInputError] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -108,11 +109,25 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !userEmail) return;
-
+    setInputError("");
+    if (!userEmail) {
+      setInputError("Kullanıcı doğrulanamadı. Lütfen tekrar giriş yapın.");
+      return;
+    }
+    if (!newMessage.trim()) {
+      setInputError("Mesaj boş olamaz.");
+      return;
+    }
+    if (newMessage.length > 300) {
+      setInputError("Mesaj 300 karakterden uzun olamaz.");
+      return;
+    }
+    if (/[^\wğüşöçıİĞÜŞÖÇ.,!?\s]/.test(newMessage)) {
+      setInputError("Mesajda geçersiz karakter var.");
+      return;
+    }
     const messageToSend = newMessage.trim();
     setNewMessage(""); // Hemen input'u temizle
-
     const { error } = await supabase
       .from("messages")
       .insert([{
@@ -120,10 +135,8 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
         sender_email: userEmail,
         content: messageToSend
       }]);
-
     if (error) {
-      console.error("Mesaj gönderilemedi:", error);
-      // Hata durumunda mesajı geri koy
+      setInputError("Mesaj gönderilemedi. Lütfen tekrar deneyin.");
       setNewMessage(messageToSend);
     }
   };
@@ -216,6 +229,7 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
       {/* Message Input */}
       <div className="bg-white border-t border-gray-200 px-4 py-4">
         <form onSubmit={sendMessage} className="flex space-x-3">
+          {inputError && <div className="text-red-500 text-center font-semibold mb-2 w-full">{inputError}</div>}
           <input
             type="text"
             value={newMessage}
@@ -223,6 +237,7 @@ export default function MobileRoomChatPage({ roomId, roomName }: MobileRoomChatP
             placeholder="Mesajınızı yazın..."
             className="flex-1 p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-sky-500 focus:border-transparent"
             disabled={!userEmail}
+            maxLength={300}
           />
           <button
             type="submit"

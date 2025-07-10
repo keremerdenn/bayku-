@@ -6,6 +6,10 @@ interface ProfilePageProps {
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
   const [activeTab, setActiveTab] = useState('profile');
+  const [usernameValue, setUsernameValue] = useState(username);
+  const [usernameError, setUsernameError] = useState("");
+  const [aboutValue, setAboutValue] = useState("");
+  const [aboutError, setAboutError] = useState("");
 
   const tabs = [
     { id: 'profile', name: 'Profil', icon: '👤' },
@@ -60,9 +64,22 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Kullanıcı Adı</label>
                     <input
                       type="text"
-                      defaultValue={username}
+                      value={usernameValue}
+                      onChange={e => {
+                        const val = e.target.value;
+                        setUsernameValue(val);
+                        if (val.length > 20) {
+                          setUsernameError("Kullanıcı adı 20 karakterden uzun olamaz.");
+                        } else if (!/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ_]+$/.test(val)) {
+                          setUsernameError("Kullanıcı adı sadece harf, rakam ve alt çizgi içerebilir.");
+                        } else {
+                          setUsernameError("");
+                        }
+                      }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                      maxLength={20}
                     />
+                    {usernameError && <div className="text-red-500 text-xs mt-1">{usernameError}</div>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">E-posta</label>
@@ -79,9 +96,23 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Hakkında</h3>
                 <textarea
                   rows={4}
+                  value={aboutValue}
+                  onChange={e => {
+                    const val = e.target.value;
+                    setAboutValue(val);
+                    if (val.length > 200) {
+                      setAboutError("Hakkında alanı 200 karakterden uzun olamaz.");
+                    } else if (!/^[a-zA-Z0-9ğüşöçıİĞÜŞÖÇ.,!?:;()\s-]*$/.test(val)) {
+                      setAboutError("Hakkında alanı geçersiz karakter içeriyor.");
+                    } else {
+                      setAboutError("");
+                    }
+                  }}
                   placeholder="Kendin hakkında kısa bir bilgi yaz..."
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  maxLength={200}
                 />
+                {aboutError && <div className="text-red-500 text-xs mt-1">{aboutError}</div>}
               </div>
             </div>
           )}
