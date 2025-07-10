@@ -125,6 +125,16 @@ export default function MobileLayout({ children, currentPage = "dashboard" }: Mo
                 );
               })}
             </nav>
+            {/* Çıkış Yap Butonu */}
+            <button
+              onClick={() => {
+                localStorage.removeItem('sinavPusulasiUser');
+                window.location.href = '/';
+              }}
+              className="m-4 mt-auto w-[90%] mx-auto py-2 rounded-xl bg-gray-100 text-gray-500 font-medium text-base hover:bg-gray-200 transition"
+            >
+              Çıkış Yap
+            </button>
           </aside>
         </div>
       )}

@@ -170,7 +170,7 @@ export default function MobileRoomsPage() {
                 placeholder="Oda adını girin"
                 value={roomName}
                 onChange={e => setRoomName(e.target.value)}
-                className="w-full p-2 border border-gray-200 rounded text-sm focus:ring-2 focus:ring-blue-200 focus:outline-none"
+                className="w-full p-2 border border-gray-200 rounded text-sm !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
                 required
               />
               <input
@@ -178,7 +178,7 @@ export default function MobileRoomsPage() {
                 placeholder="Davet Et (opsiyonel)"
                 value={inviteEmail}
                 onChange={e => setInviteEmail(e.target.value)}
-                className="w-full p-2 border border-gray-200 rounded text-sm focus:ring-2 focus:ring-blue-200 focus:outline-none"
+                className="w-full p-2 border border-gray-200 rounded text-sm !text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
               />
               <div className="flex gap-2 mt-2">
                 <button
