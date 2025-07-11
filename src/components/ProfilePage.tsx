@@ -54,7 +54,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         const userStr = localStorage.getItem(USER_KEY);
         if (userStr) {
           try {
-            const userData: UserData = JSON.parse(userStr);
+            const userData: any = JSON.parse(userStr);
             if (userData.email) userEmail = userData.email;
           } catch {}
         }
@@ -75,10 +75,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
           if (typeof window !== "undefined") {
             const userStr = localStorage.getItem(USER_KEY);
             if (userStr) {
-              const userData: UserData = JSON.parse(userStr);
+              const userData: any = JSON.parse(userStr);
               setUsernameValue(userData.username || username);
               setAboutValue(userData.bio || "");
-              setProfileImage(userData.profileImage || null);
+              setProfileImage(userData.profile_image || userData.profileImage || null);
             } else {
               window.location.href = "/";
             }
@@ -95,10 +95,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
       if (e.key === USER_KEY && e.newValue) {
         console.log("ProfilePage - localStorage changed:", e.newValue);
         try {
-          const userData: UserData = JSON.parse(e.newValue);
+          const userData: any = JSON.parse(e.newValue);
           setUsernameValue(userData.username || username);
           setAboutValue(userData.bio || "");
-          setProfileImage(userData.profileImage || null);
+          setProfileImage(userData.profile_image || userData.profileImage || null);
           console.log("ProfilePage - updated from storage event");
         } catch (error) {
           console.error("ProfilePage - storage event parse error:", error);
@@ -111,7 +111,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
       const userData = e.detail;
       setUsernameValue(userData.username || username);
       setAboutValue(userData.bio || "");
-      setProfileImage(userData.profileImage || null);
+      setProfileImage(userData.profile_image || userData.profileImage || null);
       console.log("ProfilePage - updated from custom event");
     };
 
@@ -209,11 +209,11 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         throw new Error(data.error || 'Profil güncellenemedi');
       }
       
-      const updatedUserData: UserData = {
+      const updatedUserData: any = {
         email: userEmail,
         username: usernameValue,
         bio: aboutValue,
-        profileImage: profileImage || undefined // localStorage için profileImage
+        profile_image: profileImage || undefined // localStorage için snake_case
       };
       localStorage.setItem(USER_KEY, JSON.stringify(updatedUserData));
       
@@ -260,7 +260,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
             }
             
             // localStorage'ı güncelle
-            existingUserData.profileImage = imageData;
+            existingUserData.profile_image = imageData;
             localStorage.setItem(USER_KEY, JSON.stringify(existingUserData));
             
             // Custom event tetikle
