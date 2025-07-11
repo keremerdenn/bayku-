@@ -61,7 +61,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
       }
       if (userEmail) {
         // Supabase'den çek
-        const { data, error } = await supabase
+        const { data } = await supabase
           .from("users")
           .select("email, username, bio, profile_image")
           .eq("email", userEmail)
