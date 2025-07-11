@@ -32,10 +32,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Preload kritik kaynaklar */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" media="all" />
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        {/* Örnek kritik CSS preload */}
+        <link rel="preload" as="style" href="/globals.css" />
         
         {/* PWA Meta Tags */}
         <link rel="manifest" href="/manifest.json" />

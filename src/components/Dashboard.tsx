@@ -4,14 +4,17 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Image from 'next/image';
 
-import VerilerimPage from "./VerilerimPage";
+import dynamic from 'next/dynamic';
+
+const VerilerimPage = dynamic(() => import('./VerilerimPage'));
+const AdminPanel = dynamic(() => import('./AdminPanel'));
+const RoomsPage = dynamic(() => import('./RoomsPage'));
+const LessonsPage = dynamic(() => import('./LessonsPage'));
+const ProfilePage = dynamic(() => import('./ProfilePage'));
+const SolvePage = dynamic(() => import('./SolvePage'));
+
 import NotificationSystem from "./NotificationSystem";
 import ThemeToggle from "./ThemeToggle";
-import ProfilePage from "./ProfilePage";
-import AdminPanel from "./AdminPanel";
-import RoomsPage from "./RoomsPage";
-import LessonsPage from "./LessonsPage";
-import SolvePage from "./SolvePage";
 
 const USER_KEY = "sinavPusulasiUser";
 
