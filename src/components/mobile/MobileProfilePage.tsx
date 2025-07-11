@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import MobileLayout from "./MobileLayout";
 import { XMarkIcon, CameraIcon } from "@heroicons/react/24/outline";
 import Image from 'next/image';
+import { supabase } from "@/lib/supabase";
 
 const USER_KEY = "sinavPusulasiUser";
 
@@ -46,41 +47,55 @@ export default function MobileProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      console.log("MobileProfilePage - checking localStorage...");
-      console.log("MobileProfilePage - all localStorage keys:", Object.keys(localStorage));
-      
-      try {
+    // Profil verisini önce Supabase'den, olmazsa localStorage'dan yükle
+    async function fetchProfile() {
+      let userEmail = null;
+      if (typeof window !== "undefined") {
         const userStr = localStorage.getItem(USER_KEY);
-        console.log("MobileProfilePage - localStorage data:", userStr);
         if (userStr) {
-          const userData: User = JSON.parse(userStr);
-          console.log("MobileProfilePage - parsed user data:", userData);
-          setUser(userData);
-          setEditUsername(userData.username || "");
-          setEditBio(userData.bio || "");
-          setProfileImage(userData.profileImage || null);
-          console.log("MobileProfilePage - set profileImage:", userData.profileImage);
+          try {
+            const userData: User = JSON.parse(userStr);
+            if (userData.email) userEmail = userData.email;
+          } catch {}
+        }
+      }
+      if (userEmail) {
+        // Supabase'den çek
+        const { data, error } = await supabase
+          .from("users")
+          .select("email, username, bio, profile_image")
+          .eq("email", userEmail)
+          .single();
+        if (data) {
+          setUser({
+            email: data.email,
+            username: data.username,
+            bio: data.bio,
+            profileImage: data.profile_image || null
+          });
+          setEditUsername(data.username || "");
+          setEditBio(data.bio || "");
+          setProfileImage(data.profile_image || null);
           loadStats();
         } else {
-          console.log("MobileProfilePage - no user data found in localStorage");
-          // Kullanıcı giriş yapmamış, ana sayfaya yönlendir
-          // Ama önce biraz bekle, belki localStorage henüz yüklenmemiştir
-          setTimeout(() => {
-            const retryUserStr = localStorage.getItem(USER_KEY);
-            if (!retryUserStr) {
-              window.location.href = '/';
+          // Fallback: localStorage
+          if (typeof window !== "undefined") {
+            const userStr = localStorage.getItem(USER_KEY);
+            if (userStr) {
+              const userData: User = JSON.parse(userStr);
+              setUser(userData);
+              setEditUsername(userData.username || "");
+              setEditBio(userData.bio || "");
+              setProfileImage(userData.profileImage || null);
+              loadStats();
+            } else {
+              window.location.href = "/";
             }
-          }, 1000);
+          }
         }
-      } catch (error) {
-        console.error("Kullanıcı bilgisi alınamadı:", error);
-        // Hata durumunda da ana sayfaya yönlendir
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 1000);
       }
     }
+    fetchProfile();
   }, []);
 
   // localStorage değişikliklerini dinle

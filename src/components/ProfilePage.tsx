@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { supabase } from "@/lib/supabase";
 
 interface ProfilePageProps {
   username: string;
@@ -46,38 +47,46 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
   const USER_KEY = "sinavPusulasiUser";
 
   useEffect(() => {
-    // localStorage'dan kullanıcı verilerini yükle
-    if (typeof window !== "undefined") {
-      console.log("ProfilePage - checking localStorage...");
-      console.log("ProfilePage - all localStorage keys:", Object.keys(localStorage));
-      
-      try {
+    // Profil verisini önce Supabase'den, olmazsa localStorage'dan yükle
+    async function fetchProfile() {
+      let userEmail = username;
+      if (typeof window !== "undefined") {
         const userStr = localStorage.getItem(USER_KEY);
-        console.log("ProfilePage - localStorage data:", userStr);
         if (userStr) {
-          const userData: UserData = JSON.parse(userStr);
-          console.log("ProfilePage - parsed user data:", userData);
-          setUsernameValue(userData.username || username);
-          setAboutValue(userData.bio || "");
-          setProfileImage(userData.profileImage || null);
-          console.log("ProfilePage - set profileImage:", userData.profileImage);
-        } else {
-          console.log("ProfilePage - no user data found in localStorage");
-          // Kullanıcı giriş yapmamış, ana sayfaya yönlendir
-          // Ama önce biraz bekle, belki localStorage henüz yüklenmemiştir
-          setTimeout(() => {
-            const retryUserStr = localStorage.getItem(USER_KEY);
-            if (!retryUserStr) {
-              window.location.href = '/';
-            }
-          }, 1000);
+          try {
+            const userData: UserData = JSON.parse(userStr);
+            if (userData.email) userEmail = userData.email;
+          } catch {}
         }
-      } catch (error) {
-        console.error("Kullanıcı bilgisi alınamadı:", error);
-        // Hata durumunda da ana sayfaya yönlendir
-        window.location.href = '/';
+      }
+      if (userEmail) {
+        // Supabase'den çek
+        const { data, error } = await supabase
+          .from("users")
+          .select("email, username, bio, profile_image")
+          .eq("email", userEmail)
+          .single();
+        if (data) {
+          setUsernameValue(data.username || username);
+          setAboutValue(data.bio || "");
+          setProfileImage(data.profile_image || null);
+        } else {
+          // Fallback: localStorage
+          if (typeof window !== "undefined") {
+            const userStr = localStorage.getItem(USER_KEY);
+            if (userStr) {
+              const userData: UserData = JSON.parse(userStr);
+              setUsernameValue(userData.username || username);
+              setAboutValue(userData.bio || "");
+              setProfileImage(userData.profileImage || null);
+            } else {
+              window.location.href = "/";
+            }
+          }
+        }
       }
     }
+    fetchProfile();
   }, [username]);
 
   // localStorage değişikliklerini dinle
@@ -189,7 +198,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         },
         body: JSON.stringify({
           email: userEmail,
-          profileImage: profileImage,
+          profileImage: profileImage, // profileImage state'i aslında profile_image
           bio: aboutValue
         }),
       });
@@ -204,7 +213,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         email: userEmail,
         username: usernameValue,
         bio: aboutValue,
-        profileImage: profileImage || undefined
+        profileImage: profileImage || undefined // localStorage için profileImage
       };
       localStorage.setItem(USER_KEY, JSON.stringify(updatedUserData));
       
