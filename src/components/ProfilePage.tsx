@@ -6,11 +6,12 @@ interface ProfilePageProps {
   username: string;
 }
 
-interface UserData {
+interface LocalUserData {
   email: string;
   username?: string;
   bio?: string;
-  profileImage?: string;
+  profile_image?: string;
+  profileImage?: string; // eski anahtar için
 }
 
 interface StatsData {
@@ -54,7 +55,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         const userStr = localStorage.getItem(USER_KEY);
         if (userStr) {
           try {
-            const userData: any = JSON.parse(userStr);
+            const userData: LocalUserData = JSON.parse(userStr);
             if (userData.email) userEmail = userData.email;
           } catch {}
         }
@@ -75,7 +76,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
           if (typeof window !== "undefined") {
             const userStr = localStorage.getItem(USER_KEY);
             if (userStr) {
-              const userData: any = JSON.parse(userStr);
+              const userData: LocalUserData = JSON.parse(userStr);
               setUsernameValue(userData.username || username);
               setAboutValue(userData.bio || "");
               setProfileImage(userData.profile_image || userData.profileImage || null);
@@ -95,7 +96,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
       if (e.key === USER_KEY && e.newValue) {
         console.log("ProfilePage - localStorage changed:", e.newValue);
         try {
-          const userData: any = JSON.parse(e.newValue);
+          const userData: LocalUserData = JSON.parse(e.newValue);
           setUsernameValue(userData.username || username);
           setAboutValue(userData.bio || "");
           setProfileImage(userData.profile_image || userData.profileImage || null);
@@ -108,7 +109,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
 
     const handleUserDataChange = (e: CustomEvent) => {
       console.log("ProfilePage - custom event received:", e.detail);
-      const userData = e.detail;
+      const userData = e.detail as LocalUserData;
       setUsernameValue(userData.username || username);
       setAboutValue(userData.bio || "");
       setProfileImage(userData.profile_image || userData.profileImage || null);
@@ -209,7 +210,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         throw new Error(data.error || 'Profil güncellenemedi');
       }
       
-      const updatedUserData: any = {
+      const updatedUserData: LocalUserData = {
         email: userEmail,
         username: usernameValue,
         bio: aboutValue,
@@ -238,7 +239,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
         // Gerçek kullanıcı email'ini al
         const userStr = localStorage.getItem(USER_KEY);
         if (userStr) {
-          const existingUserData = JSON.parse(userStr);
+          const existingUserData: LocalUserData = JSON.parse(userStr);
           const userEmail = existingUserData.email;
           
           // Sunucuya fotoğrafı kaydet
