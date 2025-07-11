@@ -18,7 +18,6 @@ interface ExamType {
 }
 
 export default function MobileDerslerimPage() {
-  const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
@@ -118,17 +117,12 @@ export default function MobileDerslerimPage() {
       const res = await fetch("/api/lessons");
       if (!res.ok) throw new Error("Dersler alınamadı");
       const data = await res.json();
-      setLessons(data);
+      // setLessons(data); // Kaldırıldı
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bilinmeyen hata");
     } finally {
       setLoading(false);
     }
-  }
-
-  async function handleDeleteLesson(id: string) {
-    setLessonToDelete(id);
-    setShowDeleteModal(true);
   }
 
   async function confirmDeleteLesson() {
