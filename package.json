@@ -3,13 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "analyze": "cross-env ANALYZE=true next build",
     "build:prod": "NODE_ENV=production next build",
-    "start:prod": "NODE_ENV=production next start"
+    "start:prod": "NODE_ENV=production next start",
+    "cap:add": "npx cap add android",
+    "cap:copy": "npx cap copy android",
+    "cap:sync": "npx cap sync android",
+    "cap:open": "npx cap open android",
+    "cap:build": "npm run build && npm run cap:copy"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.6",

@@ -1,0 +1,13 @@
+{
+  "packageId": "com.baykus.app",
+  "host": "bayku.vercel.app",
+  "name": "Baykuş",
+  "launcherName": "Baykuş",
+  "themeColor": "#0ea5e9",
+  "backgroundColor": "#0ea5e9",
+  "display": "standalone",
+  "startUrl": "/",
+  "orientation": "portrait",
+  "iconUrl": "https://i.imgur.com/PeRrdok.jpeg",
+  "manifestVersion": 1
+} 
