@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.vercel.bayku.twa",
+      "sha256_cert_fingerprints": [
+        "12:EC:D6:C7:35:CA:CB:C1:6A:8F:86:3E:F5:AB:11:BF:3C:56:CD:F4:B3:78:5A:9E:C7:0B:D0:DD:98:69:FE:1C"
+      ]
+    }
+  }
+] 
