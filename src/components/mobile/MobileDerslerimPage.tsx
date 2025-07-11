@@ -116,8 +116,6 @@ export default function MobileDerslerimPage() {
     try {
       const res = await fetch("/api/lessons");
       if (!res.ok) throw new Error("Dersler alınamadı");
-      const data = await res.json();
-      // setLessons(data); // Kaldırıldı
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bilinmeyen hata");
     } finally {
