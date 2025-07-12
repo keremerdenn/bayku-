@@ -21,9 +21,6 @@ interface TopicsPageProps {
 }
 
 export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics }: TopicsPageProps) {
-  const [topics] = useState<Topic[]>([]);
-  // const [loading, setLoading] = useState(true); // Artık gerekli değil
-  // const [error, setError] = useState(""); // Artık gerekli değil
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [adding, setAdding] = useState(false);
@@ -31,29 +28,6 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
 
   // Statik konuları al
   const staticTopicsForLesson = staticTopics?.[lesson.id] || [];
-
-  // API çağrısını kaldırıyoruz, sadece statik konular gösterilecek
-  // useEffect(() => {
-  //   fetchTopics();
-  //   // eslint-disable-next-line
-  // }, [lesson.id]);
-
-  // async function fetchTopics() {
-  //   setLoading(true);
-  //   setError("");
-  //   try {
-  //     const res = await fetch(`/api/topics?lesson_id=${lesson.id}`);
-  //     if (!res.ok) throw new Error("Konular alınamadı");
-  //     const data = await res.json();
-  //     setTopics(data);
-  //   } catch (err) {
-  //     setError(err instanceof Error ? err.message : "Bilinmeyen hata");
-  //     // API hatası olsa bile statik konular gösterilmeli
-  //     setTopics([]);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
 
   async function handleAddTopic(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -71,7 +45,6 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       return;
     }
     setAdding(true);
-    // setError(""); // Artık gerekli değil
     try {
       const res = await fetch("/api/topics", {
         method: "POST",
@@ -81,9 +54,7 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       if (!res.ok) throw new Error("Konu eklenemedi");
       setName("");
       setDescription("");
-      // await fetchTopics(); // Bu satır artık gerekli değil
     } catch (err) {
-      // setError(err instanceof Error ? err.message : "Konu eklenemedi"); // Artık gerekli değil
       console.error("Konu eklenemedi:", err);
     } finally {
       setAdding(false);
@@ -192,29 +163,29 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
 
       {/* Dinamik Konular */}
       {/* {!loading && topics.length === 0 && staticTopicsForLesson.length === 0 && <div>Henüz hiç konu yok.</div>} */}
-      {topics.length > 0 && (
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4 text-gray-800">Özel Konular</h3>
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            {topics.map((topic) => (
-              <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-lg flex items-center justify-center">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
-                  </div>
-                  <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
-                </div>
-                {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-fuchsia-600 font-medium">Özel Konu</span>
-                  <div className="w-2 h-2 bg-fuchsia-500 rounded-full"></div>
-                </div>
-                <button onClick={() => handleDelete(topic.id)} className="ml-2 text-red-500 hover:underline">Sil</button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* topics.length > 0 && ( */}
+      {/*   <div className="mb-8"> */}
+      {/*     <h3 className="text-xl font-bold mb-4 text-gray-800">Özel Konular</h3> */}
+      {/*     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3"> */}
+      {/*       {topics.map((topic) => ( */}
+      {/*         <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false"> */}
+      {/*           <div className="flex items-center gap-3 mb-3"> */}
+      {/*             <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-lg flex items-center justify-center"> */}
+      {/*               <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg> */}
+      {/*             </div> */}
+      {/*             <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3> */}
+      {/*           </div> */}
+      {/*           {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>} */}
+      {/*           <div className="flex items-center justify-between"> */}
+      {/*             <span className="text-xs text-fuchsia-600 font-medium">Özel Konu</span> */}
+      {/*             <div className="w-2 h-2 bg-fuchsia-500 rounded-full"></div> */}
+      {/*           </div> */}
+      {/*           <button onClick={() => handleDelete(topic.id)} className="ml-2 text-red-500 hover:underline">Sil</button> */}
+      {/*         </div> */}
+      {/*       ))} */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/* )} */}
     </div>
   );
 } 
