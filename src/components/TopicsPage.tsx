@@ -31,6 +31,14 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
 
   // Statik konuları al
   const staticTopicsForLesson = staticTopics?.[lesson.id] || [];
+  
+  // Debug için
+  console.log('=== DEBUG INFO ===');
+  console.log('Lesson ID:', lesson.id);
+  console.log('Static Topics Keys:', Object.keys(staticTopics || {}));
+  console.log('Static Topics for Lesson:', staticTopicsForLesson);
+  console.log('Static Topics Object:', staticTopics);
+  console.log('==================');
 
   // Eşleşme kontrolü
   const staticKeys = staticTopics ? Object.keys(staticTopics) : [];
@@ -162,6 +170,16 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
           <b>UYARI:</b> <span>lesson.id (<code>{lesson.id}</code>) staticTopics içinde yok! Mevcut key&apos;ler: <code>{staticKeys.join(", ")}</code></span>
         </div>
       )}
+      
+      {/* Debug Bilgisi */}
+      <div className="mb-4 p-4 bg-blue-100 text-blue-800 rounded-lg border border-blue-300">
+        <b>DEBUG:</b> 
+        <div>Lesson ID: {lesson.id}</div>
+        <div>Static Topics Keys: {Object.keys(staticTopics || {}).join(", ")}</div>
+        <div>Static Topics for Lesson Count: {staticTopicsForLesson.length}</div>
+        <div>ID Match: {idMatch ? "YES" : "NO"}</div>
+      </div>
+      
       {staticTopicsForLesson.length > 0 && (
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4 text-gray-800">2025 Müfredat Konuları</h3>
