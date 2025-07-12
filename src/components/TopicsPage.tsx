@@ -61,15 +61,6 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
     }
   }
 
-  const handleDelete = async (id: string) => {
-    await fetch('/api/topics', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
-    window.location.reload();
-  };
-
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
       <button onClick={onBack} className="mb-4 text-sky-600 hover:underline">&larr; Geri</button>
