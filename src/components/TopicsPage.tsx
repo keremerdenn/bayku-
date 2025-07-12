@@ -170,28 +170,26 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       {/* error && <div className="text-red-500">{error}</div> */}
       
       {/* Statik Konular - Her zaman göster */}
-      {staticTopicsForLesson.length > 0 && (
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4 text-gray-800">2025 Müfredat Konuları</h3>
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            {staticTopicsForLesson.map((topic) => (
-              <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
-                  </div>
-                  <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
+      <div className="mb-8">
+        <h3 className="text-xl font-bold mb-4 text-gray-800">2025 Müfredat Konuları</h3>
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          {staticTopicsForLesson.map((topic) => (
+            <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
                 </div>
-                {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-green-600 font-medium">Müfredat Konusu</span>
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                </div>
+                <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
               </div>
-            ))}
-          </div>
+              {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-green-600 font-medium">Müfredat Konusu</span>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
 
       {/* Dinamik Konular */}
       {/* {!loading && topics.length === 0 && staticTopicsForLesson.length === 0 && <div>Henüz hiç konu yok.</div>} */}

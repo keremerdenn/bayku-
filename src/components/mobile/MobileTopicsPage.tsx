@@ -83,19 +83,17 @@ export default function MobileTopicsPage({ lesson, onBack, staticTopics }: Mobil
           </form>
           
           {/* Statik Konular - Her zaman göster */}
-          {staticTopicsForLesson.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-lg font-bold mb-3 text-gray-800 text-center">2025 Müfredat Konuları</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {staticTopicsForLesson.map((topic) => (
-                  <div key={topic.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-green-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none">
-                    <h3 className="font-bold text-lg text-green-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">{topic.name}</h3>
-                    {topic.description && <span className="inline-block mt-2 px-2 py-1 rounded-full bg-gradient-to-r from-green-200 to-emerald-200 text-green-800 font-semibold text-xs shadow text-center pointer-events-none">{topic.description}</span>}
-                  </div>
-                ))}
-              </div>
+          <div className="mb-6">
+            <h3 className="text-lg font-bold mb-3 text-gray-800 text-center">2025 Müfredat Konuları</h3>
+            <div className="grid grid-cols-2 gap-3">
+              {staticTopicsForLesson.map((topic) => (
+                <div key={topic.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-green-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none">
+                  <h3 className="font-bold text-lg text-green-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">{topic.name}</h3>
+                  {topic.description && <span className="inline-block mt-2 px-2 py-1 rounded-full bg-gradient-to-r from-green-200 to-emerald-200 text-green-800 font-semibold text-xs shadow text-center pointer-events-none">{topic.description}</span>}
+                </div>
+              ))}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </MobileLayout>
