@@ -46,12 +46,7 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
     }
     setAdding(true);
     try {
-      const res = await fetch("/api/topics", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lesson_id: lesson.id, name, description }),
-      });
-      if (!res.ok) throw new Error("Konu eklenemedi");
+      // API çağrısı kaldırıldı - sadece statik konular kullanılıyor
       setName("");
       setDescription("");
     } catch (err) {
