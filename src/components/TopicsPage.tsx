@@ -109,6 +109,11 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
+      {/* Test Mesajı */}
+      <div className="mb-4 p-4 bg-red-100 text-red-800 rounded-lg border border-red-300">
+        <b>TEST:</b> TopicsPage yüklendi! Lesson: {lesson.name} ({lesson.id})
+      </div>
+      
       <button onClick={onBack} className="mb-4 text-sky-600 hover:underline">&larr; Geri</button>
       <h1 className="text-2xl font-bold mb-2">{lesson.name} - Konular</h1>
       <p className="text-gray-600 mb-4">{lesson.description}</p>
