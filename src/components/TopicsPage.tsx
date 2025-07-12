@@ -1,6 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useSession } from '@supabase/auth-helpers-react';
+import { useState, useEffect } from "react";
+
+interface Lesson {
+  id: string;
+  name: string;
+  description?: string;
+}
 
 interface Topic {
   id: string;
@@ -9,12 +14,13 @@ interface Topic {
 }
 
 interface TopicsPageProps {
-  lesson: { id: string; name: string; description?: string };
+  lesson: Lesson;
   onBack: () => void;
   onTopicSelect: (topic: Topic) => void;
+  staticTopics?: Record<string, { id: string; name: string; description?: string }[]>;
 }
 
-export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPageProps) {
+export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics }: TopicsPageProps) {
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -22,7 +28,9 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
   const [description, setDescription] = useState("");
   const [adding, setAdding] = useState(false);
   const [formError, setFormError] = useState("");
-  const session = useSession();
+
+  // Statik konuları al
+  const staticTopicsForLesson = staticTopics?.[lesson.id] || [];
 
   useEffect(() => {
     fetchTopics();
@@ -44,7 +52,7 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
     }
   }
 
-  async function handleAddTopic(e: React.FormEvent) {
+  async function handleAddTopic(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setFormError("");
     if (!name.trim()) {
@@ -79,11 +87,10 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
   }
 
   const handleDelete = async (id: string) => {
-    if (!session?.user?.email) return;
     await fetch('/api/topics', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, email: session.user.email }),
+      body: JSON.stringify({ id }),
     });
     window.location.reload();
   };
@@ -100,7 +107,7 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
           </div>
           <h3 className="text-lg font-bold text-gray-800">Yeni Konu Ekle</h3>
         </div>
-        <form onSubmit={handleAddTopic} className="space-y-4">
+        <form onSubmit={handleAddTopic}>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Konu Adı</label>
             <input
@@ -144,27 +151,56 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
       </div>
       {loading && <div>Yükleniyor...</div>}
       {error && <div className="text-red-500">{error}</div>}
-      {!loading && topics.length === 0 && <div>Henüz hiç konu yok.</div>}
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        {topics.map((topic) => (
-          <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-lg flex items-center justify-center">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+      
+      {/* Statik Konular */}
+      {staticTopicsForLesson.length > 0 && (
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4 text-gray-800">2025 Müfredat Konuları</h3>
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+            {staticTopicsForLesson.map((topic) => (
+              <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+                  </div>
+                  <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
+                </div>
+                {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-green-600 font-medium">Müfredat Konusu</span>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                </div>
               </div>
-              <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
-            </div>
-            {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-fuchsia-600 font-medium">Konu</span>
-              <div className="w-2 h-2 bg-fuchsia-500 rounded-full"></div>
-            </div>
-            {session?.user?.email === 'keremerdeen@gmail.com' && (
-              <button onClick={() => handleDelete(topic.id)} className="ml-2 text-red-500 hover:underline">Sil</button>
-            )}
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      )}
+
+      {/* Dinamik Konular */}
+      {!loading && topics.length === 0 && staticTopicsForLesson.length === 0 && <div>Henüz hiç konu yok.</div>}
+      {topics.length > 0 && (
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4 text-gray-800">Özel Konular</h3>
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+            {topics.map((topic) => (
+              <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-lg flex items-center justify-center">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+                  </div>
+                  <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
+                </div>
+                {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-fuchsia-600 font-medium">Özel Konu</span>
+                  <div className="w-2 h-2 bg-fuchsia-500 rounded-full"></div>
+                </div>
+                <button onClick={() => handleDelete(topic.id)} className="ml-2 text-red-500 hover:underline">Sil</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
