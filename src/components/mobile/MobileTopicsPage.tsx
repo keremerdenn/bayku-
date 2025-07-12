@@ -85,14 +85,27 @@ export default function MobileTopicsPage({ lesson, onBack, staticTopics }: Mobil
           {/* Statik Konular - Her zaman göster */}
           <div className="mb-6">
             <h3 className="text-lg font-bold mb-3 text-gray-800 text-center">2025 Müfredat Konuları</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {staticTopicsForLesson.map((topic) => (
-                <div key={topic.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-green-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none">
-                  <h3 className="font-bold text-lg text-green-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">{topic.name}</h3>
-                  {topic.description && <span className="inline-block mt-2 px-2 py-1 rounded-full bg-gradient-to-r from-green-200 to-emerald-200 text-green-800 font-semibold text-xs shadow text-center pointer-events-none">{topic.description}</span>}
+            {staticTopicsForLesson.length > 0 ? (
+              <div className="grid grid-cols-2 gap-3">
+                {staticTopicsForLesson.map((topic) => (
+                  <div key={topic.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-green-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none">
+                    <h3 className="font-bold text-lg text-green-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">{topic.name}</h3>
+                    {topic.description && <p className="text-xs text-green-600 text-center mt-2 pointer-events-none">{topic.description}</p>}
+                    <div className="absolute top-2 right-2 w-3 h-3 bg-green-500 rounded-full"></div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <div className="flex items-center gap-2">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" className="text-yellow-600">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span className="text-yellow-800 font-medium text-sm">Bu ders için henüz konular tanımlanmamış.</span>
                 </div>
-              ))}
-            </div>
+                <p className="text-yellow-700 text-xs mt-2">Ders ID: {lesson.id}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

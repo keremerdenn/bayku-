@@ -31,14 +31,6 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
 
   // Statik konuları al
   const staticTopicsForLesson = staticTopics?.[lesson.id] || [];
-  
-  // Debug için
-  console.log('=== DEBUG INFO ===');
-  console.log('Lesson ID:', lesson.id);
-  console.log('Static Topics Keys:', Object.keys(staticTopics || {}));
-  console.log('Static Topics for Lesson:', staticTopicsForLesson);
-  console.log('Static Topics Object:', staticTopics);
-  console.log('==================');
 
   // API çağrısını kaldırıyoruz, sadece statik konular gösterilecek
   // useEffect(() => {
@@ -109,11 +101,6 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-sky-200 via-fuchsia-100 to-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat pb-20">
-      {/* Test Mesajı */}
-      <div className="mb-4 p-4 bg-red-100 text-red-800 rounded-lg border border-red-300">
-        <b>TEST:</b> TopicsPage yüklendi! Lesson: {lesson.name} ({lesson.id})
-      </div>
-      
       <button onClick={onBack} className="mb-4 text-sky-600 hover:underline">&larr; Geri</button>
       <h1 className="text-2xl font-bold mb-2">{lesson.name} - Konular</h1>
       <p className="text-gray-600 mb-4">{lesson.description}</p>
@@ -172,23 +159,35 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       {/* Statik Konular - Her zaman göster */}
       <div className="mb-8">
         <h3 className="text-xl font-bold mb-4 text-gray-800">2025 Müfredat Konuları</h3>
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          {staticTopicsForLesson.map((topic) => (
-            <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+        {staticTopicsForLesson.length > 0 ? (
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+            {staticTopicsForLesson.map((topic) => (
+              <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+                  </div>
+                  <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
                 </div>
-                <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
+                {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-green-600 font-medium">Müfredat Konusu</span>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                </div>
               </div>
-              {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-green-600 font-medium">Müfredat Konusu</span>
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div className="flex items-center gap-2">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" className="text-yellow-600">
+                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span className="text-yellow-800 font-medium">Bu ders için henüz konular tanımlanmamış.</span>
             </div>
-          ))}
-        </div>
+            <p className="text-yellow-700 text-sm mt-2">Ders ID: {lesson.id}</p>
+          </div>
+        )}
       </div>
 
       {/* Dinamik Konular */}
