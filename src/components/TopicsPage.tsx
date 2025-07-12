@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface Lesson {
   id: string;
@@ -21,7 +21,7 @@ interface TopicsPageProps {
 }
 
 export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics }: TopicsPageProps) {
-  const [topics, setTopics] = useState<Topic[]>([]);
+  const [topics] = useState<Topic[]>([]);
   // const [loading, setLoading] = useState(true); // Artık gerekli değil
   // const [error, setError] = useState(""); // Artık gerekli değil
   const [name, setName] = useState("");
