@@ -30,12 +30,13 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
   const staticTopicsForLesson = staticTopics?.[lesson.id] || [];
 
   // DEBUG: Konsola bilgileri yazdır
-  console.log('DEBUG TopicsPage:', {
+  console.log('🔍 DEBUG TopicsPage:', {
     lessonId: lesson.id,
     lessonName: lesson.name,
     staticTopicsKeys: staticTopics ? Object.keys(staticTopics) : 'undefined',
     staticTopicsForLesson: staticTopicsForLesson,
-    staticTopicsForLessonLength: staticTopicsForLesson.length
+    staticTopicsForLessonLength: staticTopicsForLesson.length,
+    staticTopicsObject: staticTopics
   });
 
   async function handleAddTopic(e: React.FormEvent<HTMLFormElement>) {
@@ -71,14 +72,15 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       <h1 className="text-2xl font-bold mb-2">{lesson.name} - Konular</h1>
       <p className="text-gray-600 mb-4">{lesson.description}</p>
       
-      {/* DEBUG: Debug bilgileri */}
-      <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-4 mb-4">
-        <h3 className="font-bold text-yellow-800 mb-2">DEBUG Bilgileri:</h3>
-        <p className="text-yellow-700 text-sm">Ders ID: {lesson.id}</p>
-        <p className="text-yellow-700 text-sm">Ders Adı: {lesson.name}</p>
-        <p className="text-yellow-700 text-sm">StaticTopics Anahtarları: {staticTopics ? Object.keys(staticTopics).join(', ') : 'undefined'}</p>
-        <p className="text-yellow-700 text-sm">Bulunan Konular: {staticTopicsForLesson.length}</p>
-        <p className="text-yellow-700 text-sm">Konular: {staticTopicsForLesson.map(t => t.name).join(', ')}</p>
+      {/* DEBUG: Debug bilgileri - Daha belirgin */}
+      <div className="bg-red-100 border-2 border-red-400 rounded-lg p-4 mb-4">
+        <h3 className="font-bold text-red-800 mb-2 text-lg">🔍 DEBUG BİLGİLERİ:</h3>
+        <p className="text-red-700 text-sm mb-1">Ders ID: <strong>{lesson.id}</strong></p>
+        <p className="text-red-700 text-sm mb-1">Ders Adı: <strong>{lesson.name}</strong></p>
+        <p className="text-red-700 text-sm mb-1">StaticTopics Anahtarları: <strong>{staticTopics ? Object.keys(staticTopics).join(', ') : 'undefined'}</strong></p>
+        <p className="text-red-700 text-sm mb-1">Bulunan Konular: <strong>{staticTopicsForLesson.length}</strong></p>
+        <p className="text-red-700 text-sm mb-1">Konular: <strong>{staticTopicsForLesson.map(t => t.name).join(', ')}</strong></p>
+        <p className="text-red-700 text-sm">StaticTopics Objesi: <strong>{staticTopics ? 'Mevcut' : 'Yok'}</strong></p>
       </div>
       
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6">
