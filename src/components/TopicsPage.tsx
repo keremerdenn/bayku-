@@ -159,7 +159,7 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       {/* Statik Konular */}
       {staticTopics && !idMatch && (
         <div className="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg border border-yellow-300">
-          <b>UYARI:</b> <span>lesson.id (<code>{lesson.id}</code>) staticTopics içinde yok! Mevcut key'ler: <code>{staticKeys.join(", ")}</code></span>
+          <b>UYARI:</b> <span>lesson.id (<code>{lesson.id}</code>) staticTopics içinde yok! Mevcut key&apos;ler: <code>{staticKeys.join(", ")}</code></span>
         </div>
       )}
       {staticTopicsForLesson.length > 0 && (
