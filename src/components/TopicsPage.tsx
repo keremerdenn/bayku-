@@ -40,10 +40,6 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
   console.log('Static Topics Object:', staticTopics);
   console.log('==================');
 
-  // Eşleşme kontrolü
-  const staticKeys = staticTopics ? Object.keys(staticTopics) : [];
-  const idMatch = staticKeys.includes(lesson.id);
-
   useEffect(() => {
     fetchTopics();
     // eslint-disable-next-line
