@@ -32,6 +32,10 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
   // Statik konuları al
   const staticTopicsForLesson = staticTopics?.[lesson.id] || [];
 
+  // Eşleşme kontrolü
+  const staticKeys = staticTopics ? Object.keys(staticTopics) : [];
+  const idMatch = staticKeys.includes(lesson.id);
+
   useEffect(() => {
     fetchTopics();
     // eslint-disable-next-line
@@ -153,6 +157,11 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       {error && <div className="text-red-500">{error}</div>}
       
       {/* Statik Konular */}
+      {staticTopics && !idMatch && (
+        <div className="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg border border-yellow-300">
+          <b>UYARI:</b> <span>lesson.id (<code>{lesson.id}</code>) staticTopics içinde yok! Mevcut key'ler: <code>{staticKeys.join(", ")}</code></span>
+        </div>
+      )}
       {staticTopicsForLesson.length > 0 && (
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4 text-gray-800">2025 Müfredat Konuları</h3>
