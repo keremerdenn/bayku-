@@ -94,8 +94,9 @@ export default function LessonsPage() {
     ],
   };
 
-  // LGS Konuları - 2025 Müfredat
+  // Tüm Konular - 2025 Müfredat
   const staticTopics: Record<string, { id: string; name: string; description?: string }[]> = {
+    // LGS Konuları
     'lgs-mat': [
       { id: 'lgs-mat-sayilar', name: 'Sayılar ve İşlemler', description: 'Doğal sayılar, tam sayılar, rasyonel sayılar' },
       { id: 'lgs-mat-cebir', name: 'Cebirsel İfadeler', description: 'Değişkenler, denklemler, eşitsizlikler' },
@@ -145,11 +146,9 @@ export default function LessonsPage() {
       { id: 'lgs-ing-konusma', name: 'Konuşma', description: 'Günlük konuşma kalıpları' },
       { id: 'lgs-ing-zaman', name: 'Zamanlar', description: 'Present, past, future tenses' },
       { id: 'lgs-ing-cumle', name: 'Cümle Yapıları', description: 'Basit, bileşik cümleler' }
-    ]
-  };
-
-  // TYT Konuları - 2025 Müfredat
-  const tytTopics = {
+    ],
+    
+    // TYT Konuları
     'tyt-mat': [
       { id: 'tyt-mat-sayilar', name: 'Sayılar', description: 'Doğal sayılar, tam sayılar, rasyonel sayılar, reel sayılar' },
       { id: 'tyt-mat-cebir', name: 'Cebir', description: 'Denklemler, eşitsizlikler, fonksiyonlar' },
@@ -189,14 +188,9 @@ export default function LessonsPage() {
       { id: 'tyt-sosyal-turkiye', name: 'Türkiye Coğrafyası', description: 'Fiziki coğrafya, beşeri coğrafya, ekonomik coğrafya' },
       { id: 'tyt-sosyal-demokrasi', name: 'Demokrasi', description: 'Demokratik değerler, katılım, haklar' },
       { id: 'tyt-sosyal-kultur', name: 'Kültür ve Miras', description: 'Türk kültürü, tarihi miras, kültürel değerler' }
-    ]
-  };
-
-  // TYT konularını staticTopics'a ekle
-  Object.assign(staticTopics, tytTopics);
-
-  // AYT Konuları - 2025 Müfredat
-  const aytTopics = {
+    ],
+    
+    // AYT Konuları
     'ayt-mat': [
       { id: 'ayt-mat-sayilar', name: 'Sayılar', description: 'Karmaşık sayılar, reel sayılar, sayı sistemleri' },
       { id: 'ayt-mat-cebir', name: 'Cebir', description: 'Polinomlar, denklemler, eşitsizlikler, fonksiyonlar' },
@@ -281,14 +275,9 @@ export default function LessonsPage() {
       { id: 'ayt-felsefe-din', name: 'Din Felsefesi', description: 'Din problemi, teoloji, inanç' },
       { id: 'ayt-felsefe-siyaset', name: 'Siyaset Felsefesi', description: 'Devlet, iktidar, adalet, özgürlük' },
       { id: 'ayt-felsefe-bilimfelsefesi', name: 'Bilim Felsefesi', description: 'Bilimsel yöntem, bilimsel devrim' }
-    ]
-  };
-
-  // AYT konularını staticTopics'a ekle
-  Object.assign(staticTopics, aytTopics);
-
-  // KPSS Konuları - 2025 Müfredat
-  const kpssTopics = {
+    ],
+    
+    // KPSS Konuları
     'kpss-gy': [
       { id: 'kpss-gy-turkce', name: 'Türkçe', description: 'Dil bilgisi, anlam bilgisi, paragraf' },
       { id: 'kpss-gy-matematik', name: 'Matematik', description: 'Sayılar, cebir, geometri, problemler' },
@@ -330,9 +319,6 @@ export default function LessonsPage() {
       { id: 'kpss-oabt-proje', name: 'Proje Tabanlı Öğrenme', description: 'Proje çalışmaları, araştırma yöntemleri' }
     ]
   };
-
-  // KPSS konularını staticTopics'a ekle
-  Object.assign(staticTopics, kpssTopics);
 
   const lessonColors: Record<string, string> = {
     lgs: 'from-green-500 to-emerald-500',
