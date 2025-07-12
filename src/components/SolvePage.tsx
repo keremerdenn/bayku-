@@ -7,6 +7,7 @@ interface Lesson {
   name: string;
   description?: string;
 }
+
 interface Topic {
   id: string;
   name: string;
@@ -32,7 +33,6 @@ const exampleQuestions = [
 export default function SolvePage() {
   const [step, setStep] = useState<"lesson" | "topic" | "test">("lesson");
   const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [loading, setLoading] = useState(false);
@@ -65,18 +65,6 @@ export default function SolvePage() {
         .finally(() => setLoading(false));
     }
   }, [step]);
-
-  // Konuları çek
-  useEffect(() => {
-    if (step === "topic" && selectedLesson) {
-      setLoading(true);
-      fetch(`/api/topics?lesson_id=${selectedLesson.id}`)
-        .then(res => res.json())
-        .then(data => setTopics(data))
-        .catch(() => setError("Konular alınamadı"))
-        .finally(() => setLoading(false));
-    }
-  }, [step, selectedLesson]);
 
   // Test başlat
   function answerQuestion(idx: number) {
@@ -145,30 +133,12 @@ export default function SolvePage() {
         {step === "topic" && selectedLesson && (
           <>
             <h2 className="text-xl font-bold mb-6 text-sky-700 text-center">Konu Seç ({selectedLesson.name})</h2>
-            {loading ? <div className="flex flex-col items-center justify-center py-8"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500 mb-2"></div><span className="text-sky-700">Yükleniyor...</span></div> : (
-              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-                {topics.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-                    <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#94a3b8" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/></svg>
-                    <span className="mt-4 text-lg">Henüz hiç konu yok.</span>
-                  </div>
-                ) : topics.map(topic => (
-                  <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => setSelectedTopic(topic)} tabIndex={0} role="button" aria-pressed="false">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-lg flex items-center justify-center">
-                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
-                      </div>
-                      <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3>
-                    </div>
-                    {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>}
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-fuchsia-600 font-medium">Konu</span>
-                      <div className="w-2 h-2 bg-fuchsia-500 rounded-full"></div>
-                    </div>
-                  </div>
-                ))}
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+              <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+                <svg width="48" height="48" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#94a3b8" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/></svg>
+                <span className="mt-4 text-lg">Henüz hiç konu yok.</span>
               </div>
-            )}
+            </div>
             {/* Eğer bir konu seçildiyse, test kutusu göster */}
             {selectedTopic && (
               <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 mt-6">

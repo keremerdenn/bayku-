@@ -31,7 +31,6 @@ const exampleQuestions = [
 export default function MobileSolvePage() {
   const [step, setStep] = useState<"lesson" | "topic" | "test">("lesson");
   const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [loading, setLoading] = useState(false);
@@ -63,17 +62,6 @@ export default function MobileSolvePage() {
       }
     }
   }, []);
-
-  useEffect(() => {
-    if (step === "topic" && selectedLesson) {
-      setLoading(true);
-      fetch(`/api/topics?lesson_id=${selectedLesson.id}`)
-        .then(res => res.json())
-        .then(data => setTopics(data))
-        .catch(() => setError("Konular alınamadı"))
-        .finally(() => setLoading(false));
-    }
-  }, [step, selectedLesson]);
 
   function answerQuestion(idx: number) {
     setUserAnswers(prev => [...prev, idx]);
@@ -129,16 +117,11 @@ export default function MobileSolvePage() {
         {step === "topic" && selectedLesson && (
           <>
             <h2 className="text-base font-medium text-gray-700 mb-3 text-center">Konu Seç ({selectedLesson.name})</h2>
-            {loading ? <div className="flex flex-col items-center justify-center py-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mb-2"></div><span className="text-gray-500">Yükleniyor...</span></div> : (
-              <div className="grid grid-cols-2 gap-3">
-                {topics.map(topic => (
-                  <div key={topic.id} className="bg-white border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm" onClick={() => setSelectedTopic(topic)}>
-                    <h3 className="font-medium text-gray-800 text-sm mb-1">{topic.name}</h3>
-                    {topic.description && <span className="inline-block px-2 py-0.5 rounded bg-gray-100 text-gray-500 text-xs">{topic.description}</span>}
-                  </div>
-                ))}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-white border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center text-center">
+                <span className="text-gray-500 text-sm">Henüz hiç konu yok.</span>
               </div>
-            )}
+            </div>
             {/* Eğer bir konu seçildiyse, test kutusu göster */}
             {selectedTopic && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
