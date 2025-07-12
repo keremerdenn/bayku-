@@ -2,12 +2,6 @@
 import React, { useState } from "react";
 import MobileLayout from "./MobileLayout";
 
-interface Topic {
-  id: string;
-  name: string;
-  description?: string;
-}
-
 interface MobileTopicsPageProps {
   lesson: { id: string; name: string; description?: string };
   onBack: () => void;
