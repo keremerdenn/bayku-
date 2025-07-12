@@ -22,8 +22,8 @@ interface TopicsPageProps {
 
 export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics }: TopicsPageProps) {
   const [topics, setTopics] = useState<Topic[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  // const [loading, setLoading] = useState(true); // Artık gerekli değil
+  // const [error, setError] = useState(""); // Artık gerekli değil
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [adding, setAdding] = useState(false);
@@ -40,27 +40,28 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
   console.log('Static Topics Object:', staticTopics);
   console.log('==================');
 
-  useEffect(() => {
-    fetchTopics();
-    // eslint-disable-next-line
-  }, [lesson.id]);
+  // API çağrısını kaldırıyoruz, sadece statik konular gösterilecek
+  // useEffect(() => {
+  //   fetchTopics();
+  //   // eslint-disable-next-line
+  // }, [lesson.id]);
 
-  async function fetchTopics() {
-    setLoading(true);
-    setError("");
-    try {
-      const res = await fetch(`/api/topics?lesson_id=${lesson.id}`);
-      if (!res.ok) throw new Error("Konular alınamadı");
-      const data = await res.json();
-      setTopics(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Bilinmeyen hata");
-      // API hatası olsa bile statik konular gösterilmeli
-      setTopics([]);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // async function fetchTopics() {
+  //   setLoading(true);
+  //   setError("");
+  //   try {
+  //     const res = await fetch(`/api/topics?lesson_id=${lesson.id}`);
+  //     if (!res.ok) throw new Error("Konular alınamadı");
+  //     const data = await res.json();
+  //     setTopics(data);
+  //   } catch (err) {
+  //     setError(err instanceof Error ? err.message : "Bilinmeyen hata");
+  //     // API hatası olsa bile statik konular gösterilmeli
+  //     setTopics([]);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   async function handleAddTopic(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -78,7 +79,7 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       return;
     }
     setAdding(true);
-    setError("");
+    // setError(""); // Artık gerekli değil
     try {
       const res = await fetch("/api/topics", {
         method: "POST",
@@ -88,9 +89,10 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       if (!res.ok) throw new Error("Konu eklenemedi");
       setName("");
       setDescription("");
-      await fetchTopics();
+      // await fetchTopics(); // Bu satır artık gerekli değil
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Konu eklenemedi");
+      // setError(err instanceof Error ? err.message : "Konu eklenemedi"); // Artık gerekli değil
+      console.error("Konu eklenemedi:", err);
     } finally {
       setAdding(false);
     }
@@ -164,8 +166,8 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
           </button>
         </form>
       </div>
-      {loading && <div>Yükleniyor...</div>}
-      {error && <div className="text-red-500">{error}</div>}
+      {/* loading && <div>Yükleniyor...</div> */}
+      {/* error && <div className="text-red-500">{error}</div> */}
       
       {/* Statik Konular - Her zaman göster */}
       {staticTopicsForLesson.length > 0 && (
@@ -192,7 +194,7 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       )}
 
       {/* Dinamik Konular */}
-      {!loading && topics.length === 0 && staticTopicsForLesson.length === 0 && <div>Henüz hiç konu yok.</div>}
+      {/* {!loading && topics.length === 0 && staticTopicsForLesson.length === 0 && <div>Henüz hiç konu yok.</div>} */}
       {topics.length > 0 && (
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4 text-gray-800">Özel Konular</h3>
