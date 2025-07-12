@@ -29,6 +29,15 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
   // Statik konuları al
   const staticTopicsForLesson = staticTopics?.[lesson.id] || [];
 
+  // DEBUG: Konsola bilgileri yazdır
+  console.log('DEBUG TopicsPage:', {
+    lessonId: lesson.id,
+    lessonName: lesson.name,
+    staticTopicsKeys: staticTopics ? Object.keys(staticTopics) : 'undefined',
+    staticTopicsForLesson: staticTopicsForLesson,
+    staticTopicsForLessonLength: staticTopicsForLesson.length
+  });
+
   async function handleAddTopic(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setFormError("");
@@ -61,6 +70,17 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
       <button onClick={onBack} className="mb-4 text-sky-600 hover:underline">&larr; Geri</button>
       <h1 className="text-2xl font-bold mb-2">{lesson.name} - Konular</h1>
       <p className="text-gray-600 mb-4">{lesson.description}</p>
+      
+      {/* DEBUG: Debug bilgileri */}
+      <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-4 mb-4">
+        <h3 className="font-bold text-yellow-800 mb-2">DEBUG Bilgileri:</h3>
+        <p className="text-yellow-700 text-sm">Ders ID: {lesson.id}</p>
+        <p className="text-yellow-700 text-sm">Ders Adı: {lesson.name}</p>
+        <p className="text-yellow-700 text-sm">StaticTopics Anahtarları: {staticTopics ? Object.keys(staticTopics).join(', ') : 'undefined'}</p>
+        <p className="text-yellow-700 text-sm">Bulunan Konular: {staticTopicsForLesson.length}</p>
+        <p className="text-yellow-700 text-sm">Konular: {staticTopicsForLesson.map(t => t.name).join(', ')}</p>
+      </div>
+      
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-lg flex items-center justify-center">
@@ -110,8 +130,6 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
           </button>
         </form>
       </div>
-      {/* loading && <div>Yükleniyor...</div> */}
-      {/* error && <div className="text-red-500">{error}</div> */}
       
       {/* Statik Konular - Her zaman göster */}
       <div className="mb-8">
@@ -146,32 +164,6 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect, staticTopics
           </div>
         )}
       </div>
-
-      {/* Dinamik Konular */}
-      {/* {!loading && topics.length === 0 && staticTopicsForLesson.length === 0 && <div>Henüz hiç konu yok.</div>} */}
-      {/* topics.length > 0 && ( */}
-      {/*   <div className="mb-8"> */}
-      {/*     <h3 className="text-xl font-bold mb-4 text-gray-800">Özel Konular</h3> */}
-      {/*     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3"> */}
-      {/*       {topics.map((topic) => ( */}
-      {/*         <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false"> */}
-      {/*           <div className="flex items-center gap-3 mb-3"> */}
-      {/*             <div className="w-10 h-10 bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-lg flex items-center justify-center"> */}
-      {/*               <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/><path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg> */}
-      {/*             </div> */}
-      {/*             <h3 className="font-bold text-lg text-gray-800 tracking-tight">{topic.name}</h3> */}
-      {/*           </div> */}
-      {/*           {topic.description && <p className="text-sm text-gray-600 mb-3">{topic.description}</p>} */}
-      {/*           <div className="flex items-center justify-between"> */}
-      {/*             <span className="text-xs text-fuchsia-600 font-medium">Özel Konu</span> */}
-      {/*             <div className="w-2 h-2 bg-fuchsia-500 rounded-full"></div> */}
-      {/*           </div> */}
-      {/*           <button onClick={() => handleDelete(topic.id)} className="ml-2 text-red-500 hover:underline">Sil</button> */}
-      {/*         </div> */}
-      {/*       ))} */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* )} */}
     </div>
   );
 } 
