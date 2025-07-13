@@ -1,5 +1,8 @@
+-- Önce mevcut tabloyu sil (eğer varsa)
+DROP TABLE IF EXISTS topics;
+
 -- Topics tablosunu oluştur
-CREATE TABLE IF NOT EXISTS topics (
+CREATE TABLE topics (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   lesson_id TEXT NOT NULL,
   name TEXT NOT NULL,
@@ -181,7 +184,7 @@ INSERT INTO topics (lesson_id, name, description) VALUES
 ('ayt-cografya', 'Fiziki Coğrafya', 'İklim, yer şekilleri, toprak, bitki örtüsü'),
 ('ayt-cografya', 'Beşeri Coğrafya', 'Nüfus, yerleşme, göç, ekonomik faaliyetler'),
 ('ayt-cografya', 'Ekonomik Coğrafya', 'Tarım, sanayi, hizmetler, ticaret'),
-('ayt-cografya', 'Türkiye Coğrafyası', 'Türkiye\'nin fiziki ve beşeri coğrafyası'),
+('ayt-cografya', 'Türkiye Coğrafyası', 'Türkiye''nin fiziki ve beşeri coğrafyası'),
 ('ayt-cografya', 'Dünya Coğrafyası', 'Kıtalar, ülkeler, bölgeler'),
 ('ayt-cografya', 'Çevre Coğrafyası', 'Çevre sorunları, sürdürülebilirlik'),
 ('ayt-cografya', 'Enerji Kaynakları', 'Yenilenebilir ve yenilenemez enerji'),
