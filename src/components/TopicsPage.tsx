@@ -24,6 +24,7 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
   const [description, setDescription] = useState("");
   const [adding, setAdding] = useState(false);
   const [formError, setFormError] = useState("");
+  const [dynamicTopics, setDynamicTopics] = useState<{ id: string; name: string; description?: string }[]>([]);
 
   // Tüm Konular - 2025 Müfredat
   const staticTopics: Record<string, { id: string; name: string; description?: string }[]> = {
@@ -253,6 +254,9 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
 
   // Statik konuları al
   const staticTopicsForLesson = staticTopics[lesson.id] || [];
+  
+  // Statik ve dinamik konuları birleştir
+  const allTopics = [...staticTopicsForLesson, ...dynamicTopics];
 
   async function handleAddTopic(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -271,7 +275,13 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
     }
     setAdding(true);
     try {
-      // API çağrısı kaldırıldı - sadece statik konular kullanılıyor
+      // Yeni konuyu dynamicTopics listesine ekle
+      const newTopic = {
+        id: `${lesson.id}-${Date.now()}`,
+        name: name.trim(),
+        description: description.trim() || undefined
+      };
+      setDynamicTopics(prev => [...prev, newTopic]);
       setName("");
       setDescription("");
     } catch (err) {
@@ -340,9 +350,9 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
       {/* Statik Konular - Her zaman göster */}
       <div className="mb-8">
         <h3 className="text-xl font-bold mb-4 text-gray-800">2025 Müfredat Konuları</h3>
-        {staticTopicsForLesson.length > 0 ? (
+        {allTopics.length > 0 ? (
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            {staticTopicsForLesson.map((topic) => (
+            {allTopics.map((topic) => (
               <div key={topic.id} className="relative bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-sky-200 transition-all duration-300 cursor-pointer select-none p-6" onClick={() => onTopicSelect(topic)} tabIndex={0} role="button" aria-pressed="false">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">

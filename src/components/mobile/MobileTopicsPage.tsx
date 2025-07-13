@@ -12,6 +12,7 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
   const [description, setDescription] = useState("");
   const [adding, setAdding] = useState(false);
   const [formError, setFormError] = useState("");
+  const [dynamicTopics, setDynamicTopics] = useState<{ id: string; name: string; description?: string }[]>([]);
 
   // Tüm Konular - 2025 Müfredat
   const staticTopics: Record<string, { id: string; name: string; description?: string }[]> = {
@@ -241,6 +242,9 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
 
   // Statik konuları al
   const staticTopicsForLesson = staticTopics[lesson.id] || [];
+  
+  // Statik ve dinamik konuları birleştir
+  const allTopics = [...staticTopicsForLesson, ...dynamicTopics];
 
   async function handleAddTopic(e: React.FormEvent) {
     e.preventDefault();
@@ -259,7 +263,13 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
     }
     setAdding(true);
     try {
-      // API çağrısı kaldırıldı - sadece statik konular kullanılıyor
+      // Yeni konuyu dynamicTopics listesine ekle
+      const newTopic = {
+        id: `${lesson.id}-${Date.now()}`,
+        name: name.trim(),
+        description: description.trim() || undefined
+      };
+      setDynamicTopics(prev => [...prev, newTopic]);
       setName("");
       setDescription("");
     } catch (err) {
@@ -306,9 +316,9 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
           {/* Statik Konular - Her zaman göster */}
           <div className="mb-6">
             <h3 className="text-lg font-bold mb-3 text-gray-800 text-center">2025 Müfredat Konuları</h3>
-            {staticTopicsForLesson.length > 0 ? (
+            {allTopics.length > 0 ? (
               <div className="grid grid-cols-2 gap-3">
-                {staticTopicsForLesson.map((topic) => (
+                {allTopics.map((topic) => (
                   <div key={topic.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-green-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none">
                     <h3 className="font-bold text-lg text-green-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">{topic.name}</h3>
                     {topic.description && <p className="text-xs text-green-600 text-center mt-2 pointer-events-none">{topic.description}</p>}
