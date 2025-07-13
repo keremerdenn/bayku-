@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import "../styles/mobile-sidebar.css";
+
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter"
+});
 
 export const metadata: Metadata = {
   title: "Baykuş - Sınav Başarısına Giden Yolda En Güçlü Rehberin",
@@ -8,7 +15,6 @@ export const metadata: Metadata = {
   // SEO ve Performance optimizasyonları
   keywords: ["sınav", "ÖSYM", "test", "eğitim", "başarı"],
   authors: [{ name: "Baykuş" }],
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
   // Open Graph
   openGraph: {
@@ -25,15 +31,15 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr">
+    <html lang="tr" className={inter.variable}>
       <head>
-        {/* Preload kritik kaynaklar */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" media="all" />
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
