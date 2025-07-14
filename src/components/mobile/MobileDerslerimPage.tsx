@@ -220,7 +220,7 @@ export default function MobileDerslerimPage() {
             <div
               key={lesson.id}
               className={`bg-white border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm relative group`}
-              onClick={() => setSelectedLesson({ id: lesson.id, name: lesson.name })}
+              onClick={() => setSelectedLesson(lesson)}
             >
               <div className={`w-10 h-10 bg-gradient-to-r ${lessonColors[selectedExamType] || 'from-gray-300 to-gray-400'} rounded-lg flex items-center justify-center mb-1`}>
                 <span className="text-white font-bold text-base">{lesson.name[0]}</span>
