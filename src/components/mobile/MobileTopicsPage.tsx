@@ -129,14 +129,14 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
                 <p className="text-yellow-700 text-xs mt-2">Ders ID: {lesson.id}</p>
               </div>
             ) : topics.length > 0 ? (
-              <div className="grid grid-cols-2 gap-3 mt-2">
+              <div className="grid grid-cols-2 gap-2 mt-2">
                 {topics.map((topic) => (
-                  <div key={topic.id} className="bg-white border border-gray-200 rounded-xl p-2 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm relative group min-h-[90px] min-w-0">
-                    <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mb-1">
-                      <span className="text-white font-bold text-base">{topic.name[0]}</span>
+                  <div key={topic.id} className="bg-white border border-gray-100 rounded-lg p-1 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm min-h-[56px] min-w-0">
+                    <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded-md flex items-center justify-center mb-0">
+                      <span className="text-white font-medium text-xs">{topic.name[0]}</span>
                     </div>
-                    <h3 className="font-bold text-gray-800 text-xs mb-0.5 group-hover:text-sky-600 transition-colors truncate w-full">{topic.name}</h3>
-                    {topic.description && <p className="text-[10px] text-gray-500 text-center mt-0.5 pointer-events-none truncate w-full">{topic.description}</p>}
+                    <h3 className="font-medium text-gray-800 text-xs mb-0 truncate w-full">{topic.name}</h3>
+                    {topic.description && <p className="text-[9px] text-gray-500 text-center mt-0 pointer-events-none truncate w-full">{topic.description}</p>}
                   </div>
                 ))}
               </div>
