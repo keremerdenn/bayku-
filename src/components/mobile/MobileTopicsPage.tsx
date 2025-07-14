@@ -18,7 +18,7 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
   // Konuları API'den çek
   useEffect(() => {
     fetchTopics();
-  }, [lesson.id, fetchTopics]);
+  }, [lesson.id]);
 
   async function fetchTopics() {
     setLoading(true);
