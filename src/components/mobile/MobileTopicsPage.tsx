@@ -129,12 +129,14 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
                 <p className="text-yellow-700 text-xs mt-2">Ders ID: {lesson.id}</p>
               </div>
             ) : topics.length > 0 ? (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 mt-2">
                 {topics.map((topic) => (
-                  <div key={topic.id} className="relative aspect-square flex flex-col items-center justify-center bg-white rounded-2xl shadow-2xl border-4 border-transparent bg-clip-padding hover:border-green-400 hover:scale-105 transition-all duration-300 group overflow-hidden cursor-pointer select-none">
-                    <h3 className="font-bold text-lg text-green-700 tracking-tight flex items-center gap-2 text-center pointer-events-none">{topic.name}</h3>
-                    {topic.description && <p className="text-xs text-green-600 text-center mt-2 pointer-events-none">{topic.description}</p>}
-                    <div className="absolute top-2 right-2 w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div key={topic.id} className="bg-white border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center text-center cursor-pointer active:scale-95 transition shadow-sm relative group">
+                    <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mb-1">
+                      <span className="text-white font-bold text-base">{topic.name[0]}</span>
+                    </div>
+                    <h3 className="font-bold text-gray-800 text-sm mb-1 group-hover:text-sky-600 transition-colors">{topic.name}</h3>
+                    {topic.description && <p className="text-xs text-gray-500 text-center mt-1 pointer-events-none">{topic.description}</p>}
                   </div>
                 ))}
               </div>
