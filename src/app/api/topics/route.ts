@@ -10,7 +10,8 @@ const supabase = createClient(
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const lessonId = searchParams.get('lessonId');
+    // Hem lessonId hem lesson_id parametresini kontrol et
+    const lessonId = searchParams.get('lessonId') || searchParams.get('lesson_id');
 
     if (!lessonId) {
       return NextResponse.json({ error: 'lessonId gerekli' }, { status: 400 });
