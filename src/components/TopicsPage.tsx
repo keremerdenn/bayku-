@@ -24,7 +24,7 @@ export default function TopicsPage({ lesson, onBack, onTopicSelect }: TopicsPage
   // Konuları API'den çek
   useEffect(() => {
     fetchTopics();
-  }, [lesson.id]);
+  }, [lesson.id, fetchTopics]);
 
   async function fetchTopics() {
     setLoading(true);
