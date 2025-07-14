@@ -148,7 +148,7 @@ export default function MobileDerslerimPage() {
   const filteredLessons: { id: string; name: string }[] = staticLessons[selectedExamType] || [];
 
   if (selectedLesson) {
-            return <MobileTopicsPage lesson={selectedLesson} onBack={() => setSelectedLesson(null)} />;
+    return <MobileTopicsPage key={selectedLesson.id} lesson={selectedLesson} onBack={() => setSelectedLesson(null)} />;
   }
 
   if (currentView === 'examTypes') {

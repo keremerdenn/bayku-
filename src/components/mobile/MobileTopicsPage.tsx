@@ -17,6 +17,10 @@ export default function MobileTopicsPage({ lesson, onBack }: MobileTopicsPagePro
 
   // Konuları API'den çek
   useEffect(() => {
+    setName("");
+    setDescription("");
+    setFormError("");
+    setTopics([]);
     fetchTopics();
   }, [lesson.id]);
 
